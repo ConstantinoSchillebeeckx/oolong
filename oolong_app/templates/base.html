@@ -1,0 +1,54 @@
+{% load static %}
+{% load bootstrap_ui_tags %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content='width=device-width, initial-scale=1, user-scalable=0' name='viewport' />
+
+        <!-- font awesome -->
+        <link rel="stylesheet" type="text/css" href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' />
+
+        <!-- bootstrap css/js cdn -->
+        {% bootstrap_css %}
+
+        <!-- include custom css/js -->
+        <link rel='stylesheet' type='text/css' href='{% static 'css/styles.css' %}'/>
+
+        <!-- let page render title -->
+        <title>{% block title%}{% endblock %}</title>
+
+    </head>
+
+    <body>
+
+        <!-- nav -->
+        {% include "includes/navbar.html" %}
+        <!-- end nav -->
+
+        {% block content %}
+        {% endblock %}
+
+        <!-- footerwrap -->
+        <div id="footerwrap">
+            {% container %}
+                <h6>Some footer text</h6>
+            {% endcontainer %}
+        </div>
+        <!-- end footerwrap -->
+
+
+        <!-- load js last -->
+        <script src='{% bootstrap_jquery_url %}'></script>
+        {% bootstrap_javascript %}
+
+        <!-- custom js -->
+        <script src='{% static 'js/scripts.js' %}'></script>
+
+
+    </body>
+</html>

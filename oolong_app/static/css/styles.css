@@ -1,0 +1,199 @@
+
+/* ==========================================================================
+   Base Styles, Bootstrap Modifications & Fonts Import
+   ========================================================================== */
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+
+::-moz-selection {
+    background: #f2c2c9;
+    color: #a4003a;
+    text-shadow: none;
+}
+
+::selection {
+    background: #16a085;
+    color: #a4003a;
+    text-shadow: none;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/* force scrollbar */
+body {
+    overflow-y: scroll;
+}
+
+
+/* ==========================================================================
+   General styles
+   ========================================================================== */
+
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: #4a4a4a;
+}
+
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.navbar-default .navbar-brand {
+    color: #1abc9c;
+}
+
+.navbar-default {
+    /*background-color: transparent; */
+    border-color: transparent;
+    font-size: 16px;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #1abc9c;
+    background-color: transparent;
+    border-bottom: 2px solid #1abc9c
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #1abc9c;
+}
+
+.name-header {
+    margin-bottom: 50px;
+}
+
+.api-data-table-header {
+    text-align: left;
+    margin: 2px;
+}
+
+.smiles-container {
+    padding-top: 20px;
+}
+
+/* ==========================================================================
+   Wrap Sections
+   ========================================================================== */
+
+#headerwrap {
+    margin-top: -70px;
+    padding-top: 150px;
+    text-align:center;
+    background-attachment: relative;
+    background-position: center center;
+    min-height: 250px;
+    width: 100%;
+
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    -o-background-size: 100%;
+    background-size: 100%;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#headerwrap h1 {
+    color:#4a4a4a;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    letter-spacing: 4px;
+    font-size: 80px;
+    font-weight: bold;
+}
+
+#headerwrap h4 {
+    font-weight: 400;
+    color:#4a4a4a;
+}
+
+#footerwrap {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #2f2f2f;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+#footerwrap p {
+    color: #f2f2f2;
+    margin-left: 10px;
+}
+
+#bodywrap {
+    margin-top: -70px;
+    padding-top: 150px;
+    padding-bottom: 150px;
+    background-attachment: relative;
+    background-position: center center;
+    /*min-height: 650px; */
+    width: 100%;
+
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    -o-background-size: 100%;
+    background-size: 100%;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#bodywrap h1 {
+    color:#ffffff;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    letter-spacing: 4px;
+    font-size: 80px;
+    font-weight: bold;
+}
+
+.mt {
+    margin-top: 20px;
+}
+
+.table-condensed {
+    font-size: 80%;
+}
+
+
+
+/* ==========================================================================
+   Development
+   ========================================================================== */
+
+.wireframe1 {
+    border: 1px dotted red;
+}
+.wireframe2 {
+    border: 1px dotted green;
+}
+.wireframe3 {
+    border: 1px dotted blue;
+}
+.wireframe4 {
+    border: 1px dotted yellow;
+}
