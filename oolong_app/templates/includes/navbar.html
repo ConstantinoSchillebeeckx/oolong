@@ -14,13 +14,9 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="{% if request.resolver_match.url_name == "home" %}active{% endif %}"><a href="/">Home</a></li>
-                <li class="{% if request.resolver_match.url_name == "search" %}active{% endif %}"><a href="/search">Search</a></li>
-                <li class="{% if request.resolver_match.url_name == "db_summary" %}active{% endif %}"><a href="/db_summary">Summary</a></li>
-                {% if user.is_authenticated and user.get_username == 'meow' %}
-                    <li class="{% if request.resolver_match.url_name == "batch_upload" %}active{% endif %}"><a href="/batch_upload">Batch</a></li>
-                {% endif %}
+                <li class="{% if request.resolver_match.url_name == "metric" %}active{% endif %}"><a href="/metric">Metric</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href='/log_out_user/'>Log out</a></li>
+                    <li><a href='/log_out/'>Log out</a></li>
                 {% endif %}
             </ul>
         </div><!--/.nav-collapse -->

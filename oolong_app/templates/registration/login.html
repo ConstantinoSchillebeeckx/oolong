@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load bootstrap_ui_tags %}
+{% load bootstrap3 %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+    <!-- bodywrap -->
+    <div id="bodywrap">
+        {% container %}
+
+            <h2 class='form-header'>Login</h2>
+
+            {% row %}
+                {% column xs="3" %}
+                    <!-- crib user login form -->
+                    <form method='POST' action='/login/'>{% csrf_token %}
+
+                        {% bootstrap_form form %}
+                        <input type='submit' class='btn btn-info' value='Log in'/>
+                        <span class='error-message'>{{ error }}</span>
+
+                    </form>
+                {% endcolumn %}
+            {% endrow %}
+
+            {% row %}
+                {% column xs="6" %}
+                    <!-- link to signup page -->
+                    <form method='GET' action='/signup/'>
+                                <input type='submit' class='btn btn-default' value='Sign up!'/>
+                    </form>
+                {% endcolumn %}
+            {% endrow %}
+
+        {% endcontainer %}
+    </div>
+    <!-- end bodywrap -->
+
+{% endblock %}

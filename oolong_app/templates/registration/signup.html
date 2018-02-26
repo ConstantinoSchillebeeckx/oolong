@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load bootstrap_ui_tags %}
+{% load bootstrap3 %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+    <!-- bodywrap -->
+    <div id="bodywrap">
+        {% container %}
+
+            <h2 class='form-header'>Login</h2>
+
+            {% row %}
+                {% column xs="6" %}
+
+                <form method='POST' action=''>{% csrf_token %}
+
+                    <!-- form fields -->
+                    {% for field in form %}
+                    <div class='row'>
+                        <div class='form-field-column col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                            {{ field.label_tag }}
+                        </div>
+                        <div class='form-input-column col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                            {{ field }}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- register button -->
+                    <input type='submit' class='btn btn-default' value='Register'/>
+                    <span class='error-message'>{{ error }}</span>
+
+                </form>
+
+
+                {% endcolumn %}
+            {% endrow %}
+
+            {% row %}
+                {% column xs="6" %}
+
+                <!-- link to login page -->
+                <form method='GET' action='/login/'>
+                    <div class='form-field-column col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                        Already a member?
+                    </div>
+                    <div class='form-input-column col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                        <p><input type='submit' class='btn btn-default' value='Click here'/></p>
+                    </div>
+                </form>
+
+                {% endcolumn %}
+            {% endrow %}
+
+        {% endcontainer %}
+    </div>
+    <!-- end bodywrap -->
+
+{% endblock %}
