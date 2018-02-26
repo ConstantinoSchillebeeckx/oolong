@@ -41,13 +41,14 @@ class Metric(models.Model):
         default=None,
         help_text=(
             "When provided, defines a duration of the metric by subtracting "
-            "the `start` field."
+            "the <code>start</code> field."
         )
     )
-    notes = models.TextField(
+    item = models.TextField(
         blank=True,
         help_text=(
-            "Any extra notes associated with metric event."
+            "The item associated with the metric; e.g. when eating, "
+            "the user may write what was eaten."
         )
     )
     value = models.FloatField(
@@ -58,38 +59,29 @@ class Metric(models.Model):
             "this could be how many calories were eaten."
         )
     )
-    item = models.TextField(
-        blank=True,
-        help_text=(
-            "The item associated with the metric; e.g. when eating, "
-            "the user may write what was eaten."
-        )
-    )
     units = models.ForeignKey(
         Unit,
         on_delete=models.CASCADE,
         blank=True,
         default=None,
         help_text=(
-            "Units associated with the `values` field"
+            "Units associated with the <code>value</code> field."
         )
     )
     alone = models.BooleanField(
         blank=False,
         default=True,
         help_text=(
-            "Whether metric event occurred alone."
+            "Whether metric event occurred while being alone."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        help_text=(
+            "Any extra notes associated with metric event."
         )
     )
     
     class Meta:
         db_table = 'metric'
 
-
-
-''' FORMS '''
-
-class MetricForm(ModelForm):
-    class Meta:
-        model = Metric
-        fields = ['activity', 'start', 'end']

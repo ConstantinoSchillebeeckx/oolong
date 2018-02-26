@@ -19,17 +19,21 @@ def index(request):
     return response
 
 
+@login_required 
 @csrf_protect 
 def metric(request):
-    '''Renders the homepage.'''
 
-    context = {
-        'csrf' : csrf,
-    }
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
 
-    response = render(request, 'metric.html', context)
+        pass
 
-    return response
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = MetricForm()
+
+    return render(request, 'metric.html', {'form': form})
+
 
 @csrf_protect
 def user_login(request):

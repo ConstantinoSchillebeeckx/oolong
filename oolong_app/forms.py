@@ -1,5 +1,17 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import ModelForm
+
+from .models import *
+
+# submit metric
+class MetricForm(ModelForm):
+    class Meta:
+        model = Metric
+        fields = '__all__'
+        widgets = {
+            'item': forms.Textarea(attrs={'cols': 80, 'rows': 2}),
+        }
 
 
 #  user login form model

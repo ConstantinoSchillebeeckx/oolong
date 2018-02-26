@@ -18,6 +18,7 @@
 
         <!-- include custom css/js -->
         <link rel='stylesheet' type='text/css' href='{% static 'css/styles.css' %}'/>
+        <script src='{% bootstrap_jquery_url %}'></script>
 
         <!-- let page render title -->
         <title>{% block title%}{% endblock %}</title>
@@ -43,11 +44,12 @@
 
 
         <!-- load js last -->
-        <script src='{% bootstrap_jquery_url %}'></script>
         {% bootstrap_javascript %}
 
         <!-- custom js -->
         <script src='{% static 'js/scripts.js' %}'></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+        <script src='{% static 'js/datetime_picker.js' %}'></script>
 
 
     </body>

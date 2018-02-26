@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 {% load bootstrap_ui_tags %}
 
 {% block title %}Submit metric{% endblock %}
@@ -8,11 +9,30 @@
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
+            {% row %}
 
+                <div class="col-sm-12">
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <button type="submit" class="btn btn-info pull-right">Submit</button>
+                </form>
+                </div>
+            {% endrow %}
 
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
+
+    <script>
+         jQuery(function () {
+            jQuery("#id_start").datetimepicker({
+                sideBySide: true
+            });
+            jQuery("#id_end").datetimepicker({
+            });
+        });
+    </script>
 
 
 {% endblock %}
