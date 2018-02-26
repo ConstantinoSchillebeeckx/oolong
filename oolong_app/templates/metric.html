@@ -10,14 +10,24 @@
     <div id="bodywrap">
         {% container %}
             {% row %}
-
-                <div class="col-sm-12">
-                <form method="post">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    <button type="submit" class="btn btn-info pull-right">Submit</button>
-                </form>
-                </div>
+                {% column xs="3" %}
+                    <form method="get">
+                        {% csrf_token %}
+                        {% bootstrap_form activity_form %}
+                    </form>
+                {% endcolumn %}
+            {% endrow %}
+            {% row %}
+                {% column %}
+                    {% if metric_form %}
+                        <hr>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% bootstrap_formset metric_form %}
+                            <button type="submit" class="btn btn-info pull-right">Submit</button>
+                        </form>
+                    {% endif %}
+                {% endcolumn %}
             {% endrow %}
 
         {% endcontainer %}
@@ -25,11 +35,16 @@
     <!-- end bodywrap -->
 
     <script>
-         jQuery(function () {
-            jQuery("#id_start").datetimepicker({
+        jQuery('#id_activity').change(function(){
+            window.location = '?activity=' + jQuery(this).val();
+        })
+
+        jQuery(function () {
+            jQuery("#id_form-0-start").datetimepicker({
                 sideBySide: true
             });
-            jQuery("#id_end").datetimepicker({
+            jQuery("#id_form-0-end").datetimepicker({
+                sideBySide: true
             });
         });
     </script>

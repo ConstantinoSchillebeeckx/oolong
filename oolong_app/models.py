@@ -12,6 +12,9 @@ class Activity(models.Model):
         default=None,
     )
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'activity'
 
@@ -23,17 +26,27 @@ class Unit(models.Model):
         blank=True,
         default=None,
     )
+
+    class Meta:
+        db_table = 'unit'
     
 
 
 class Metric(models.Model):
+    '''
+    The base model on which all other models are based.
+
+    The required fields for this model are:
+        - start
+        - alone
+    '''
+
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
     )
     start = models.DateTimeField(
-        blank=False,
-        default=None,
+       blank=False,
         help_text="When the metric occurred or began.",
     )
     end = models.DateTimeField(
@@ -46,6 +59,7 @@ class Metric(models.Model):
     )
     item = models.TextField(
         blank=True,
+        default=None,
         help_text=(
             "The item associated with the metric; e.g. when eating, "
             "the user may write what was eaten."
@@ -83,5 +97,38 @@ class Metric(models.Model):
     )
     
     class Meta:
-        db_table = 'metric'
+        abstract = True
 
+
+class Eat(Metric):
+    '''
+    Metric to log eating; inherits from `Metric` base model.
+
+    Required fields:
+        - same as Metric model
+    '''
+
+    class Meta:
+        db_table = 'metric_eat'
+
+
+class Sleep(Metric):
+    '''
+    Metric to log sleeping; inherits from `Metric` base model.
+
+    Required fields:
+        - same as Metric model
+        - end 
+    '''
+
+    end = models.DateTimeField(
+        blank=False,
+        default=None,
+        help_text=(
+            "When provided, defines a duration of the metric by subtracting "
+            "the <code>start</code> field."
+        )
+    )
+
+    class Meta:
+        db_table = 'metric_sleep'

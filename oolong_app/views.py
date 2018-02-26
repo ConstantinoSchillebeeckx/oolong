@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.template.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms import modelformset_factory
 
 from .forms import *
 
@@ -22,6 +23,21 @@ def index(request):
 @login_required 
 @csrf_protect 
 def metric(request):
+    '''
+    This view works by having two forms:
+    1.  activity_form
+        This form is simply a single select populated by the `Activity` table.
+        It is a GET form which redirects with jQuery to ?activity=ID where
+        ID is set based on the select. This ID is then used to load the proper
+        form derived from the model associated with that ID. It is assumed
+        that every option in the select, has a model that pertains to it; e.g.
+        the value `eat` must have a model `Eat'.
+    2.  metric_form
+        The primary form that captures the recorded metric; this form is
+        dynamically loaded based on which value for the select was chosen;
+        based on that selection, the corresponding django model is chosen and
+        used to populate the form.
+    '''
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -30,9 +46,29 @@ def metric(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = MetricForm()
+        activity_id=request.GET.get('activity', None)
+        activity_form = ActivityForm(initial={'activity': activity_id})
 
-    return render(request, 'metric.html', {'form': form})
+        metric_form = None
+        if activity_id:
+            # lookup our model name based on the select
+            activity_name = Activity.objects.get(id=activity_id).name
+
+            model_lookup = {
+                'eat':Eat,
+                'sleep':Sleep
+            }
+
+            model = model_lookup.get(activity_name, None)
+
+            if model:
+                metric_form = modelformset_factory(model, fields=('start', 'end'))()
+
+    return render(request, 'metric.html', 
+               {'activity_form': activity_form,
+                'metric_form': metric_form
+               }
+           )
 
 
 @csrf_protect

@@ -8,10 +8,13 @@ from .models import *
 class MetricForm(ModelForm):
     class Meta:
         model = Metric
-        fields = '__all__'
+        fields = ('start','end')
         widgets = {
             'item': forms.Textarea(attrs={'cols': 80, 'rows': 2}),
         }
+
+class ActivityForm(forms.Form):
+    activity = forms.ModelChoiceField(queryset=Activity.objects.all())
 
 
 #  user login form model
