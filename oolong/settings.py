@@ -26,7 +26,7 @@ SECRET_KEY = 'v)ehp28_qzekiju6#o5$4%#sv^p)46k(mf5chsdhmw!62)m@24'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['oolong-app.herokuapp.com']
 
 
 # Application definition
@@ -113,7 +113,8 @@ STATICFILES_DIRS = (
     #os.path.join(BASE_DIR, 'static'),
 )
 
+
 # Override production variables if DJANGO_DEVELOPMENT env variable is set
 # https://stackoverflow.com/a/34891731/1153897
 if os.environ.get('DJANGO_DEVELOPMENT') is not None:
-    from settings_dev import * 
+    from oolong.dev_settings import * 
