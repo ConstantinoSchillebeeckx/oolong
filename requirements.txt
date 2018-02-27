@@ -12,3 +12,4 @@ MarkupSafe==1.0
 psycopg2==2.7.4
 pytz==2018.3
 Werkzeug==0.14.1
+whitenoise==3.3.1
