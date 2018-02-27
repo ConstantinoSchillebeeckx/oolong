@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'v)ehp28_qzekiju6#o5$4%#sv^p)46k(mf5chsdhmw!62)m@24'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -79,7 +78,7 @@ WSGI_APPLICATION = 'oolong.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': {'ENGINE': 'django.db.backends.postgresql_psycopg2', 'NAME': 'oolong'} # local
 }
 
 
@@ -113,7 +112,3 @@ STATICFILES_DIRS = (
     #os.path.join(BASE_DIR, 'static'),
 )
 
-# Override production variables if DJANGO_DEVELOPMENT env variable is set
-# https://stackoverflow.com/a/34891731/1153897
-if os.environ.get('DJANGO_DEVELOPMENT') is not None:
-    from settings_dev import * 
