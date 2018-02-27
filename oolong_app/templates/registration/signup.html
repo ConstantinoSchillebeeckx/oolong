@@ -13,21 +13,12 @@
             <h2 class='form-header'>Login</h2>
 
             {% row %}
-                {% column xs="6" %}
+                {% column xs="12" sm="3" %}
 
-                <form method='POST' action=''>{% csrf_token %}
+                <form method='POST' action=''>
 
-                    <!-- form fields -->
-                    {% for field in form %}
-                    <div class='row'>
-                        <div class='form-field-column col-xs-6 col-sm-6 col-md-6 col-lg-6'>
-                            {{ field.label_tag }}
-                        </div>
-                        <div class='form-input-column col-xs-6 col-sm-6 col-md-6 col-lg-6'>
-                            {{ field }}
-                        </div>
-                    </div>
-                    {% endfor %}
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
 
                     <!-- register button -->
                     <input type='submit' class='btn btn-default' value='Register'/>
@@ -40,7 +31,7 @@
             {% endrow %}
 
             {% row %}
-                {% column xs="6" %}
+                {% column xs="12" sm="3" %}
 
                 <!-- link to login page -->
                 <form method='GET' action='/login/'>

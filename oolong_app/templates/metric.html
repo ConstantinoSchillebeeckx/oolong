@@ -11,7 +11,7 @@
         {% container %}
             {% if success %}
                 {% row %}
-                    {% column xs="4" %}
+                    {% column xs="12" sm="3" %}
                         <div class="alert alert-success" role="alert">
                             Metric successfully submitted.
                         </div>
@@ -19,7 +19,7 @@
                 {% endrow %}
             {% elif error %}
                 {% row %}
-                    {% column xs="4" %}
+                    {% column xs="12" sm="3" %}
                         <div class="alert alert-danger" role="alert">
                             An error occurred, please try again.
                         </div>
@@ -27,7 +27,7 @@
                 {% endrow %}
             {% else %}
                 {% row %}
-                    {% column xs="3" %}
+                    {% column xs="12" sm="3" %}
                         {% if activity_form %}
                             <form method="get">
                                 {% csrf_token %}

@@ -13,7 +13,7 @@
             <h2 class='form-header'>Login</h2>
 
             {% row %}
-                {% column xs="3" %}
+                {% column xs="12" sm="3" %}
                     <!-- crib user login form -->
                     <form method='POST' action='/login/'>{% csrf_token %}
 
@@ -26,10 +26,10 @@
             {% endrow %}
 
             {% row %}
-                {% column xs="6" %}
+                {% column xs="12" sm="3" %}
                     <!-- link to signup page -->
                     <form method='GET' action='/signup/'>
-                                <input type='submit' class='btn btn-default' value='Sign up!'/>
+                    <input type='submit' class='btn btn-default' value='Sign up!'/>
                     </form>
                 {% endcolumn %}
             {% endrow %}
