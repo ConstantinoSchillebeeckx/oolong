@@ -38,36 +38,69 @@ def metric(request):
         based on that selection, the corresponding django model is chosen and
         used to populate the form.
     '''
+    metric_form, activity_form = None, None
+    success, error = False, False
+    activity_id=request.GET.get('activity', None)
+    activity_form = ActivityForm(initial={'activity': activity_id})
 
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
+    if activity_id:
 
-        pass
+        # lookup our model name based on the select
+        activity_name = Activity.objects.get(id=activity_id).name
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        activity_id=request.GET.get('activity', None)
-        activity_form = ActivityForm(initial={'activity': activity_id})
+        model_lookup = {
+            'eat':Eat,
+            'sleep':Sleep
+        }
 
-        metric_form = None
-        if activity_id:
-            # lookup our model name based on the select
-            activity_name = Activity.objects.get(id=activity_id).name
+        # we use this to manually set the order of the form
+        # fields
+        fields = {
+            'eat':['start','end','item','value','units','alone','notes'],
+            'sleep':['start','end','item','value','units','alone','notes'],
+        }
+        
+        model = model_lookup.get(activity_name, None)
+        include_fields = fields.get(activity_name, '__all__')
 
-            model_lookup = {
-                'eat':Eat,
-                'sleep':Sleep
-            }
+        if model:
+            tmp = modelformset_factory(
+                    model, 
+                    fields=include_fields, 
+                  )
 
-            model = model_lookup.get(activity_name, None)
+            if request.method == 'GET':
+                metric_form = tmp(queryset=model.objects.none())
+            else:
+                metric_form = tmp(request.POST)
 
-            if model:
-                metric_form = modelformset_factory(model, fields=('start', 'end'))()
+                if metric_form.is_valid():
 
-    return render(request, 'metric.html', 
-               {'activity_form': activity_form,
-                'metric_form': metric_form
-               }
+                    try:
+                        a = metric_form.save()
+                    except:
+                        error = True
+                    else:
+
+                        # if a comes back as an empty list
+                        # that means an empty form was submitted
+                        # in that case we just reset the form
+                        if a == []:
+                            metric_form = tmp(queryset=model.objects.none())
+                        elif isinstance(a[0], model):
+                            success = True
+
+                        
+
+    return render(
+                request, 
+                'metric.html', 
+                {
+                    'activity_form': activity_form,
+                    'metric_form': metric_form,
+                    'success': success,
+                    'error': error
+                }
            )
 
 

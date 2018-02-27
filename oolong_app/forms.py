@@ -4,14 +4,6 @@ from django.forms import ModelForm
 
 from .models import *
 
-# submit metric
-class MetricForm(ModelForm):
-    class Meta:
-        model = Metric
-        fields = ('start','end')
-        widgets = {
-            'item': forms.Textarea(attrs={'cols': 80, 'rows': 2}),
-        }
 
 class ActivityForm(forms.Form):
     activity = forms.ModelChoiceField(queryset=Activity.objects.all())

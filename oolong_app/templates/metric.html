@@ -9,27 +9,46 @@
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
-            {% row %}
-                {% column xs="3" %}
-                    <form method="get">
-                        {% csrf_token %}
-                        {% bootstrap_form activity_form %}
-                    </form>
-                {% endcolumn %}
-            {% endrow %}
-            {% row %}
-                {% column %}
-                    {% if metric_form %}
-                        <hr>
-                        <form method="post">
-                            {% csrf_token %}
-                            {% bootstrap_formset metric_form %}
-                            <button type="submit" class="btn btn-info pull-right">Submit</button>
-                        </form>
-                    {% endif %}
-                {% endcolumn %}
-            {% endrow %}
-
+            {% if success %}
+                {% row %}
+                    {% column xs="4" %}
+                        <div class="alert alert-success" role="alert">
+                            Metric successfully submitted.
+                        </div>
+                    {% endcolumn %}
+                {% endrow %}
+            {% elif error %}
+                {% row %}
+                    {% column xs="4" %}
+                        <div class="alert alert-danger" role="alert">
+                            An error occurred, please try again.
+                        </div>
+                    {% endcolumn %}
+                {% endrow %}
+            {% else %}
+                {% row %}
+                    {% column xs="3" %}
+                        {% if activity_form %}
+                            <form method="get">
+                                {% csrf_token %}
+                                {% bootstrap_form activity_form %}
+                            </form>
+                        {% endif %}
+                    {% endcolumn %}
+                {% endrow %}
+                {% row %}
+                    {% column %}
+                        {% if metric_form %}
+                            <hr>
+                            <form method="post">
+                                {% csrf_token %}
+                                {% bootstrap_formset metric_form %}
+                                <button type="submit" class="btn btn-info pull-right">Submit</button>
+                            </form>
+                        {% endif %}
+                    {% endcolumn %}
+                {% endrow %}
+            {% endif %}
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
@@ -41,10 +60,12 @@
 
         jQuery(function () {
             jQuery("#id_form-0-start").datetimepicker({
-                sideBySide: true
+                sideBySide: true,
+                format: "YYYY-MM-DD H:mm:ss"
             });
             jQuery("#id_form-0-end").datetimepicker({
-                sideBySide: true
+                sideBySide: true,
+                format: "YYYY-MM-DD H:mm:ss"
             });
         });
     </script>

@@ -1,0 +1,12 @@
+click==6.7
+Django==1.11.10
+django-bootstrap-ui==0.5.1
+django-bootstrap3==9.1.0
+django-tag-parser==2.1
+dominate==2.1.17
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+psycopg2==2.7.4 --no-binary :all:
+pytz==2018.3
+Werkzeug==0.14.1
