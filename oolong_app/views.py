@@ -9,6 +9,7 @@ from django.forms import modelformset_factory
 from django.utils import timezone
 
 from .forms import EatForm, SleepForm, ActivityForm, DrinkForm
+from .forms import UserLoginForm
 from .models import Activity
 
 @login_required 
