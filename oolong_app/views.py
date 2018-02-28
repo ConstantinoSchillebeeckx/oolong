@@ -6,7 +6,10 @@ from django.template.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import modelformset_factory
 
-from .forms import *
+from django.utils import timezone
+
+from .forms import EatForm, SleepForm, ActivityForm, DrinkForm
+from .models import Activity
 
 @login_required 
 def index(request):
@@ -48,31 +51,22 @@ def metric(request):
         # lookup our model name based on the select
         activity_name = Activity.objects.get(id=activity_id).name
 
-        model_lookup = {
-            'eat':Eat,
-            'sleep':Sleep
+        form_lookup = {
+            'Eat':EatForm,
+            'Sleep':SleepForm,
+            'Drink':DrinkForm,
         }
 
-        # we use this to manually set the order of the form
-        # fields
-        fields = {
-            'eat':['start','end','item','value','units','alone','notes'],
-            'sleep':['start','end','item','value','units','alone','notes'],
-        }
-        
-        model = model_lookup.get(activity_name, None)
-        include_fields = fields.get(activity_name, '__all__')
+        form = form_lookup.get(activity_name, None) 
 
-        if model:
-            tmp = modelformset_factory(
-                    model, 
-                    fields=include_fields, 
-                  )
+        if form:
 
             if request.method == 'GET':
-                metric_form = tmp(queryset=model.objects.none())
+                metric_form = form()
+                print(timezone.localtime(timezone.now()))
+                print(timezone.now())
             else:
-                metric_form = tmp(request.POST)
+                metric_form = form(request.POST)
 
                 if metric_form.is_valid():
 
@@ -81,14 +75,7 @@ def metric(request):
                     except:
                         error = True
                     else:
-
-                        # if a comes back as an empty list
-                        # that means an empty form was submitted
-                        # in that case we just reset the form
-                        if a == []:
-                            metric_form = tmp(queryset=model.objects.none())
-                        elif isinstance(a[0], model):
-                            success = True
+                        success = True
 
                         
 

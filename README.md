@@ -1,3 +1,3 @@
 # oolong
 
-An app for tracking various activities in hopes of correlating it to depression/anxiety.
+> How much variance in my daily affect (anxiety & depression) can be attributed to behavioral decisions?

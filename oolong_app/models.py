@@ -1,9 +1,22 @@
 from django.db import models
-from django.forms import ModelForm
 
-''' MODELS '''
+'''
+Other models:
+- medication
+- sex
+- bathroom
+- exercise
+- social time
+
+- questionaires
+'''
 
 class Activity(models.Model):
+    '''
+    Defines the lsit of available metrics to record; is
+    used to populate the select dropdown on the form
+    that submits a metric.
+    '''
     name = models.TextField(
         blank=False,
     )
@@ -18,68 +31,49 @@ class Activity(models.Model):
     class Meta:
         db_table = 'activity'
 
-class Unit(models.Model):
-    name = models.TextField(
-        blank=False,
-    )
-    description = models.TextField(
-        blank=True,
-        default=None,
-    )
 
-    class Meta:
-        db_table = 'unit'
-    
-
-
-class Metric(models.Model):
+class Eat(models.Model):
     '''
-    The base model on which all other models are based.
+    Metric to log eating.
 
     The required fields for this model are:
         - start
         - alone
 
-    activity = models.ForeignKey(
-        Activity,
-        on_delete=models.CASCADE,
-    )
     '''
     start = models.DateTimeField(
         blank=False,
-        help_text="When the metric occurred or began.",
+        help_text="When the metric event occurred or began.",
     )
     end = models.DateTimeField(
         blank=True,
         null=True,
         help_text=(
-            "When provided, defines a duration of the metric by subtracting "
-            "the <code>start</code> field."
+            "When provided, defines a duration of the metric event by"
+            " subtracting the <code>Start</code> field."
         )
     )
     item = models.TextField(
         blank=True,
         null=True,
         help_text=(
-            "The item associated with the metric; e.g. when eating, "
-            "the user may write what was eaten."
+            "Description of any item eaten."
         )
     )
     value = models.FloatField(
         blank=True,
         null=True,
         help_text=(
-            "The recorded value for the metric event; e.g. when eating "
-            "this could be how many calories were eaten."
+            "The recorded calories for the metric event."
         )
     )
-    units = models.ForeignKey(
-        Unit,
-        on_delete=models.CASCADE,
+    units = models.CharField(
+        max_length=3,
+        choices=[('cal','Cal')],
         blank=True,
         null=True,
         help_text=(
-            "Units associated with the <code>value</code> field."
+            "Units associated with the <code>Value</code> field."
         )
     )
     alone = models.BooleanField(
@@ -98,35 +92,115 @@ class Metric(models.Model):
     )
     
     class Meta:
-        abstract = True
-
-class Eat(Metric):
-    '''
-    Metric to log eating; inherits from `Metric` base model.
-
-    Required fields:
-        - same as Metric model (start, alone)
-    '''
-
-    class Meta:
         db_table = 'metric_eat'
 
-
-class Sleep(Metric):
+class Drink(models.Model):
     '''
-    Metric to log sleeping; inherits from `Metric` base model.
+    Metric to log drinking.
 
-    Required fields:
-        - same as Metric model (start, alone)
-        - end 
+    The required fields for this model are:
+        - start
+        - alone
+        - item
+        - has_caffeine
+
     '''
+    start = models.DateTimeField(
+        blank=False,
+        help_text="When the metric occurred or began.",
+    )
+    item = models.CharField(
+        max_length=9,
+        choices=[
+            ('water','Water'),
+            ('tea','Tea'),
+            ('coffee','Coffee'),
+            ('alcohol','Alcohol'),
+            ('soda','Soda')
+        ],
+        default='water',
+        blank=False,
+        help_text=(
+            "The type of item drunk."
+        )
+    )
+    value = models.FloatField(
+        blank=True,
+        null=True,
+        help_text=(
+            "The recorded volume for the metric event."
+        )
+    )
+    units = models.CharField(
+        max_length=9,
+        choices=[('fl oz','Fluid Ounce')],
+        blank=True,
+        null=True,
+        help_text=(
+            "Units associated with the <code>Value</code> field."
+        )
+    )
+    has_caffeine = models.BooleanField(
+        blank=False,
+        default=True,
+        help_text=(
+            "Whether the metric event contained caffeine."
+        )
+    )
+    alone = models.BooleanField(
+        blank=False,
+        default=True,
+        help_text=(
+            "Whether metric event occurred while being alone."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Any extra notes associated with metric event."
+        )
+    )
 
+    class Meta:
+        db_table = 'metric_drink'
+
+
+
+class Sleep(models.Model):
+    '''
+    Metric to log eating.
+
+    The required fields for this model are:
+        - start
+        - alone
+        - end
+
+    '''
+    start = models.DateTimeField(
+        blank=False,
+        help_text="When the metric occurred or began.",
+    )
     end = models.DateTimeField(
         blank=False,
         null=False,
         help_text=(
             "When provided, defines a duration of the metric by subtracting "
             "the <code>start</code> field."
+        )
+    )
+    alone = models.BooleanField(
+        blank=False,
+        default=True,
+        help_text=(
+            "Whether metric event occurred while being alone."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Any extra notes associated with metric event."
         )
     )
 

@@ -179,21 +179,8 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 80%;
 }
 
+.required label::after {
+    content: " *";
+    color: red;
+}
 
-
-/* ==========================================================================
-   Development
-   ========================================================================== */
-
-.wireframe1 {
-    border: 1px dotted red;
-}
-.wireframe2 {
-    border: 1px dotted green;
-}
-.wireframe3 {
-    border: 1px dotted blue;
-}
-.wireframe4 {
-    border: 1px dotted yellow;
-}
