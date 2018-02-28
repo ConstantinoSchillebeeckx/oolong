@@ -11,15 +11,15 @@
         {% container %}
             {% if success %}
                 {% row %}
-                    {% column xs="12" sm="3" %}
+                    {% column xs="12" sm="4" %}
                         <div class="alert alert-success" role="alert">
-                            Metric successfully submitted.
+                            Metric successfully submitted; <a href='/metric/'>submit another</a>.
                         </div>
                     {% endcolumn %}
                 {% endrow %}
             {% elif error %}
                 {% row %}
-                    {% column xs="12" sm="3" %}
+                    {% column xs="12" sm="4" %}
                         <div class="alert alert-danger" role="alert">
                             An error occurred, please try again.
                         </div>

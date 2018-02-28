@@ -21,6 +21,8 @@
         <link rel='stylesheet' type='text/css' href='{% static 'css/datetime_picker.css' %}'/>
         <script src='{% bootstrap_jquery_url %}'></script>
 
+        <link rel="icon" href="{% static 'favicon.ico' %}">
+
         <!-- let page render title -->
         <title>{% block title%}{% endblock %}</title>
 
@@ -36,11 +38,13 @@
         {% endblock %}
 
         <!-- footerwrap -->
+        <!--
         <div id="footerwrap">
             {% container %}
                 <h6>Some footer text</h6>
             {% endcontainer %}
         </div>
+        -->
         <!-- end footerwrap -->
 
 
