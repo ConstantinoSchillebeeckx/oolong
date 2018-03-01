@@ -9,29 +9,34 @@
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
-            {% row %}
-                <p class="lead">{{questionnaire.form_header|safe}}<p>
-            {% endrow %}
-            {% row %}
-                {% column %}
-                    <form method="post" class="form-horizontal">
-                        {% csrf_token %}
-                        {% for q in questions %}
-                            <div class="form-group">
-                                <label class="col-sm-5 control-label">{{q}}</label>
-                                <div class="col-sm-3">
-                                    <select class="form-control" id="q{{q.id}}">
-                                    {% for i in responses %}
-                                        <option value="{{i.score}}">{{i}}</option>
-                                    {% endfor %}
-                                    </select>
+            {% if questionnaire %}
+                {% row %}
+                    {% column %}
+                        <p class="lead">{{questionnaire.form_header|safe}}<p>
+                    {% endcolumn %}
+                {% endrow %}
+                {% row %}
+                    {% column %}
+                        <form method="post" class="form-horizontal">
+                            {% csrf_token %}
+                            {% for q in questions %}
+                                <div class="form-group">
+                                    <label class="col-sm-9 control-label">{{q}}</label>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" id="q{{q.id}}">
+                                            <option value selected>-------</option>
+                                            {% for i in responses %}
+                                                <option value="{{i.score}}">{{i}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                        <button type="submit" class="btn btn-info pull-right">Submit</button>
-                    </form>
-                {% endcolumn %}
-            {% endrow %}
+                            {% endfor %}
+                            <button type="submit" class="btn btn-info pull-right">Submit</button>
+                        </form>
+                    {% endcolumn %}
+                {% endrow %}
+            {% endif %}
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->

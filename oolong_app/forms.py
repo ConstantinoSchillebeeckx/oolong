@@ -5,14 +5,22 @@ from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
 
 from .models import Activity, Sleep, Eat, Drink, Question
+from .models import Medication, Sex, Bathroom, Relax, Exercise
 
+'''
+med
+sex
+bath
+exerc
+relax
+'''
 
 class ActivityForm(forms.Form):
     activity = forms.ModelChoiceField(queryset=Activity.objects.all())
 
-class BaseForm(ModelForm):
+class _BaseForm(ModelForm):
     '''
-    BaseForm used as parent for all other metric forms.
+    _BaseForm used as parent for all other metric forms.
     '''
     required_css_class = 'required'
 
@@ -31,36 +39,14 @@ class BaseForm(ModelForm):
             )
             self.add_error('units', forms.ValidationError(msg))
 
+
     class Meta:
         exclude = ['user']
-
-class EatForm(BaseForm):
-
-    class Meta(BaseForm.Meta):
-        model = Eat
         widgets = {
+            'notes': Textarea(attrs={'rows': 3}),
             'item': Textarea(attrs={'rows': 2}),
-            'notes': Textarea(attrs={'rows': 4}),
+            'medication': Textarea(attrs={'rows': 2}),
         }
-
-class SleepForm(BaseForm):
-
-    class Meta(BaseForm.Meta):
-        model = Sleep
-        widgets = {
-            'notes': Textarea(attrs={'rows': 4}),
-        }
-
-class DrinkForm(BaseForm):
-
-    class Meta(BaseForm.Meta):
-        model = Drink
-        widgets = {
-            'notes': Textarea(attrs={'rows': 4}),
-        }
-
-
-
 
 #  user login form model
 class UserLoginForm(forms.Form):

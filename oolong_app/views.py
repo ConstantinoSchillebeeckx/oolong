@@ -5,11 +5,12 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.template.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import modelformset_factory
+from django.forms import modelform_factory
+from django.apps import apps
 
 from django.utils import timezone
 
-from .forms import EatForm, SleepForm, ActivityForm, DrinkForm
-from .forms import UserLoginForm
+from .forms import UserLoginForm, _BaseForm, ActivityForm
 from .models import Activity, Question, AvailableResponse, Questionnaire
 
 @login_required 
@@ -27,20 +28,17 @@ def index(request):
 @csrf_protect 
 def questionnaire(request):
 
-    '''
-    form = modelformset_factory(
-                Question, 
-                formset=QuestionForm,
-                fields='__all__',
-           )
+    qid = request.GET.get('qid', None)
 
-    '''
+    try:
+        questionnaire = Questionnaire.objects.get(name=qid)
+    except:
+        questionnaire = None
 
-    qid = 1 # questionnaire_id
-
-    questionnaire = Questionnaire.objects.get(id=qid)
     questions = Question.objects.filter(questionnaire_id=qid)
     responses = AvailableResponse.objects.filter(questionnaire_id=qid)
+
+    print(questions, responses)
 
     return render(
                 request, 
@@ -80,28 +78,30 @@ def metric(request):
         # lookup our model name based on the select
         activity_name = Activity.objects.get(id=activity_id).name
 
-        form_lookup = {
-            'Eat':EatForm,
-            'Sleep':SleepForm,
-            'Drink':DrinkForm,
-        }
+        # model associated with activity
+        # NOTE: this assumes the activity name is the same as the model name
+        model = apps.get_model('oolong_app', activity_name)
 
-        form = form_lookup.get(activity_name, None) 
+        form = modelform_factory(model, form=_BaseForm)
 
         if form:
 
             if request.method == 'GET':
-                metric_form = form()
-                print(timezone.localtime(timezone.now()))
-                print(timezone.now())
+                metric_form = form(
+                                initial={
+                                    'start':timezone.localtime(timezone.now()),
+                                })
             else:
                 metric_form = form(request.POST)
 
                 if metric_form.is_valid():
 
                     try:
-                        a = metric_form.save()
-                    except:
+                        a = metric_form.save(commit=False)
+                        a.user_id = request.user.id
+                        a.save()
+                    except Exception as e:
+                        print(e)
                         error = True
                     else:
                         success = True

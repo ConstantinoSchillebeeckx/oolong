@@ -1,20 +1,15 @@
 from django.db import models
 from django.conf import settings
 
-'''
-Other models:
-- medication
-- sex
-- bathroom
-- exercise
-- social time
 
-- questionaires
 '''
-
+                                -------------
+                                METRIC MODELS
+                                -------------
+'''
 class Activity(models.Model):
     '''
-    Defines the lsit of available metrics to record; is
+    Defines the list of available metrics to record; is
     used to populate the select dropdown on the form
     that submits a metric.
     '''
@@ -33,7 +28,8 @@ class Activity(models.Model):
     class Meta:
         db_table = 'activity'
 
-class Metric(models.Model):
+
+class _Metric(models.Model):
     '''
     Serves as the base model for all other metrics.
 
@@ -55,15 +51,196 @@ class Metric(models.Model):
     class Meta:
         abstract = True
 
+class Medication(_Metric):
+    '''
+    Metric to log taking medication.
 
-class Eat(Metric):
+    The required fields for this model are:
+        - those of the base `Metric` model
+        - dose
+        - medication
+    '''
+    medication = models.TextField(
+        blank=False,
+        null=False,
+        db_index=True,
+        help_text=(
+            "Name of medication taken."
+        )
+    )
+    dose = models.FloatField(
+        blank=False,
+        null=False,
+        db_index=True,
+        help_text=(
+            "Dose of medication taken in mg."
+        )
+    )
+
+    class Meta:
+        db_table = 'metric_medication'
+    
+    
+class Sex(_Metric):
+    '''
+    Metric to log sexual activity.
+
+    The required fields for this model are:
+        - those of the base `Metric` model
+        - alone
+    '''
+    alone = models.BooleanField(
+        blank=False,
+        default=True,
+        db_index=True,
+        help_text=(
+            "Whether metric event occurred while being alone."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Any extra notes associated with metric event."
+        )
+    )
+
+    class Meta:
+        db_table = 'metric_sex'
+    
+
+class Bathroom(_Metric):
+    '''
+    Metric to log bathroom usage.
+
+    The required fields for this model are:
+        - those of the base `Metric` model
+        - process
+    '''
+    process = models.CharField(
+        max_length=1,
+        choices=[
+            ('1','Number 1'),
+            ('2','Number 2'),
+        ],
+        blank=False,
+        null=False,
+        db_index=True,
+        help_text=(
+            "You know..."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Any extra notes associated with metric event."
+        )
+    )
+
+    class Meta:
+        db_table = 'metric_bathroom'
+
+class Exercise(_Metric):
+    '''
+    Metric to log exercise.
+
+    The required fields for this model are:
+        - those of the base `Metric` model
+        - alone
+        - type
+    '''
+    type = models.CharField(
+        max_length=5,
+        choices=[
+            ('gym','Gym'),
+            ('run','Run'),
+            ('steps','Steps'),
+        ],
+        blank=False,
+        null=False,
+        db_index=True,
+        help_text=(
+            "The type of meal eaten."
+        )
+    )
+    value = models.FloatField(
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "The recorded value for the type of exercise."
+        )
+    )
+    units = models.CharField(
+        max_length=3,
+        choices=[
+            ('steps','Steps'),
+            ('miles','Miles'),
+        ],
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "Units associated with the <code>Value</code> field."
+        )
+    )
+    alone = models.BooleanField(
+        blank=False,
+        default=True,
+        db_index=True,
+        help_text=(
+            "Whether metric event occurred while being alone."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Any extra notes associated with metric event."
+        )
+    )
+
+    class Meta:
+        db_table = 'metric_exercise'
+
+class Relax(_Metric):
+    '''
+    Metric to log relaxing time. This is meant as a type of catch
+    all for activities like meditation, hanging out with friends,
+    watching TV, etc.
+
+    The required fields for this model are:
+        - those of the base `Metric` model
+        - alone
+    '''
+    alone = models.BooleanField(
+        blank=False,
+        default=True,
+        db_index=True,
+        help_text=(
+            "Whether metric event occurred while being alone."
+        )
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True,
+        help_text=(
+            "Any extra notes associated with metric event."
+        )
+    )
+
+    class Meta:
+        db_table = 'metric_social'
+
+class Eat(_Metric):
     '''
     Metric to log eating.
 
     The required fields for this model are:
         - those of the base `Metric` model
         - alone
-
+        - type
     '''
     end = models.DateTimeField(
         blank=True,
@@ -72,6 +249,19 @@ class Eat(Metric):
         help_text=(
             "When provided, defines a duration of the metric event by"
             " subtracting the <code>Start</code> field."
+        )
+    )
+    type = models.CharField(
+        max_length=5,
+        choices=[
+            ('snack','Snack'),
+            ('meal','Meal'),
+        ],
+        blank=False,
+        null=False,
+        db_index=True,
+        help_text=(
+            "The type of meal eaten."
         )
     )
     item = models.TextField(
@@ -119,7 +309,7 @@ class Eat(Metric):
     class Meta:
         db_table = 'metric_eat'
 
-class Drink(Metric):
+class Drink(_Metric):
     '''
     Metric to log drinking.
 
@@ -130,7 +320,7 @@ class Drink(Metric):
         - has_caffeine
 
     '''
-    item = models.CharField(
+    type = models.CharField(
         max_length=9,
         choices=[
             ('water','Water'),
@@ -193,7 +383,7 @@ class Drink(Metric):
 
 
 
-class Sleep(Metric):
+class Sleep(_Metric):
     '''
     Metric to log eating.
 
@@ -233,6 +423,14 @@ class Sleep(Metric):
 
 
 
+'''
+                    --------------------
+                    QUESTIONNAIRE MODELS
+                    --------------------
+'''
+
+
+
 
 class Questionnaire(models.Model):
     '''
@@ -242,8 +440,7 @@ class Questionnaire(models.Model):
     name = models.TextField(
         blank=False,
         null=False,
-        unique=True,
-        db_index=True,
+        primary_key=True,
     )
     description = models.TextField(
         null=True,

@@ -6,10 +6,13 @@ django-bootstrap3==9.1.0
 django-tag-parser==2.1
 dominate==2.1.17
 gunicorn==19.7.1
+ipaddress==1.0.16
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
 psycopg2==2.7.4
-pytz==2018.3
+pygeoip==0.3.2
+pytz==2016.6
+six==1.11.0
 Werkzeug==0.14.1
 whitenoise==3.3.1

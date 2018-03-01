@@ -31,17 +31,22 @@ ALLOWED_HOSTS = ['oolong-app.herokuapp.com']
 
 # Application definition
 
-INSTALLED_APPS = (
+PROJECT_APPS = [
     'oolong_app.apps.OolongAppConfig',
     'bootstrap3',
     'bootstrap_ui',
+    'tz_detect',
+]
+
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-)
+] + PROJECT_APPS
+
 
 MIDDLEWARE_CLASSES = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -53,7 +58,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'tz_detect.middleware.TimezoneMiddleware',
 )
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -92,7 +99,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
