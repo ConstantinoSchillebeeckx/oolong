@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from .forms import EatForm, SleepForm, ActivityForm, DrinkForm
 from .forms import UserLoginForm
-from .models import Activity
+from .models import Activity, Question, AvailableResponse, Questionnaire
 
 @login_required 
 def index(request):
@@ -23,6 +23,34 @@ def index(request):
 
     return response
 
+@login_required 
+@csrf_protect 
+def questionnaire(request):
+
+    '''
+    form = modelformset_factory(
+                Question, 
+                formset=QuestionForm,
+                fields='__all__',
+           )
+
+    '''
+
+    qid = 1 # questionnaire_id
+
+    questionnaire = Questionnaire.objects.get(id=qid)
+    questions = Question.objects.filter(questionnaire_id=qid)
+    responses = AvailableResponse.objects.filter(questionnaire_id=qid)
+
+    return render(
+                request, 
+                'questionnaire.html', 
+                {
+                    'questions': questions,
+                    'responses': responses,
+                    'questionnaire': questionnaire
+                }
+           )
 
 @login_required 
 @csrf_protect 

@@ -2,15 +2,18 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea
 from django.utils.safestring import mark_safe
+from django.forms import BaseModelFormSet
 
-from .models import Activity, Sleep, Eat, Drink
+from .models import Activity, Sleep, Eat, Drink, Question
 
 
 class ActivityForm(forms.Form):
     activity = forms.ModelChoiceField(queryset=Activity.objects.all())
 
-class EatForm(ModelForm):
-
+class BaseForm(ModelForm):
+    '''
+    BaseForm used as parent for all other metric forms.
+    '''
     required_css_class = 'required'
 
     def clean(self):
@@ -18,8 +21,8 @@ class EatForm(ModelForm):
         If `Value` is provided, so must `Units`
         '''
         cleaned_data = super().clean()
-        value = cleaned_data.get('value')
-        units = cleaned_data.get('units')
+        value = cleaned_data.get('value', None)
+        units = cleaned_data.get('units', None)
 
         if value and not units:
             msg=mark_safe(
@@ -29,46 +32,29 @@ class EatForm(ModelForm):
             self.add_error('units', forms.ValidationError(msg))
 
     class Meta:
+        exclude = ['user']
+
+class EatForm(BaseForm):
+
+    class Meta(BaseForm.Meta):
         model = Eat
-        fields = '__all__'
         widgets = {
             'item': Textarea(attrs={'rows': 2}),
             'notes': Textarea(attrs={'rows': 4}),
         }
 
-class SleepForm(ModelForm):
+class SleepForm(BaseForm):
 
-    required_css_class = 'required'
-
-    class Meta:
+    class Meta(BaseForm.Meta):
         model = Sleep
-        fields = '__all__'
         widgets = {
             'notes': Textarea(attrs={'rows': 4}),
         }
 
-class DrinkForm(ModelForm):
+class DrinkForm(BaseForm):
 
-    required_css_class = 'required'
-
-    def clean(self):
-        '''
-        If `Value` is provided, so must `Units`
-        '''
-        cleaned_data = super().clean()
-        value = cleaned_data.get('value')
-        units = cleaned_data.get('units')
-
-        if value and not units:
-            msg=mark_safe(
-                "If providing a <code>Value</code>, "
-                "you must also provide <code>Units.</code>"
-            )
-            self.add_error('units', forms.ValidationError(msg))
-
-    class Meta:
+    class Meta(BaseForm.Meta):
         model = Drink
-        fields = '__all__'
         widgets = {
             'notes': Textarea(attrs={'rows': 4}),
         }

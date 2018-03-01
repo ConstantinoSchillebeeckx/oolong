@@ -13,9 +13,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li class="{% if request.resolver_match.url_name == "home" %}active{% endif %}"><a href="/">Home</a></li>
-                <li class="{% if request.resolver_match.url_name == "metric" %}active{% endif %}"><a href="/metric">Metric</a></li>
                 {% if user.is_authenticated %}
+                    <li class="{% if request.resolver_match.url_name == "home" %}active{% endif %}"><a href="/">Home</a></li>
+                    <li class="{% if request.resolver_match.url_name == "metric" %}active{% endif %}"><a href="/metric">Metric</a></li>
+                    <li class="{% if request.resolver_match.url_name == "questionnaire" %}active{% endif %}"><a href="/questionnaire">Questionnaire</a></li>
                     <li><a href='/log_out/'>Log out</a></li>
                 {% endif %}
             </ul>
