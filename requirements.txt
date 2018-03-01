@@ -4,6 +4,7 @@ Django==1.11.10
 django-bootstrap-ui==0.5.1
 django-bootstrap3==9.1.0
 django-tag-parser==2.1
+django-tz-detect==0.2.9
 dominate==2.1.17
 gunicorn==19.7.1
 ipaddress==1.0.16
