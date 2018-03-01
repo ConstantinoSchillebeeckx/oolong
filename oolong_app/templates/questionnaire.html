@@ -37,9 +37,9 @@
                                 {% for field in form.visible_fields %}
                                     <div class="form-group">
                                         {% if not field.is_hidden %}
-                                            <label class="col-sm-9 control-label">{{ field.label }}</label>
+                                            <label class="col-sm-8 control-label">{{ field.label }}</label>
                                         {% endif %}
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-4">
                                             {{ field }}
                                         </div>
                                     </div>
