@@ -7,10 +7,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import modelformset_factory
 from django.forms import modelform_factory
 from django.apps import apps
+from django.shortcuts import redirect
 
 from django.utils import timezone
 
-from .forms import UserLoginForm, _BaseForm, ActivityForm
+from .forms import UserLoginForm, MetricForm, ActivityForm, QuestionnaireForm
 from .models import Activity, Question, AvailableResponse, Questionnaire
 
 @login_required 
@@ -26,26 +27,48 @@ def index(request):
 
 @login_required 
 @csrf_protect 
+def submit_success(request):
+
+    return render(request, 'submit_success.html', {})
+
+@login_required 
+@csrf_protect 
 def questionnaire(request):
 
     qid = request.GET.get('qid', None)
+    qid = 'PHQ-9'
 
     try:
         questionnaire = Questionnaire.objects.get(name=qid)
     except:
         questionnaire = None
 
-    questions = Question.objects.filter(questionnaire_id=qid)
-    responses = AvailableResponse.objects.filter(questionnaire_id=qid)
+    # get our list of questions for this questionnaire
+    # [(question_id, question_str),()]
+    questions = list(Question.objects.filter(questionnaire_id=qid).values_list('id','question'))
 
-    print(questions, responses)
+    # get the available responses for the questions
+    # [(response_score, response_label),()]
+    responses = [(None,'----')]
+    tmp = AvailableResponse.objects.filter(questionnaire_id=qid).values_list('score','label')
+    responses.extend(list(tmp))
+
+    form = QuestionnaireForm(
+                request.POST or None, 
+                q=questions, 
+                choices=responses,
+                user=request.user.id,
+           )
+
+    if form.is_valid():
+        form.save()
+        return redirect('/submit_success/')
 
     return render(
                 request, 
                 'questionnaire.html', 
                 {
-                    'questions': questions,
-                    'responses': responses,
+                    'form':form,
                     'questionnaire': questionnaire
                 }
            )
@@ -82,15 +105,13 @@ def metric(request):
         # NOTE: this assumes the activity name is the same as the model name
         model = apps.get_model('oolong_app', activity_name)
 
-        form = modelform_factory(model, form=_BaseForm)
+        form = modelform_factory(model, form=MetricForm)
 
         if form:
 
             if request.method == 'GET':
-                metric_form = form(
-                                initial={
-                                    'start':timezone.localtime(timezone.now()),
-                                })
+                initial = {'start':timezone.localtime(timezone.now())}
+                metric_form = form(initial=initial)
             else:
                 metric_form = form(request.POST)
 

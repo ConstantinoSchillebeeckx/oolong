@@ -9,30 +9,49 @@
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
-            {% if questionnaire %}
-                {% row %}
-                    {% column %}
-                        <p class="lead">{{questionnaire.form_header|safe}}<p>
-                    {% endcolumn %}
-                {% endrow %}
+            {% if form %}
+
+                {% if not form.errors %}
+                    {% row %}
+                        {% column %}
+                            <p class="lead">{{questionnaire.form_header|safe}}<p>
+                        {% endcolumn %}
+                    {% endrow %}
+                {% endif %}
+
                 {% row %}
                     {% column %}
                         <form method="post" class="form-horizontal">
                             {% csrf_token %}
-                            {% for q in questions %}
-                                <div class="form-group">
-                                    <label class="col-sm-9 control-label">{{q}}</label>
-                                    <div class="col-sm-3">
-                                        <select class="form-control" id="q{{q.id}}">
-                                            <option value selected>-------</option>
-                                            {% for i in responses %}
-                                                <option value="{{i.score}}">{{i}}</option>
-                                            {% endfor %}
-                                        </select>
+
+                            {% if form.errors %}
+
+                                <!-- Form Errors -->
+                                {% for error in form.non_field_errors %}
+                                    <div class="alert alert-danger" role="alert">{{error}}</div>
+                                {% endfor %}
+
+                            {% else %}
+
+                                <!-- Display Form -->
+                                {% for field in form.visible_fields %}
+                                    <div class="form-group">
+                                        {% if not field.is_hidden %}
+                                            <label class="col-sm-9 control-label">{{ field.label }}</label>
+                                        {% endif %}
+                                        <div class="col-sm-3">
+                                            {{ field }}
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                            <button type="submit" class="btn btn-info pull-right">Submit</button>
+                                {% endfor %}
+
+                                <!-- Hidden field for user_id -->
+                                {% for field in form.hidden_fields %}
+                                    {{ field }}
+                                {% endfor %}
+
+                                <button type="submit" class="btn btn-info pull-right">Submit</button>
+                            {% endif %}
                         </form>
                     {% endcolumn %}
                 {% endrow %}

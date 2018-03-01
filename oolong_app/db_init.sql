@@ -40,4 +40,8 @@ INSERT INTO available_response (score, label, questionnaire_id) VALUES
 (0,'Not at all','GAD-7'),
 (1,'Several days','GAD-7'),
 (2,'More than half the days','GAD-7'),
-(3,'Nearly every day','GAD-7');
+(3,'Nearly every day','GAD-7'),
+(0,'Not at all','PHQ-9'),
+(1,'Several days','PHQ-9'),
+(2,'More than half the days','PHQ-9'),
+(3,'Nearly every day','PHQ-9');

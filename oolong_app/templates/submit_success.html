@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load bootstrap_ui_tags %}
+
+{% block title %}Sucess{% endblock %}
+
+{% block content %}
+
+    <!-- bodywrap -->
+    <div id="bodywrap">
+        {% container %}
+            {% row %}
+                <div class="alert alert-success" role="alert">Everything submitted properly!</div>
+            {% endrow %}
+        {% endcontainer %}
+    </div>
+    <!-- end bodywrap -->
+
+{% endblock %}

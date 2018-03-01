@@ -4,7 +4,7 @@ from django.forms import ModelForm, Textarea
 from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
 
-from .models import Activity, Sleep, Eat, Drink, Question
+from .models import Activity, Sleep, Eat, Drink, Question, Response
 from .models import Medication, Sex, Bathroom, Relax, Exercise
 
 '''
@@ -18,9 +18,73 @@ relax
 class ActivityForm(forms.Form):
     activity = forms.ModelChoiceField(queryset=Activity.objects.all())
 
-class _BaseForm(ModelForm):
+class QuestionnaireForm(forms.Form):
     '''
-    _BaseForm used as parent for all other metric forms.
+    Generic questionnaire form; note that it's defined entirely
+    by the kwargs we initiate the form with.
+
+    https://jacobian.org/writing/dynamic-form-generation/
+    '''
+
+    def __init__(self, *args, **kwargs):
+        q = kwargs.pop('q') # questions
+        choices = kwargs.pop('choices')
+        user = kwargs.pop('user')
+
+        super(QuestionnaireForm, self).__init__(*args, **kwargs)
+        widget = forms.Select(attrs={'class':'form-control'})
+        hidden = forms.HiddenInput(attrs={'value':user})
+
+        self.fields['user'] = forms.CharField(widget=hidden, label='user')
+
+        for q_id, q_str in q:
+            self.fields['qid_%s' % q_id] = forms.ChoiceField(
+                                                choices=choices,
+                                                label=q_str,
+                                                widget=widget
+                                           )
+
+    def clean(self):
+        # ensure user hasn't already filled out this form today
+
+        form_data = super(QuestionnaireForm, self).clean()
+        user_id = form_data.get('user',None)
+
+        for (question_id, score) in self.get_answers():
+            try:
+                a = Response.objects.get(user_id=user_id, question_id=question_id)
+            except:
+                pass
+            else:
+                raise forms.ValidationError('You cannot submit this questionnaire more than once per day.')
+
+        return form_data
+
+
+    def get_answers(self):
+        # returns the tuple (question_id, score)
+        for name, value in self.cleaned_data.items():
+            if name.startswith('qid_'):
+                qid = int(name.replace('qid_',''))
+                yield (qid, value)
+
+
+    def save(self, commit=True, *args, **kwargs):
+        super(QuestionnaireForm, self).__init__(*args, **kwargs)
+        user = self.cleaned_data.get('user',None)
+
+        for (question_id, score) in self.get_answers():
+            r = Response(
+                    question_id = question_id,
+                    score = score,
+                    user_id = user
+                )
+            r.save()
+
+
+class MetricForm(ModelForm):
+    '''
+    Generic form used for metrics.
     '''
     required_css_class = 'required'
 

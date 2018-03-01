@@ -553,17 +553,18 @@ class Response(models.Model):
             "Question being answered/scored."
         )
     )   
-    response = models.ForeignKey(
-        AvailableResponse,
-        on_delete=models.PROTECT,
+    score = models.IntegerField(
+        blank=False,
+        null=False,
+        db_index=True,
         help_text=(
-            "Response to given question."
+            "Response score to given question."
         )
     )   
 
     class Meta:
         db_table = 'response'
-        unique_together = ('user','date','question','response')
+        unique_together = ('user','date','question')
 
 
 
