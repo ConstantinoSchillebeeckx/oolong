@@ -10,6 +10,8 @@
     <div id="bodywrap">
         {% container %}
             {% if success %}
+
+                <!-- success message -->
                 {% row %}
                     {% column xs="12" sm="7" %}
                         <div class="alert alert-success" role="alert">
@@ -17,7 +19,10 @@
                         </div>
                     {% endcolumn %}
                 {% endrow %}
+
             {% elif error %}
+
+                <!-- serror message -->
                 {% row %}
                     {% column xs="12" sm="4" %}
                         <div class="alert alert-danger" role="alert">
@@ -25,21 +30,26 @@
                         </div>
                     {% endcolumn %}
                 {% endrow %}
+
             {% else %}
+
+                <!-- activity icons -->
                 {% row %}
-                    {% column xs="12" sm="3" %}
-                        {% if activity_form %}
-                            <form method="get">
-                                {% csrf_token %}
-                                {% bootstrap_form activity_form %}
-                            </form>
-                        {% endif %}
-                    {% endcolumn %}
+                    <div class='col-xs-12 button-wrapper'>
+                        {% for activity in activities %}
+                            <a href='?activity={{activity.id}}' type="button" class="btn btn-info">
+                                <i class="fas {{activity.icon}} fa-2x"></i> {{activity.name}}
+                            </a>
+                        {% endfor %}
+                    </div>
                 {% endrow %}
+
+                <!-- metric form -->
                 {% row %}
                     {% column %}
                         {% if metric_form %}
                             <hr>
+                            <h2><code>{{selected_activity}}</code></h2>
                             <form method="post">
                                 {% csrf_token %}
                                 {% bootstrap_form metric_form %}
@@ -48,6 +58,7 @@
                         {% endif %}
                     {% endcolumn %}
                 {% endrow %}
+
             {% endif %}
         {% endcontainer %}
     </div>

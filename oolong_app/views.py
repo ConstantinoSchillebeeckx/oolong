@@ -101,7 +101,8 @@ def metric(request):
     if activity_id:
 
         # lookup our model name based on the select
-        activity_name = Activity.objects.get(id=activity_id).name
+        activity = Activity.objects.get(id=activity_id)
+        activity_name = activity.name
 
         # model associated with activity
         # NOTE: this assumes the activity name is the same as the model name
@@ -135,10 +136,11 @@ def metric(request):
                 request, 
                 'metric.html', 
                 {
-                    'activity_form': activity_form,
                     'metric_form': metric_form,
                     'success': success,
-                    'error': error
+                    'error': error,
+                    'activities': Activity.objects.all(),
+                    'selected_activity': activity,
                 }
            )
 

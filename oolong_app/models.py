@@ -17,6 +17,11 @@ class Activity(models.Model):
         blank=False,
         db_index=True,
     )
+    icon = models.TextField(
+        blank=False,
+        db_index=True,
+        help_text = "Name of font-awesome icon; e.g. `fa-beer`"
+    )
     description = models.TextField(
         blank=True,
         default=None,
