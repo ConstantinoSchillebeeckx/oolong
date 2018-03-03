@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Textarea, NumberInput
 from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
 
@@ -81,6 +81,8 @@ class QuestionnaireForm(forms.Form):
                 )
             r.save()
 
+    
+
 
 class MetricForm(ModelForm):
     '''
@@ -91,17 +93,30 @@ class MetricForm(ModelForm):
     def clean(self):
         '''
         If `Value` is provided, so must `Units`
+
+        If `End` is provided, it must be after 'Time stamp`
         '''
         cleaned_data = super().clean()
         value = cleaned_data.get('value', None)
         units = cleaned_data.get('units', None)
+        time_stamp = cleaned_data.get('time_stamp', None)
+        end = cleaned_data.get('end', None)
 
         if value and not units:
             msg=mark_safe(
                 "If providing a <code>Value</code>, "
-                "you must also provide <code>Units.</code>"
+                "you must also provide <code>Units</code>."
             )
             self.add_error('units', forms.ValidationError(msg))
+
+        if end and time_stamp and end < time_stamp:
+            print(end)
+            msg=mark_safe(
+                "If providing an <code>End</code> timestamp, "
+                "it must occurr after starting <code>Time stamp</code>."
+            )
+            self.add_error('end', forms.ValidationError(msg))
+
 
 
     class Meta:
@@ -110,6 +125,7 @@ class MetricForm(ModelForm):
             'notes': Textarea(attrs={'rows': 3}),
             'item': Textarea(attrs={'rows': 2}),
             'medication': Textarea(attrs={'rows': 2}),
+            'value': NumberInput(attrs={"pattern":"[0-9]*"}),
         }
 
 #  user login form model

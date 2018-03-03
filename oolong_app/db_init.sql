@@ -14,9 +14,9 @@ INSERT INTO public.auth_user
 ('pbkdf2_sha256$36000$wLBJNgE16iS4$1NFzUVoGAmIq6phn61H0LDbeJrcZHSOLbxfzpiivkwc=', '2018-02-27 16:42:57.534', false, 'meow', 'meow', 'meow', 'meow@gmail.com', false, true, '2018-02-27 16:42:57.449');
 
 INSERT INTO questionnaire (name, description, form_header) VALUES 
-('GAD-7','Generalized Anxiety Disorder 7 (GAD-7) is a self-reported questionnaire for screening and severity measuring of generalized anxiety disorder (GAD).','Over the last <b>2 weeks</b>, how often have you been bothered by the following problems? '),
-('PHQ-9','The PHQ-9 is a 9-question instrument given to patients in a primary care setting to screen for the presence and severity of depression.','Over the last <b>2 weeks</b>, how often have you been bothered
-by any of the following problems? ');
+('GAD-7','Generalized Anxiety Disorder 7 (GAD-7) is a self-reported questionnaire for screening and severity measuring of generalized anxiety disorder (GAD).','Over the last <b>2 weeks</b>, how often have you been bothered by the following problems?'),
+('PHQ-9','The PHQ-9 is a 9-question instrument given to patients in a primary care setting to screen for the presence and severity of depression.','Over the last <b>2 weeks</b>, how often have you been bothered by any of the following problems?'),
+('Custom','My own custom questionnaire.','Over the last <b>day</b>, how did you feel?');
 
 INSERT INTO question (question, questionnaire_id) VALUES
 ('Feeling nervous, anxious or on edge','GAD-7'),
@@ -34,7 +34,8 @@ INSERT INTO question (question, questionnaire_id) VALUES
 ('Feeling bad about yourself — or that you are a failure or have let yourself or your family down','PHQ-9'),
 ('Trouble concentrating on things, such as reading the newspaper or watching television','PHQ-9'),
 ('Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual ','PHQ-9'),
-('Thoughts that you would be better off dead or of hurting yourself in some way','PHQ-9');
+('Thoughts that you would be better off dead or of hurting yourself in some way','PHQ-9'),
+('I felt hopeful','Custom');
 
 INSERT INTO available_response (score, label, questionnaire_id) VALUES 
 (0,'Not at all','GAD-7'),
@@ -44,4 +45,11 @@ INSERT INTO available_response (score, label, questionnaire_id) VALUES
 (0,'Not at all','PHQ-9'),
 (1,'Several days','PHQ-9'),
 (2,'More than half the days','PHQ-9'),
-(3,'Nearly every day','PHQ-9');
+(3,'Nearly every day','PHQ-9'),
+(1,'Strongly disagree','Custom'),
+(2,'Disagree','Custom'),
+(3,'Slightly disagree','Custom'),
+(4,'Neither agree or disagree','Custom'),
+(5,'Slightly agree','Custom'),
+(6,'Agree','Custom'),
+(7,'Strongly agree','Custom');

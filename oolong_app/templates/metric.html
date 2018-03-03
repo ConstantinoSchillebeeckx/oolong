@@ -62,9 +62,14 @@
         })
 
         jQuery(function () {
-            jQuery("#id_start").datetimepicker({
-                format: "YYYY-MM-DD H:mm:ss"
-            });
+            // we show/hide start to autopopulate with
+            // user's current time - a little dirty ...
+            if (jQuery('#id_time_stamp').length) {
+                jQuery("#id_time_stamp").datetimepicker({
+                    format: "YYYY-MM-DD H:mm:ss"
+                }).data("DateTimePicker").show().hide();
+            }
+
             jQuery("#id_end").datetimepicker({
                 format: "YYYY-MM-DD H:mm:ss"
             });

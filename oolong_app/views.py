@@ -36,7 +36,9 @@ def submit_success(request):
 def questionnaire(request):
 
     qid = request.GET.get('qid', None)
-    qid = 'PHQ-9'
+    
+    if not qid:
+        qid = 'PHQ-9'
 
     try:
         questionnaire = Questionnaire.objects.get(name=qid)
@@ -111,7 +113,7 @@ def metric(request):
 
             if request.method == 'GET':
                 initial = {'start':timezone.localtime(timezone.now())}
-                metric_form = form(initial=initial)
+                metric_form = form()
             else:
                 metric_form = form(request.POST)
 

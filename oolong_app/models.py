@@ -34,9 +34,9 @@ class _Metric(models.Model):
     Serves as the base model for all other metrics.
 
     The required fields for this model are:
-        - start
+        - time_stamp
     '''
-    start = models.DateTimeField(
+    time_stamp = models.DateTimeField(
         blank=False,
         db_index=True,
         help_text="When the metric event occurred or began.",
@@ -151,7 +151,7 @@ class Exercise(_Metric):
         - type
     '''
     type = models.CharField(
-        max_length=5,
+        max_length=10,
         choices=[
             ('gym','Gym'),
             ('run','Run'),
@@ -173,7 +173,7 @@ class Exercise(_Metric):
         )
     )
     units = models.CharField(
-        max_length=3,
+        max_length=10,
         choices=[
             ('steps','Steps'),
             ('miles','Miles'),
@@ -248,11 +248,11 @@ class Eat(_Metric):
         db_index=True,
         help_text=(
             "When provided, defines a duration of the metric event by"
-            " subtracting the <code>Start</code> field."
+            " subtracting the <code>Time stamp</code> field."
         )
     )
     type = models.CharField(
-        max_length=5,
+        max_length=10,
         choices=[
             ('snack','Snack'),
             ('meal','Meal'),
@@ -281,7 +281,7 @@ class Eat(_Metric):
         )
     )
     units = models.CharField(
-        max_length=3,
+        max_length=10,
         choices=[('cal','Cal')],
         blank=True,
         null=True,
@@ -321,7 +321,7 @@ class Drink(_Metric):
 
     '''
     type = models.CharField(
-        max_length=9,
+        max_length=10,
         choices=[
             ('water','Water'),
             ('tea','Tea'),
@@ -345,7 +345,7 @@ class Drink(_Metric):
         )
     )
     units = models.CharField(
-        max_length=9,
+        max_length=10,
         choices=[('fl oz','Fluid Ounce')],
         blank=True,
         null=True,
@@ -399,7 +399,7 @@ class Sleep(_Metric):
         db_index=True,
         help_text=(
             "When provided, defines a duration of the metric by subtracting "
-            "the <code>start</code> field."
+            "the <code>Time stamp</code> field."
         )
     )
     alone = models.BooleanField(
@@ -435,7 +435,10 @@ class Sleep(_Metric):
 class Questionnaire(models.Model):
     '''
     Model that serves as a reference to define what questionnaires
-    are available; e.g. GAD-7
+    are available; e.g. GAD-7.
+
+    NOTE: it is assumed that the available answers for each question
+    on a questionnaire are all the same.
     '''
     name = models.TextField(
         blank=False,
