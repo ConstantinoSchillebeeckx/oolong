@@ -93,7 +93,7 @@ def metric(request):
         based on that selection, the corresponding django model is chosen and
         used to populate the form.
     '''
-    metric_form, activity_form = None, None
+    metric_form, activity_form, activity = None, None, None
     success, error = False, False
     activity_id=request.GET.get('activity', None)
     activity_form = ActivityForm(initial={'activity': activity_id})
