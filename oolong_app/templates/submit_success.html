@@ -6,6 +6,10 @@
 
 {% block content %}
 
+    <style>
+        .noUi-value, .noUi-marker-large { visibility: hidden; }
+    </style>
+
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
@@ -57,14 +61,16 @@
                 // input_id: 'slider1_hidden'
 
                 var slider = $(this)[0];
+                var max = 8;
+                var min = 0;
 
                 noUiSlider.create(slider, {
                     start: 4,
                     tooltips: true,
                     padding: 1,
                     range: {
-                        'min': 0,
-                        'max': 8
+                        'min': min,
+                        'max': max
                     },
                     step: 1,
                     format: {
@@ -75,6 +81,10 @@
                         from: function ( value ) {
                             return value;
                         }
+                    },
+                    pips: {
+                        mode: 'range',
+                        density: 100/(max-min)
                     }
                 });
 
