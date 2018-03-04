@@ -6,7 +6,8 @@ INSERT INTO activity (name, description, icon) VALUES
 ('Sex','Having sex.','fa-heart'),
 ('Bathroom','Using the bathroom.','fa-bath'),
 ('Exercise','Doing exercise.','fa-football-ball'),
-('Relax','Relaxing.','fa-hand-peace');
+('Relax','Relaxing.','fa-hand-peace'),
+('Note','Generic note.','fa-sticky-note');
 
 INSERT INTO public.auth_user
 (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) VALUES
@@ -16,7 +17,8 @@ INSERT INTO public.auth_user
 INSERT INTO questionnaire (name, description, form_header) VALUES 
 ('GAD-7','Generalized Anxiety Disorder 7 (GAD-7) is a self-reported questionnaire for screening and severity measuring of generalized anxiety disorder (GAD).','Over the last <b>2 weeks</b>, how often have you been bothered by the following problems?'),
 ('PHQ-9','The PHQ-9 is a 9-question instrument given to patients in a primary care setting to screen for the presence and severity of depression.','Over the last <b>2 weeks</b>, how often have you been bothered by any of the following problems?'),
-('Custom','My own custom questionnaire.','Over the last <b>day</b>, how did you feel?');
+('Daily','My own custom daily questionnaire.','For each of the following emotions, respond with how strongly you agree or disgree with the statement: <b>Today</b> I felt ...'),
+('Summary', 'Questionnaire to get a single, summarizing stat for each affect.','<b>Today</b>, I generally felt ...');
 
 INSERT INTO question (question, questionnaire_id) VALUES
 ('Feeling nervous, anxious or on edge','GAD-7'),
@@ -35,7 +37,39 @@ INSERT INTO question (question, questionnaire_id) VALUES
 ('Trouble concentrating on things, such as reading the newspaper or watching television','PHQ-9'),
 ('Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual ','PHQ-9'),
 ('Thoughts that you would be better off dead or of hurting yourself in some way','PHQ-9'),
-('I felt hopeful','Custom');
+('hopeful','Daily'),
+('cheerful','Daily'),
+('enthusiastic','Daily'),
+('interested, engaged and stimulated','Daily'),
+('I liked myself','Daily'),
+('satisfied','Daily'),
+('tranquil','Daily'),
+('purposeful / meaningful','Daily'),
+('my life was worth living','Daily'),
+('uneasy / nervous / tense','Daily'),
+('stressed','Daily'),
+('overwhelmed','Daily'),
+('ruminative / can''t concentrate','Daily'),
+('impending doom','Daily'),
+('nervous when my normal routine was disturbed','Daily'),
+('that various situations made me worry','Daily'),
+('I had difficulty calming down','Daily'),
+('I had sudden feelings of panic','Daily'),
+('hopeless','Daily'),
+('sad','Daily'),
+('tired','Daily'),
+('discouraged','Daily'),
+('low self-esteem / worthless','Daily'),
+('guilt','Daily'),
+('lonely','Daily'),
+('like a failure','Daily'),
+('like hurting myself','Daily'),
+('that my life is empty','Daily'),
+('that nothing is interesting','Daily'),
+('I had no reason for living','Daily'),
+('happy','Summary'),
+('anxious','Summary'),
+('depressed','Summary');
 
 INSERT INTO available_response (score, label, questionnaire_id) VALUES 
 (0,'Not at all','GAD-7'),
@@ -46,10 +80,17 @@ INSERT INTO available_response (score, label, questionnaire_id) VALUES
 (1,'Several days','PHQ-9'),
 (2,'More than half the days','PHQ-9'),
 (3,'Nearly every day','PHQ-9'),
-(1,'Strongly disagree','Custom'),
-(2,'Disagree','Custom'),
-(3,'Slightly disagree','Custom'),
-(4,'Neither agree or disagree','Custom'),
-(5,'Slightly agree','Custom'),
-(6,'Agree','Custom'),
-(7,'Strongly agree','Custom');
+(1,'Strongly disagree','Daily'),
+(2,'Disagree','Daily'),
+(3,'Slightly disagree','Daily'),
+(4,'Neither agree or disagree','Daily'),
+(5,'Slightly agree','Daily'),
+(6,'Agree','Daily'),
+(7,'Strongly agree','Daily'),
+(1,'Strongly disagree','Summary'),
+(2,'Disagree','Summary'),
+(3,'Slightly disagree','Summary'),
+(4,'Neither agree or disagree','Summary'),
+(5,'Slightly agree','Summary'),
+(6,'Agree','Summary'),
+(7,'Strongly agree','Summary');

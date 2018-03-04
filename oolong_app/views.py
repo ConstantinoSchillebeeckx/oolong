@@ -36,9 +36,11 @@ def submit_success(request):
 def questionnaire(request):
 
     qid = request.GET.get('qid', None)
+    next_qid = request.GET.get('next_qid', None)
     
     if not qid:
-        qid = 'PHQ-9'
+        qid = 'Daily'
+        next_qid = 'Summary'
 
     try:
         questionnaire = Questionnaire.objects.get(name=qid)
@@ -64,7 +66,11 @@ def questionnaire(request):
 
     if form.is_valid():
         form.save()
-        return redirect('/submit_success/')
+    
+        if next_qid:
+            return redirect('/questionnaire?qid=Summary')
+        else:
+            return redirect('/submit_success/')
 
     return render(
                 request, 

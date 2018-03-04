@@ -56,6 +56,22 @@ class _Metric(models.Model):
     class Meta:
         abstract = True
 
+class Note(_Metric):
+    '''
+    Generic note
+
+    The required fields for this model are:
+        - those of the base `Metric` model
+        - nots
+    '''
+    notes = models.TextField(
+        blank=False,
+        null=False,
+        help_text=(
+            "Any extra notes associated with metric event."
+        )
+    )
+
 class Medication(_Metric):
     '''
     Metric to log taking medication.
