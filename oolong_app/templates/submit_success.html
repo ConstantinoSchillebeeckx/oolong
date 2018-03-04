@@ -14,15 +14,17 @@
                     <div class="alert alert-success" role="alert">Everything submitted properly!</div>
                 {% endcolumn %}
             {% endrow %}
+            {% row %}
+                {% column xs="12" sm="3" %}
+                    <div id='slider1' class="sliders"></div>
+                    <input type="hidden" id="slider1_hidden" value="4"></input>
+                {% endcolumn %}
+            {% endrow %}
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
 
-    <div id='slider1' class="sliders"></div>
-    <input type="hidden" id="slider1_hidden" value="4"></input>
 
-    <div id='slider2' class="sliders"></div>
-    <input type="hidden" id="slider2_hidden" value="4"></input>
 
     <script>
         window.onload = function() {
