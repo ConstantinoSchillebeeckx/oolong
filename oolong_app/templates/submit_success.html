@@ -10,12 +10,78 @@
     <div id="bodywrap">
         {% container %}
             {% row %}
-                {% column xs="3" %}
+                {% column xs="12" sm="3" %}
                     <div class="alert alert-success" role="alert">Everything submitted properly!</div>
                 {% endcolumn %}
             {% endrow %}
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
+
+    <div id='slider1' class="sliders"></div>
+    <input type="hidden" id="slider1_hidden" value="4"></input>
+
+    <div id='slider2' class="sliders"></div>
+    <input type="hidden" id="slider2_hidden" value="4"></input>
+
+    <script>
+        window.onload = function() {
+
+            var lookup = {
+                1:'Strongly disagree',
+                2:'Disagree',
+                3:'Slightly disagree',
+                4:'Neither',
+                5:'Slightly agree',
+                6:'Agree',
+                7:'Strongly agree'
+            }
+
+            getValByKey = function(value) {
+
+                if (value in lookup) {
+                    return value;
+                } else {
+                    return Object.keys(lookup).filter(function(key) {return lookup[key] === value})[0];
+                }
+            }
+
+            $('.sliders').each(function(d) {
+
+                // assumes each slider div also has a hidden
+                // input div with the same id as the slider,
+                // but with an appended '_hidden', e.g.
+                // slider_id: 'slider1'
+                // input_id: 'slider1_hidden'
+
+                var slider = $(this)[0];
+
+                noUiSlider.create(slider, {
+                    start: 4,
+                    tooltips: true,
+                    range: {
+                        'min': 1,
+                        'max': 7
+                    },
+                    step: 1,
+                    format: {
+                        to: function ( value ) {
+                            var label = lookup[Math.floor(value)];
+                            return label;
+                        },
+                        from: function ( value ) {
+                            return value;
+                        }
+                    }
+                });
+
+                slider.noUiSlider.on('end', function(values, handle) {
+                    var number = getValByKey(values[0]);
+                    var input_id = '#' + this.target.id + '_hidden';
+                    $(input_id).val(number);
+                });
+            })
+        }
+    </script>
 
 {% endblock %}

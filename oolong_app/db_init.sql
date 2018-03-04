@@ -4,10 +4,10 @@ INSERT INTO activity (name, description, icon) VALUES
 ('Sleep','Sleeping event.','fa-moon'),
 ('Medication','Taking medication.','fa-pills'),
 ('Sex','Having sex.','fa-heart'),
+('Note','Generic note.','fa-sticky-note'),
 ('Bathroom','Using the bathroom.','fa-bath'),
 ('Exercise','Doing exercise.','fa-football-ball'),
-('Relax','Relaxing.','fa-hand-peace'),
-('Note','Generic note.','fa-sticky-note');
+('Relax','Relaxing.','fa-hand-peace');
 
 INSERT INTO public.auth_user
 (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) VALUES
