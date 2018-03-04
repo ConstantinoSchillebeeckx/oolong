@@ -36,11 +36,20 @@ def submit_success(request):
 def questionnaire(request):
 
     qid = request.GET.get('qid', None)
-    next_qid = request.GET.get('next_qid', None)
-    
     if not qid:
-        qid = 'Daily'
-        next_qid = 'Summary'
+        qid = 'Happiness'
+
+
+    # defines how user traverses questionnaires
+    # key: starting form
+    # value: redirect to form
+    path = {
+        'Happiness':'Anxiety',
+        'Anxiety':'Depression',
+        'Depression':'Summary'
+    }
+    
+    next_qid = path.get(qid,None)
 
     try:
         questionnaire = Questionnaire.objects.get(name=qid)
@@ -68,8 +77,10 @@ def questionnaire(request):
         form.save()
     
         if next_qid:
-            return redirect('/questionnaire?qid=Summary')
+            # redirect to next questionnaire
+            return redirect('/questionnaire?qid=%s' %next_qid)
         else:
+            # questionnaires finished
             return redirect('/submit_success/')
 
     return render(
