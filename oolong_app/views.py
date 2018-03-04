@@ -135,6 +135,7 @@ def metric(request):
                         error = True
                     else:
                         success = True
+                        metric_form = None
 
                         
 

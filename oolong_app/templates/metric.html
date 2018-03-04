@@ -9,13 +9,25 @@
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
+
+            <!-- activity icons -->
+            {% row %}
+                <div class='col-xs-12 button-wrapper'>
+                    {% for activity in activities %}
+                        <a href='?activity={{activity.id}}' type="button" class="btn btn-info">
+                            <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span> {{activity.name}}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endrow %}
+
             {% if success %}
 
                 <!-- success message -->
                 {% row %}
-                    {% column xs="12" sm="7" %}
+                    {% column xs="12" sm="3" %}
                         <div class="alert alert-success" role="alert">
-                            Metric successfully submitted; <a href='/metric/'>submit another</a>.
+                            Metric successfully submitted.
                         </div>
                     {% endcolumn %}
                 {% endrow %}
@@ -31,35 +43,24 @@
                     {% endcolumn %}
                 {% endrow %}
 
-            {% else %}
+            {% endif %}
 
-                <!-- activity icons -->
-                {% row %}
-                    <div class='col-xs-12 button-wrapper'>
-                        {% for activity in activities %}
-                            <a href='?activity={{activity.id}}' type="button" class="btn btn-info">
-                                <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span> {{activity.name}}</span>
-                            </a>
-                        {% endfor %}
-                    </div>
-                {% endrow %}
 
-                <!-- metric form -->
+            <!-- metric form -->
+            {% if metric_form %}
                 {% row %}
                     {% column %}
-                        {% if metric_form %}
-                            <hr>
-                            <h2><code>{{selected_activity}}</code></h2>
-                            <form method="post">
-                                {% csrf_token %}
-                                {% bootstrap_form metric_form %}
-                                <button type="submit" class="btn btn-info pull-right">Submit</button>
-                            </form>
-                        {% endif %}
+                        <hr>
+                        <h2><code>{{selected_activity}}</code></h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form metric_form %}
+                            <button type="submit" class="btn btn-info pull-right">Submit</button>
+                        </form>
                     {% endcolumn %}
                 {% endrow %}
-
             {% endif %}
+
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->

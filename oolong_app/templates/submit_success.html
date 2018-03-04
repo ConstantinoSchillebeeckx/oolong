@@ -10,7 +10,9 @@
     <div id="bodywrap">
         {% container %}
             {% row %}
-                <div class="alert alert-success" role="alert">Everything submitted properly!</div>
+                {% column %}
+                    <div class="alert alert-success" role="alert">Everything submitted properly!</div>
+                {% endcolumn %}
             {% endrow %}
         {% endcontainer %}
     </div>
