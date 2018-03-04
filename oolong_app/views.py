@@ -11,6 +11,8 @@ from django.shortcuts import redirect
 
 from django.utils import timezone
 
+import json
+
 from .forms import UserLoginForm, MetricForm, ActivityForm, QuestionnaireForm
 from .models import Activity, Question, AvailableResponse, Questionnaire
 
@@ -65,6 +67,7 @@ def questionnaire(request):
     responses = [(None,'----')]
     tmp = AvailableResponse.objects.filter(questionnaire_id=qid).values_list('score','label')
     responses.extend(list(tmp))
+    responses_dict = {k:v for k,v in responses if k}
 
     form = QuestionnaireForm(
                 request.POST or None, 
@@ -88,7 +91,8 @@ def questionnaire(request):
                 'questionnaire.html', 
                 {
                     'form':form,
-                    'questionnaire': questionnaire
+                    'questionnaire': questionnaire,
+                    'responses': json.dumps(responses_dict) # not currently used
                 }
            )
 

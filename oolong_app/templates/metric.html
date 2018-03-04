@@ -25,7 +25,7 @@
 
                 <!-- success message -->
                 {% row %}
-                    {% column xs="12" sm="3" %}
+                    {% column xs="12" sm="5" lg="3" %}
                         <div class="alert alert-success" role="alert">
                             Metric successfully submitted.
                         </div>
@@ -36,7 +36,7 @@
 
                 <!-- serror message -->
                 {% row %}
-                    {% column xs="12" sm="4" %}
+                    {% column xs="12" sm="5" lg="3" %}
                         <div class="alert alert-danger" role="alert">
                             An error occurred, please try again.
                         </div>
@@ -66,12 +66,6 @@
     <!-- end bodywrap -->
 
     <script>
-
-        jQuery('#id_activity').change(function(){
-            // on change even handler to set the proper
-            // GET variables that load the proper form
-            window.location = '?activity=' + jQuery(this).val();
-        })
 
         jQuery(function () {
             // we show/hide start to autopopulate with

@@ -6,6 +6,22 @@
 
 {% block content %}
 
+    <style>
+        .noUi-tooltip {
+            display: none;
+        }
+        .noUi-active .noUi-tooltip {
+            display: block;
+        }
+        .form-group {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+        input {
+            visibility: hidden; /* hide inputs so we don't see them onload */
+        }
+    </style>
+
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
@@ -40,7 +56,7 @@
                                             <label class="col-sm-8 col-lg-9 control-label">{{ field.label }}</label>
                                         {% endif %}
                                         <div class="col-sm-4 col-lg-3">
-                                            {{ field }}
+                                            {{field}}
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -55,10 +71,17 @@
                         </form>
                     {% endcolumn %}
                 {% endrow %}
+
             {% endif %}
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
 
+
+    <script type="text/javascript">
+        var lookup = {{responses|safe}}
+
+        //window.onload = function() { convert('input[type=text]'); };
+    </script>
 
 {% endblock %}

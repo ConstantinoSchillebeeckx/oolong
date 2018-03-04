@@ -110,7 +110,6 @@ class MetricForm(ModelForm):
             self.add_error('units', forms.ValidationError(msg))
 
         if end and time_stamp and end < time_stamp:
-            print(end)
             msg=mark_safe(
                 "If providing an <code>End</code> timestamp, "
                 "it must occurr after starting <code>Time stamp</code>."

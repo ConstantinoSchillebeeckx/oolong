@@ -20,7 +20,7 @@ INSERT INTO questionnaire (name, description, form_header) VALUES
 ('Happiness','My own custom daily questionnaire for happiness.','For each of the following emotions, respond with how strongly you agree or disgree with the statement: <b>Today</b> I felt ...'),
 ('Anxiety','My own custom daily questionnaire for anxiety.','For each of the following emotions, respond with how strongly you agree or disgree with the statement: <b>Today</b> I felt ...'),
 ('Depression','My own custom daily questionnaire for depression.','For each of the following emotions, respond with how strongly you agree or disgree with the statement: <b>Today</b> I felt ...'),
-('Summary', 'Questionnaire to get a single, summarizing stat for each affect.','<b>Today</b>, I generally felt ...');
+('Summary', 'Questionnaire to get a single, summarizing stat for each affect.','On a score from 1 to 10, 10 being the strongest feeling, rate how you felt <b>today</b> for each of the feelings:');
 
 INSERT INTO question (question, questionnaire_id) VALUES
 ('Feeling nervous, anxious or on edge','GAD-7'),
@@ -103,10 +103,13 @@ INSERT INTO available_response (score, label, questionnaire_id) VALUES
 (5,'Slightly agree','Depression'),
 (6,'Agree','Depression'),
 (7,'Strongly agree','Depression'),
-(1,'Strongly disagree','Summary'),
-(2,'Disagree','Summary'),
-(3,'Slightly disagree','Summary'),
-(4,'Neither agree or disagree','Summary'),
-(5,'Slightly agree','Summary'),
-(6,'Agree','Summary'),
-(7,'Strongly agree','Summary');
+(1,1,'Summary'),
+(2,2,'Summary'),
+(3,3,'Summary'),
+(4,4,'Summary'),
+(5,5,'Summary'),
+(6,6,'Summary'),
+(7,7,'Summary'),
+(8,8,'Summary'),
+(9,9,'Summary'),
+(10,10,'Summary');
