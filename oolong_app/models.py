@@ -263,7 +263,6 @@ class Relax(_Metric):
         blank=False,
         null=False,
         db_index=True,
-        default='other',
         help_text=(
             "The type of relax/social event."
         )
@@ -350,6 +349,14 @@ class Eat(_Metric):
         db_index=True,
         help_text=(
             "Whether metric event occurred while being alone."
+        )
+    )
+    home_cooked = models.BooleanField(
+        blank=False,
+        default=True,
+        db_index=True,
+        help_text=(
+            "Whether the meal was cooked at home."
         )
     )
     notes = models.TextField(
