@@ -257,6 +257,7 @@ class Relax(_Metric):
             ('video_game','Video game'),
             ('meditation','Meditation'),
             ('walk','Walk'),
+            ('internet','Internet'),
             ('other','Other'),
         ],
         blank=False,
