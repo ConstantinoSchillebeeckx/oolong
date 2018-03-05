@@ -245,7 +245,7 @@ class Relax(_Metric):
         )
     )
     type = models.CharField(
-        max_length=10,
+        max_length=15,
         choices=[
             ('read_book','Read book'),
             ('work','Work'),
