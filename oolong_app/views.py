@@ -10,11 +10,13 @@ from django.apps import apps
 from django.shortcuts import redirect
 
 from django.utils import timezone
+import django_tables2 as tables
 
 import json
 
-from .forms import UserLoginForm, MetricForm, ActivityForm, QuestionnaireForm
+from .forms import UserLoginForm, MetricForm, QuestionnaireForm
 from .models import Activity, Question, AvailableResponse, Questionnaire
+from .tables import _Generic
 
 @login_required 
 def index(request):
@@ -98,26 +100,65 @@ def questionnaire(request):
 
 @login_required 
 @csrf_protect 
-def metric(request):
+def edit_metric(request):
+
+    metric_form, activity, table = None, None, None
+    success, error = False, False
+    activity_id=request.GET.get('activity', None)
+
+    if activity_id:
+
+        # lookup our model name based on the select
+        activity = Activity.objects.get(id=activity_id)
+        activity_name = activity.name
+
+        # model associated with activity
+        # NOTE: this assumes the activity name is the same as the model name
+        model = apps.get_model('oolong_app', activity_name)
+
+        extra_columns = []
+        for l in model._meta.get_fields():
+            l = str(l).split('.')[-1] # strip off the model name
+            if not 'id' in l and not 'time_stamp' in l:
+                extra_columns.append((l,tables.Column()))
+
+        user_activities = model.objects.filter(user_id=request.user.id)
+
+        table = _Generic(user_activities, extra_columns=extra_columns)
+
+    context = {'metric_form': metric_form,
+               'success': success,
+               'error': error,
+               'activities': Activity.objects.all(),
+               'selected_activity': activity,
+               'activities_table': table,
+              }
+
+
+    return render(
+                request, 
+                'metric.html', 
+                context,
+           )
+
+@login_required 
+@csrf_protect 
+def submit_metric(request):
     '''
-    This view works by having two forms:
-    1.  activity_form
-        This form is simply a single select populated by the `Activity` table.
+    This view works by having:
+    1.  A list of buttons with hyperlinks populated by `Activity`
         It is a GET form which redirects with jQuery to ?activity=ID where
         ID is set based on the select. This ID is then used to load the proper
-        form derived from the model associated with that ID. It is assumed
-        that every option in the select, has a model that pertains to it; e.g.
-        the value `eat` must have a model `Eat'.
+        form derived from the model associated with that ID.
     2.  metric_form
         The primary form that captures the recorded metric; this form is
         dynamically loaded based on which value for the select was chosen;
         based on that selection, the corresponding django model is chosen and
         used to populate the form.
     '''
-    metric_form, activity_form, activity = None, None, None
+    metric_form, activity = None, None
     success, error = False, False
     activity_id=request.GET.get('activity', None)
-    activity_form = ActivityForm(initial={'activity': activity_id})
 
     if activity_id:
 

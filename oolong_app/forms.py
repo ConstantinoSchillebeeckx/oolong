@@ -7,16 +7,6 @@ from django.forms import BaseModelFormSet
 from .models import Activity, Sleep, Eat, Drink, Question, Response
 from .models import Medication, Sex, Bathroom, Relax, Exercise
 
-'''
-med
-sex
-bath
-exerc
-relax
-'''
-
-class ActivityForm(forms.Form):
-    activity = forms.ModelChoiceField(queryset=Activity.objects.all())
 
 class QuestionnaireForm(forms.Form):
     '''

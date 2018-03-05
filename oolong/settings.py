@@ -36,6 +36,7 @@ PROJECT_APPS = [
     'bootstrap3',
     'bootstrap_ui',
     'tz_detect',
+    'django_tables2',
 ]
 
 INSTALLED_APPS = [

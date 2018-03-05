@@ -176,7 +176,7 @@ class Exercise(_Metric):
         choices=[
             ('gym','Gym'),
             ('run','Run'),
-            ('steps','Steps'),
+            ('walk','Walk'),
         ],
         blank=False,
         null=False,
@@ -198,6 +198,7 @@ class Exercise(_Metric):
         choices=[
             ('steps','Steps'),
             ('miles','Miles'),
+            ('km','Kilometers'),
         ],
         blank=True,
         null=True,
@@ -407,7 +408,10 @@ class Drink(_Metric):
     )
     units = models.CharField(
         max_length=10,
-        choices=[('fl oz','Fluid Ounce')],
+        choices=[
+            ('fl oz','Fluid Ounce'),
+            ('ml','Milliliter'),
+        ],
         blank=True,
         null=True,
         db_index=True,
