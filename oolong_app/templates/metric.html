@@ -79,6 +79,17 @@
             jQuery("#id_end").datetimepicker({
                 format: "YYYY-MM-DD H:mm:ss"
             });
+
+            // set the end timestamp to the start timestamp if the default
+            // end timestamp is before the end timestamp
+            jQuery("#id_end").on("dp.show", function (e) {
+                var start = jQuery('#id_time_stamp').data('DateTimePicker').date()
+                var end = jQuery('#id_end').data('DateTimePicker').date()
+
+                if (end < start) {
+                    jQuery('#id_end').data('DateTimePicker').date(start);
+                }
+            });
         });
 
 

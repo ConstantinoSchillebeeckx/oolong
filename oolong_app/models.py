@@ -235,6 +235,38 @@ class Relax(_Metric):
         - those of the base `Metric` model
         - alone
     '''
+    end = models.DateTimeField(
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "When provided, defines a duration of the metric event by"
+            " subtracting the <code>Time stamp</code> field."
+        )
+    )
+    type = models.CharField(
+        max_length=10,
+        choices=[
+            ('read_book','Read book'),
+            ('work','Work'),
+            ('hobby','Hobby'),
+            ('therapist','Therapist'),
+            ('phone','Phone'),
+            ('friends','Friends'),
+            ('walk','Walk'),
+            ('video_game','Video game'),
+            ('meditation','Meditation'),
+            ('walk','Walk'),
+            ('other','Other'),
+        ],
+        blank=False,
+        null=False,
+        db_index=True,
+        default='other',
+        help_text=(
+            "The type of relax/social event."
+        )
+    )
     alone = models.BooleanField(
         blank=False,
         default=True,
@@ -252,7 +284,7 @@ class Relax(_Metric):
     )
 
     class Meta:
-        db_table = 'metric_social'
+        db_table = 'metric_relax'
 
 class Eat(_Metric):
     '''
