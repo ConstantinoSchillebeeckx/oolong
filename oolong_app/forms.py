@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea, NumberInput
 from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
-from django.utils.timezone import localtime, now
 
 from .models import Activity, Sleep, Eat, Drink, Question, Response
 from .models import Medication, Sex, Bathroom, Relax, Exercise
@@ -41,15 +40,24 @@ class QuestionnaireForm(forms.Form):
         form_data = super(QuestionnaireForm, self).clean()
         user_id = form_data.get('user',None)
 
+        q_ids = [l[0] for l in self.get_answers()]
+
         # get the timestamp from the last submitted response
-        a = Response.objects.filter(user_id=user_id).order_by('-date').first()
+        a = (Response.objects
+                     .filter(user_id=user_id)
+                     .filter(question_id__in=q_ids)
+                     .order_by('-date')
+                     .first())
 
-        diff = localtime(now()) - a.date
-        hr_diff = diff.total_seconds() / 3600.0
-        min_diff = 12 # minumum 12 hrs between submits
+        print(a)
 
-        if hr_diff < min_diff:
-                raise forms.ValidationError('You cannot submit this questionnaire more than once per day.')
+        if a:
+            diff = localtime(now()) - a.date
+            hr_diff = diff.total_seconds() / 3600.0
+            min_diff = 12 # minumum 12 hrs between submits
+
+            if hr_diff < min_diff:
+                    raise forms.ValidationError('You cannot submit this questionnaire more than once per day.')
 
         return form_data
 
@@ -94,6 +102,7 @@ class MetricForm(ModelForm):
         units = cleaned_data.get('units', None)
         time_stamp = cleaned_data.get('time_stamp', None)
         end = cleaned_data.get('end', None)
+
 
         if value and not units:
             msg=mark_safe(

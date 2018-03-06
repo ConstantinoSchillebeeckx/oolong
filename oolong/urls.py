@@ -19,5 +19,4 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('oolong_app.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^tz_detect/', include('tz_detect.urls')),
 ]

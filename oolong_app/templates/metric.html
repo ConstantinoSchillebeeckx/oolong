@@ -77,31 +77,33 @@
 
     <script>
 
+        var start_id = '#id_time_stamp'
+        var end_id = '#id_end'
+
         jQuery(function () {
             // we show/hide start to autopopulate with
             // user's current time - a little dirty ...
-            if (jQuery('#id_time_stamp').length) {
-                jQuery("#id_time_stamp").datetimepicker({
+            if (jQuery(start_id).length) {
+                jQuery(start_id).datetimepicker({
                     format: "YYYY-MM-DD H:mm:ss"
                 }).data("DateTimePicker").show().hide();
             }
 
-            jQuery("#id_end").datetimepicker({
+            jQuery(end_id).datetimepicker({
                 format: "YYYY-MM-DD H:mm:ss"
             });
 
             // set the end timestamp to the start timestamp if the default
             // end timestamp is before the end timestamp
-            jQuery("#id_end").on("dp.show", function (e) {
-                var start = jQuery('#id_time_stamp').data('DateTimePicker').date()
-                var end = jQuery('#id_end').data('DateTimePicker').date()
+            jQuery(end_id).on("dp.show", function (e) {
+                var start = jQuery(start_id).data('DateTimePicker').date()
+                var end = jQuery(end_id).data('DateTimePicker').date()
 
                 if (end < start) {
-                    jQuery('#id_end').data('DateTimePicker').date(start);
+                    jQuery(end_id).data('DateTimePicker').date(start);
                 }
             });
         });
-
 
     </script>
 

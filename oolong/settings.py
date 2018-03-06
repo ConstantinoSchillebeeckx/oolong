@@ -35,7 +35,6 @@ PROJECT_APPS = [
     'oolong_app.apps.OolongAppConfig',
     'bootstrap3',
     'bootstrap_ui',
-    'tz_detect',
     'django_tables2',
 ]
 
@@ -59,7 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'tz_detect.middleware.TimezoneMiddleware',
+    'oolong_app.middleware.TimezoneMiddleware',
 )
 
 
