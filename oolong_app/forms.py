@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea, NumberInput
 from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
+from django.utils.timezone import localtime, now
 
 from .models import Activity, Sleep, Eat, Drink, Question, Response
 from .models import Medication, Sex, Bathroom, Relax, Exercise
@@ -40,12 +41,14 @@ class QuestionnaireForm(forms.Form):
         form_data = super(QuestionnaireForm, self).clean()
         user_id = form_data.get('user',None)
 
-        for (question_id, score) in self.get_answers():
-            try:
-                a = Response.objects.get(user_id=user_id, question_id=question_id)
-            except:
-                pass
-            else:
+        # get the timestamp from the last submitted response
+        a = Response.objects.filter(user_id=user_id).order_by('-date').first()
+
+        diff = localtime(now()) - a.date
+        hr_diff = diff.total_seconds() / 3600.0
+        min_diff = 12 # minumum 12 hrs between submits
+
+        if hr_diff < min_diff:
                 raise forms.ValidationError('You cannot submit this questionnaire more than once per day.')
 
         return form_data

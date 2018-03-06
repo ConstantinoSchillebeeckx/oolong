@@ -56,6 +56,47 @@ class _Metric(models.Model):
     class Meta:
         abstract = True
 
+class Daily(_Metric):
+    '''
+    Metric to capture daily occurances of a measured value
+    e.g. daily screen time, daily steps
+    '''
+    type = models.CharField(
+        max_length=10,
+        choices=[
+            ('screen_time','Screen time'),
+            ('steps','Steps'),
+        ],
+        blank=False,
+        null=False,
+        db_index=True,
+        help_text=(
+            "The type of daily metric."
+        )
+    )
+    value = models.FloatField(
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "The recorded value for the type of metric"
+        )
+    )
+    units = models.CharField(
+        max_length=10,
+        choices=[
+            ('minutes','Minutes'),
+            ('steps','Steps'),
+            ('hours','Hours'),
+        ],
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "Units associated with the <code>Value</code> field."
+        )
+    )
+
 class Note(_Metric):
     '''
     Generic note
@@ -171,6 +212,15 @@ class Exercise(_Metric):
         - alone
         - type
     '''
+    end = models.DateTimeField(
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "When provided, defines a duration of the metric event by"
+            " subtracting the <code>Time stamp</code> field."
+        )
+    )
     type = models.CharField(
         max_length=10,
         choices=[
@@ -182,7 +232,7 @@ class Exercise(_Metric):
         null=False,
         db_index=True,
         help_text=(
-            "The type of meal eaten."
+            "The type of exercise."
         )
     )
     value = models.FloatField(
@@ -196,7 +246,6 @@ class Exercise(_Metric):
     units = models.CharField(
         max_length=10,
         choices=[
-            ('steps','Steps'),
             ('miles','Miles'),
             ('km','Kilometers'),
         ],
@@ -606,7 +655,7 @@ class Response(models.Model):
         default=None,
         db_index=True,
     )
-    date = models.DateField(
+    date = models.DateTimeField(
         blank=False,
         auto_now_add=True,
         db_index=True,
