@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm, Textarea, NumberInput
 from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
-from django.utils.timezone import localtime, now
+from django.utils.timezone import *
 
 from .models import Activity, Sleep, Eat, Drink, Question, Response
 from .models import Medication, Sex, Bathroom, Relax, Exercise
@@ -50,7 +50,7 @@ class QuestionnaireForm(forms.Form):
                      .order_by('-date')
                      .first())
 
-        print(timezone.now(), timezone.localtime(timezone.now()))
+        print(now(), localtime(now()), get_current_timezone())
 
         if a:
             diff = localtime(now()) - a.date
