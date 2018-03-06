@@ -97,6 +97,9 @@ class Daily(_Metric):
         )
     )
 
+    class Meta:
+        db_table = 'metric_daily'
+
 class Note(_Metric):
     '''
     Generic note
@@ -112,6 +115,9 @@ class Note(_Metric):
             "Any extra notes associated with metric event."
         )
     )
+
+    class Meta:
+        db_table = 'metric_note'
 
 class Medication(_Metric):
     '''
