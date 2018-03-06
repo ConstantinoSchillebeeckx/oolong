@@ -111,6 +111,13 @@ USE_TZ = True
 
 LOGIN_URL = '/login/'
 
+
+#
+# Logging
+#
+# Run the following from the local command line to watch the log:
+# heroku logs --source app --tail
+#
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
