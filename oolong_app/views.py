@@ -179,6 +179,9 @@ def submit_metric(request):
                 metric_form = form()
             else:
                 metric_form = form(request.POST)
+                print('view', dict(request.POST)['time_stamp'])
+                print(timezone.now())
+                print(timezone.localtime(timezone.now()))
 
                 if metric_form.is_valid():
 

@@ -101,7 +101,7 @@ class MetricForm(ModelForm):
         units = cleaned_data.get('units', None)
         time_stamp = cleaned_data.get('time_stamp', None)
         end = cleaned_data.get('end', None)
-
+        print('clean',time_stamp)
 
         if value and not units:
             msg=mark_safe(
