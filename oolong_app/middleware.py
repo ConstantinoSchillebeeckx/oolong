@@ -1,9 +1,7 @@
 # middleware.py
 
 from django.utils import timezone
-
 import pytz
-
 
 class TimezoneMiddleware(object):
 

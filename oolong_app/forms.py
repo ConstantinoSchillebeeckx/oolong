@@ -50,8 +50,6 @@ class QuestionnaireForm(forms.Form):
                      .order_by('-date')
                      .first())
 
-        print(now(), localtime(now()), get_current_timezone())
-
         if a:
             diff = localtime(now()) - a.date
             hr_diff = diff.total_seconds() / 3600.0

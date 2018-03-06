@@ -9,8 +9,9 @@ from django.forms import modelform_factory
 from django.apps import apps
 from django.shortcuts import redirect
 
-from django.utils import timezone
 import django_tables2 as tables
+from django_tables2 import RequestConfig
+from pprint import pprint
 
 import json
 
@@ -105,6 +106,9 @@ def edit_metric(request):
     metric_form, activity, table = None, None, None
     success, error = False, False
     activity_id=request.GET.get('activity', None)
+    metric_id=request.GET.get('id', None)
+
+
 
     if activity_id:
 
@@ -115,16 +119,58 @@ def edit_metric(request):
         # model associated with activity
         # NOTE: this assumes the activity name is the same as the model name
         model = apps.get_model('oolong_app', activity_name)
+        form = modelform_factory(model, form=MetricForm)
 
-        extra_columns = []
-        for l in model._meta.get_fields():
-            l = str(l).split('.')[-1] # strip off the model name
-            if not 'id' in l and not 'time_stamp' in l:
-                extra_columns.append((l,tables.Column()))
+        # if editing a metric instance
+        if metric_id:
+            a = model.objects.get(id=metric_id)
+            metric_form = form(a.__dict__)
 
-        user_activities = model.objects.filter(user_id=request.user.id)
 
-        table = _Generic(user_activities, extra_columns=extra_columns)
+        # if submitting changed form data
+        if request.method == 'POST':
+            metric_form = form(request.POST)
+
+            if metric_form.is_valid():
+
+                try:
+                    a = metric_form.save(commit=False)
+                    a.id = metric_id # set PK so we can do a save()
+                    a.user_id = request.user.id
+                    a.save()
+                except Exception as e:
+                    print(e)
+                    error = True
+                else:
+                    success = True
+                    metric_form = None
+
+        if not metric_id or request.method == 'POST':
+
+            # lookup extra columns for given model
+            # to make tables2 dynamic
+            extra_columns = []
+            for l in model._meta.get_fields():
+                l = l.name # strip off model name
+                if not 'id' in l and not 'time_stamp' in l:
+                    col = (l,tables.Column())
+
+                    # TODO find a better way to automatically
+                    # check whether a field is DateTime type
+                    if l == 'end':
+                        col = (l,tables.DateTimeColumn(format='Y-m-d H:m:s'))
+                    extra_columns.append(col)
+
+            user_activities = list(model.objects.filter(user_id=request.user.id).values())
+
+            # manually add in activity_id so that
+            # the TemplateColumn has access to it
+            for l in user_activities:
+                l['activity'] = activity_id
+
+
+            table = _Generic(user_activities, extra_columns=extra_columns)
+            RequestConfig(request, paginate={'per_page': 25}).configure(table)
 
     context = {'metric_form': metric_form,
                'success': success,
@@ -175,7 +221,6 @@ def submit_metric(request):
         if form:
 
             if request.method == 'GET':
-                initial = {'start':timezone.localtime(timezone.now())}
                 metric_form = form()
             else:
                 metric_form = form(request.POST)

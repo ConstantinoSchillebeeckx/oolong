@@ -6,10 +6,11 @@ class _Generic(tables.Table):
     be passed by `extra_columns`
     '''
 
-    id = tables.Column()
-    time_stamp = tables.Column()
+    edit = tables.TemplateColumn('<a style="color:#1abc9c;" class="far fa-edit fa-lg" href="?activity={{record.activity}}&id={{record.id}}"></a>', verbose_name='')
+    time_stamp = tables.DateTimeColumn(format='Y-m-d H:m:s')
 
     class Meta:
+        order_by = '-time_stamp'
         exclude=('user',)
         attrs = {
             'class': 'table',

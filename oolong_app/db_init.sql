@@ -7,7 +7,8 @@ INSERT INTO activity (name, description, icon) VALUES
 ('Note','Generic note.','fa-sticky-note'),
 ('Bathroom','Using the bathroom.','fa-bath'),
 ('Exercise','Any type of physical activity.','fa-football-ball'),
-('Relax','A general catch-all for a relaxing or social event.','fa-hand-peace');
+('Relax','A general catch-all for a relaxing or social event.','fa-hand-peace'),
+('Daily','Daily metric recording','fa-signal');
 
 INSERT INTO public.auth_user
 (password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) VALUES
