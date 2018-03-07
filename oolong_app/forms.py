@@ -62,7 +62,7 @@ class QuestionnaireForm(forms.Form):
 
 
     def get_answers(self):
-        # returns the tuple (question_id, score)
+        # returns the tuple (question_id, response_id)
         for name, value in self.cleaned_data.items():
             if name.startswith('qid_'):
                 qid = int(name.replace('qid_',''))
@@ -73,10 +73,10 @@ class QuestionnaireForm(forms.Form):
         super(QuestionnaireForm, self).__init__(*args, **kwargs)
         user = self.cleaned_data.get('user',None)
 
-        for (question_id, score) in self.get_answers():
+        for (question_id, response_id) in self.get_answers():
             r = Response(
                     question_id = question_id,
-                    score = score,
+                    response_id = response_id,
                     user_id = user
                 )
             r.save()

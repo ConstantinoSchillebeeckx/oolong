@@ -66,9 +66,9 @@ def questionnaire(request):
     questions = list(Question.objects.filter(questionnaire_id=qid).values_list('id','question'))
 
     # get the available responses for the questions
-    # [(response_score, response_label),()]
+    # [(response_id, response_label),()]
     responses = [(None,'----')]
-    tmp = AvailableResponse.objects.filter(questionnaire_id=qid).values_list('score','label')
+    tmp = AvailableResponse.objects.filter(questionnaire_id=qid).values_list('id','label')
     responses.extend(list(tmp))
     responses_dict = {k:v for k,v in responses if k}
 
@@ -145,6 +145,8 @@ def edit_metric(request):
                     success = True
                     metric_form = None
 
+        # if no previous metric specified, or we've just saved an edit
+        # show the table of all available saved metrics
         if not metric_id or request.method == 'POST':
 
             # lookup extra columns for given model
