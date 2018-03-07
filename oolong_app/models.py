@@ -44,6 +44,7 @@ class _Metric(models.Model):
     time_stamp = models.DateTimeField(
         blank=False,
         db_index=True,
+        unique=True, # helps prevent double form submit
         help_text="When the metric event occurred or began.",
     )
     user = models.ForeignKey(
@@ -676,14 +677,15 @@ class Response(models.Model):
             "Question being answered/scored."
         )
     )   
-    score = models.IntegerField(
+    response = models.ForeignKey(
+        AvailableResponse,
         blank=False,
         null=False,
         db_index=True,
         help_text=(
-            "Response score to given question."
+            "Response to given question."
         )
-    )   
+    )
 
     class Meta:
         db_table = 'response'

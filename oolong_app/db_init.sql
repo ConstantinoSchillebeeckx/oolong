@@ -63,7 +63,7 @@ INSERT INTO question (question, questionnaire_id) VALUES
 ('tired','Depression'),
 ('discouraged','Depression'),
 ('low self-esteem / worthless','Depression'),
-('guilt','Depression'),
+('guilt','Anxiety'),
 ('lonely','Depression'),
 ('like a failure','Depression'),
 ('like hurting myself','Depression'),
