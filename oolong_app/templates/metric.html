@@ -58,7 +58,9 @@
         }
 
         jQuery('select, input, textarea').focus(function() {
-            $(this).scrollView();
+            // since we show().hide() the timestamp div
+            // prevent it from auto scrolling on first page load :(
+            if (this.id !== 'id_time_stamp') $(this).scrollView();
         })
 
         jQuery(function () {
@@ -66,13 +68,14 @@
             // user's current time - a little dirty ...
             if (start_input.length) {
                 var start_picker = start_input.datetimepicker(picker_format)
+                start_picker.data("DateTimePicker").show().hide();
 
                 start_picker.on("dp.show", function(e) {
                     // show time by default
                     $('[data-action=togglePicker]').click();
+                    $(this).scrollView();
                 })
 
-                start_picker.data("DateTimePicker").show().hide();
             }
 
             end_input.datetimepicker(picker_format);
