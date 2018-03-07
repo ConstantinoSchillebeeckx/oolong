@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.forms import ModelForm, Textarea, NumberInput
+from django.forms import ModelForm, Textarea, NumberInput, TextInput
 from django.utils.safestring import mark_safe
 from django.forms import BaseModelFormSet
 from django.utils.timezone import *
@@ -117,7 +117,12 @@ class MetricForm(ModelForm):
             self.add_error('end', forms.ValidationError(msg))
 
 
-
+    '''
+    NOTE: i'm specifying widget attributes even if the form
+    won't have that field; e.g. medication is only on the
+    medication form. this doesn't cause any issues and allows me
+    to set some defaults in case the form has that field
+    '''
     class Meta:
         exclude = ['user']
         widgets = {
@@ -125,6 +130,8 @@ class MetricForm(ModelForm):
             'item': Textarea(attrs={'rows': 2}),
             'medication': Textarea(attrs={'rows': 2}),
             'value': NumberInput(attrs={"pattern":"[0-9]*"}),
+            'time_stamp': TextInput(attrs={"readonly":True}), # https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668
+            'end': TextInput(attrs={"readonly":True}), # https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668
         }
 
 #  user login form model

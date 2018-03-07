@@ -122,14 +122,17 @@ def edit_metric(request):
         form = modelform_factory(model, form=MetricForm)
 
         # if editing a metric instance
+        # load the form with this id
         if metric_id:
             a = model.objects.get(id=metric_id)
-            metric_form = form(a.__dict__)
+            metric_form = form(instance=a)
+
+        print(request.method)
 
 
         # if submitting changed form data
         if request.method == 'POST':
-            metric_form = form(request.POST)
+            metric_form = form(request.POST, instance=a)
 
             if metric_form.is_valid():
 

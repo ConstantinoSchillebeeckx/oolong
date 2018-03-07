@@ -22,7 +22,6 @@
             <!-- serror message -->
             {% include "includes/error.html" %}
 
-
             <!-- metric form -->
             {% include "includes/metric_form.html" %}
 
@@ -38,24 +37,38 @@
         var start_id = '#id_time_stamp'
         var end_id = '#id_end'
 
+        var picker_format = {
+            format: "YYYY-MM-DD H:mm:ss",
+            ignoreReadonly: true, // https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668
+            allowInputToggle: true,
+            showTodayButton: true,
+            showClose: true,
+        }
+
         jQuery(function () {
             // we show/hide start to autopopulate with
             // user's current time - a little dirty ...
             if (jQuery(start_id).length) {
-                jQuery(start_id).datetimepicker({
-                    format: "YYYY-MM-DD H:mm:ss"
-                }).data("DateTimePicker").show().hide();
+                var start_picker = jQuery(start_id).datetimepicker(picker_format)
+
+                start_picker.on("dp.show", function(e) {
+                    // show time by default
+                    $('[data-action=togglePicker]').click();
+                })
+
+                start_picker.data("DateTimePicker").show().hide();
             }
 
-            jQuery(end_id).datetimepicker({
-                format: "YYYY-MM-DD H:mm:ss"
-            });
+            jQuery(end_id).datetimepicker(picker_format);
 
             // set the end timestamp to the start timestamp if the default
             // end timestamp is before the end timestamp
             jQuery(end_id).on("dp.show", function (e) {
                 var start = jQuery(start_id).data('DateTimePicker').date()
                 var end = jQuery(end_id).data('DateTimePicker').date()
+
+                // show time by default
+                $('[data-action=togglePicker]').click();
 
                 if (end < start) {
                     jQuery(end_id).data('DateTimePicker').date(start);
