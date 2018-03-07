@@ -1,0 +1,23 @@
+{% load bootstrap_ui_tags %}
+{% load bootstrap3 %}
+
+<!-- expects the var `metric_form` to be a valid Django form -->
+<!-- expects the var `selected_activity` to be a string -->
+{% if metric_form %}
+    {% row %}
+        {% column %}
+            <hr>
+            <a id="anchor">
+                <h2><code>{{selected_activity}}</code></h2>
+            </a>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form metric_form %}
+                <button type="submit" class="btn btn-info pull-right">
+                    {% if action == 'submit' %} Submit {% else %} Save {% endif %}
+                </button>
+            </form>
+        {% endcolumn %}
+    {% endrow %}
+{% endif %}
+

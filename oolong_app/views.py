@@ -170,7 +170,6 @@ def edit_metric(request):
             for l in user_activities:
                 l['activity'] = activity_id
 
-
             table = _Generic(user_activities, extra_columns=extra_columns)
             RequestConfig(request, paginate={'per_page': 25}).configure(table)
 
@@ -179,8 +178,10 @@ def edit_metric(request):
                'error': error,
                'activities': Activity.objects.all(),
                'selected_activity': activity,
-               'activities_table': table,
+               'metric_table': table,
+               'action':'edit',
               }
+
 
 
     return render(
@@ -245,12 +246,12 @@ def submit_metric(request):
     return render(
                 request, 
                 'metric.html', 
-                {
-                    'metric_form': metric_form,
-                    'success': success,
-                    'error': error,
-                    'activities': Activity.objects.all(),
-                    'selected_activity': activity,
+                {'metric_form': metric_form,
+                 'success': success,
+                 'error': error,
+                 'activities': Activity.objects.all(),
+                 'selected_activity': activity,
+                 'action':'submit',
                 }
            )
 

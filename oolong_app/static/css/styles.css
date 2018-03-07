@@ -189,3 +189,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .noUi-value, .noUi-marker-large { visibility: hidden; }
+
+a#anchor:hover {
+    text-decoration: none;
+}
+
+/* https://stackoverflow.com/a/11842865/1153897 */
+a#anchor h2 {
+    padding-top: 60px;
+    margin-top: -60px;
+}

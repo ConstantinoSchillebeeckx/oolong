@@ -1,0 +1,12 @@
+{% load bootstrap_ui_tags %}
+
+<!-- expects the var `activities` to be a list of Activity model objects -->
+{% row %}
+    <div class='col-xs-12 button-wrapper'>
+        {% for activity in activities %}
+            <a href='?activity={{activity.id}}#anchor' type="button" class="btn btn-info">
+                <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span> {{activity.name}}</span>
+            </a>
+        {% endfor %}
+    </div>
+{% endrow %}

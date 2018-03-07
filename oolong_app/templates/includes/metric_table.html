@@ -1,0 +1,12 @@
+{% load bootstrap_ui_tags %}
+{% load render_table from django_tables2 %}
+
+<!-- expects the var `metric_table` to be a _Generic tables2 table -->
+{% if metric_table %}
+    {% row %}
+        {% column %}
+            {% render_table metric_table %}
+        {% endcolumn %}
+    {% endrow %}
+{% endif %}
+

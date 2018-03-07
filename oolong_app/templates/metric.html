@@ -11,65 +11,23 @@
     <div id="bodywrap">
         {% container %}
 
+            {% if action %}<p class="lead">{{action|title}} metric</p>{% endif %}
+
             <!-- activity icons -->
-            {% row %}
-                <div class='col-xs-12 button-wrapper'>
-                    {% for activity in activities %}
-                        <a href='?activity={{activity.id}}' type="button" class="btn btn-info">
-                            <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span> {{activity.name}}</span>
-                        </a>
-                    {% endfor %}
-                </div>
-            {% endrow %}
+            {% include "includes/activity_icons.html" %}
 
-            {% if success %}
+            <!-- success message -->
+            {% include "includes/success.html" %}
 
-                <!-- success message -->
-                {% row %}
-                    {% column xs="12" sm="5" lg="3" %}
-                        <div class="alert alert-success" role="alert" style="margin-top:20px;">
-                            Metric successfully submitted.
-                        </div>
-                    {% endcolumn %}
-                {% endrow %}
-
-            {% elif error %}
-
-                <!-- serror message -->
-                {% row %}
-                    {% column xs="12" sm="5" lg="3" %}
-                        <div class="alert alert-danger" role="alert">
-                            An error occurred, please try again.
-                        </div>
-                    {% endcolumn %}
-                {% endrow %}
-
-            {% endif %}
+            <!-- serror message -->
+            {% include "includes/error.html" %}
 
 
             <!-- metric form -->
-            {% if metric_form %}
-                {% row %}
-                    {% column %}
-                        <hr>
-                        <h2><code>{{selected_activity}}</code></h2>
-                        <form method="post">
-                            {% csrf_token %}
-                            {% bootstrap_form metric_form %}
-                            <button type="submit" class="btn btn-info pull-right">Submit</button>
-                        </form>
-                    {% endcolumn %}
-                {% endrow %}
-            {% endif %}
+            {% include "includes/metric_form.html" %}
 
             <!-- list of user activities -->
-            {% if activities_table %}
-                {% row %}
-                    {% column %}
-                        {% render_table activities_table %}
-                    {% endcolumn %}
-                {% endrow %}
-            {% endif %}
+            {% include "includes/metric_table.html" %}
 
         {% endcontainer %}
     </div>
