@@ -62,7 +62,7 @@ class Daily(_Metric):
     e.g. daily screen time, daily steps
     '''
     type = models.CharField(
-        max_length=10,
+        max_length=15,
         choices=[
             ('screen_time','Screen time'),
             ('steps','Steps'),
