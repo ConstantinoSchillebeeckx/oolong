@@ -392,7 +392,9 @@ class Eat(_Metric):
     )
     units = models.CharField(
         max_length=10,
-        choices=[('cal','Cal')],
+        choices=[('cal','Cal'),
+                 ('number','Number'),
+                ],
         blank=True,
         null=True,
         db_index=True,
