@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 {% load bootstrap_ui_tags %}
+{% load render_table from django_tables2 %}
 
 {% block title %}Submit questionnaire{% endblock %}
 
@@ -26,52 +27,9 @@
     <div id="bodywrap">
         {% container %}
             {% if form %}
-
-                {% if not form.errors %}
-                    {% row %}
-                        {% column %}
-                            <p class="lead">{{questionnaire.form_header|safe}}<p>
-                        {% endcolumn %}
-                    {% endrow %}
-                {% endif %}
-
-                {% row %}
-                    {% column %}
-                        <form method="post" class="form-horizontal">
-                            {% csrf_token %}
-
-                            {% if form.errors %}
-
-                                <!-- Form Errors -->
-                                {% for error in form.non_field_errors %}
-                                    <div class="alert alert-danger" role="alert">{{error}}</div>
-                                {% endfor %}
-
-                            {% else %}
-
-                                <!-- Display Form -->
-                                {% for field in form.visible_fields %}
-                                    <div class="form-group">
-                                        {% if not field.is_hidden %}
-                                            <label class="col-sm-8 col-lg-9 control-label">{{ field.label }}</label>
-                                        {% endif %}
-                                        <div class="col-sm-4 col-lg-3">
-                                            {{field}}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-
-                                <!-- Hidden field for user_id -->
-                                {% for field in form.hidden_fields %}
-                                    {{ field }}
-                                {% endfor %}
-
-                                <button type="submit" class="btn btn-info pull-right">Submit</button>
-                            {% endif %}
-                        </form>
-                    {% endcolumn %}
-                {% endrow %}
-
+                {% include "includes/response_form.html" %}
+            {% elif table %}
+                {% render_table table %}
             {% endif %}
         {% endcontainer %}
     </div>
@@ -79,8 +37,8 @@
 
 
     <script type="text/javascript">
-        var lookup = {{responses|safe}}
-
+        // see https://github.com/ConstantinoSchillebeeckx/oolong/issues/2
+        //var lookup = {{responses|safe}}
         //window.onload = function() { convert('input[type=text]'); };
     </script>
 

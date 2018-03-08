@@ -6,7 +6,31 @@ from django.forms import BaseModelFormSet
 from django.utils.timezone import *
 
 from .models import Activity, Sleep, Eat, Drink, Question, Response
-from .models import Medication, Sex, Bathroom, Relax, Exercise
+from .models import Medication, Sex, Bathroom, Relax, Exercise, AvailableResponse
+
+class ResponseForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices')
+        super(ResponseForm, self).__init__(*args, **kwargs)
+        widget = forms.Select(attrs={'class':'form-control'})
+        self.fields['response'] = forms.ChoiceField(choices=choices,
+                                                    widget=widget
+                                                   )
+    def clean(self):
+        form_data = super(ModelForm, self).clean()
+
+        # not sure why i have to do this TODO
+        # works, just leaving it commented it out so i know what to come back
+        # to
+        #response = AvailableResponse.objects.get(id=form_data['response'])
+        #form_data['response'] = response
+
+        return form_data
+
+    class Meta:
+        model = Response
+        fields = ['response']
 
 
 class QuestionnaireForm(forms.Form):

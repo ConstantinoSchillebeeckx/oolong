@@ -1,0 +1,49 @@
+{% load bootstrap_ui_tags %}
+{% load bootstrap3 %}
+
+<!-- expects the var `form` as a django form -->
+<!-- expects the var `questionnaire` as a Questionnaire object -->
+{% if not form.errors %}
+    {% row %}
+        {% column %}
+            <p class="lead">{{questionnaire.form_header|safe}}<p>
+        {% endcolumn %}
+    {% endrow %}
+{% endif %}
+
+{% row %}
+    {% column %}
+        <form method="post" class="form-horizontal">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+
+                <!-- Form Errors -->
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">{{error}}</div>
+                {% endfor %}
+
+            {% else %}
+
+                <!-- Display Form -->
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        {% if not field.is_hidden %}
+                            <label class="col-sm-8 col-lg-9 control-label">{{ field.label }}</label>
+                        {% endif %}
+                        <div class="col-sm-4 col-lg-3">
+                            {{field}}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Hidden field for user_id -->
+                {% for field in form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+
+                <button type="submit" class="btn btn-info pull-right">Submit</button>
+            {% endif %}
+        </form>
+    {% endcolumn %}
+{% endrow %}

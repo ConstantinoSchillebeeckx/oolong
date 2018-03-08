@@ -16,7 +16,8 @@
                 {% if user.is_authenticated %}
                     <li class="{% if request.resolver_match.url_name == "submit_metric" %}active{% endif %}"><a href="/submit_metric">New metric</a></li>
                     <li class="{% if request.resolver_match.url_name == "edit_metric" %}active{% endif %}"><a href="/edit_metric">Edit metric</a></li>
-                    <li class="{% if request.resolver_match.url_name == "questionnaire" %}active{% endif %}"><a href="/questionnaire">Questionnaire</a></li>
+                    <li class="{% if request.resolver_match.url_name == "submit_questionnaire" %}active{% endif %}"><a href="/submit_questionnaire">New Questionnaire</a></li>
+                    <li class="{% if request.resolver_match.url_name == "edit_questionnaire" %}active{% endif %}"><a href="/edit_questionnaire">Edit Questionnaire</a></li>
                     <li><a href='/log_out/'>Log out</a></li>
                 {% endif %}
             </ul>

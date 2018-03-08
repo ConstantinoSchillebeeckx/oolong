@@ -15,9 +15,10 @@ from pprint import pprint
 
 import json
 
-from .forms import UserLoginForm, MetricForm, QuestionnaireForm
+from .forms import UserLoginForm, MetricForm, QuestionnaireForm, ResponseForm
 from .models import Activity, Question, AvailableResponse, Questionnaire
-from .tables import _Generic
+from .models import Response
+from .tables import _Generic, ResponseTable
 
 @login_required 
 def index(request):
@@ -38,7 +39,47 @@ def submit_success(request):
 
 @login_required 
 @csrf_protect 
-def questionnaire(request):
+def edit_questionnaire(request):
+
+    response_id = request.GET.get('id', None)
+    form, questionnaire, table = None, None, None
+
+    if not response_id:
+        # if first arriving, show all submitted responses in a table
+        responses = Response.objects.filter(user_id=request.user.id)
+        table = ResponseTable(responses, order_by="-date")
+        per_page = 33 # there are 33 questions total
+        RequestConfig(request, paginate={'per_page': per_page}).configure(table)
+    else:
+        # if editing a response
+        a = Response.objects.get(id=response_id)
+        q = Question.objects.get(id=a.question_id)
+
+        # available responses for this questions
+        responses = [(None,'----')]
+        tmp = AvailableResponse.objects.filter(questionnaire_id=q.questionnaire_id).values_list('id','label')
+        responses.extend(list(tmp))
+
+        form = ResponseForm(request.POST or None, instance=a, choices=responses)
+
+        print(form.is_valid())
+
+
+
+    return render(
+                request, 
+                'questionnaire.html', 
+                {
+                    'form':form,
+                    'questionnaire': questionnaire,
+                    'table': table,
+                }
+           )
+
+
+@login_required 
+@csrf_protect 
+def submit_questionnaire(request):
 
     qid = request.GET.get('qid', None)
     if not qid:
@@ -95,9 +136,10 @@ def questionnaire(request):
                 {
                     'form':form,
                     'questionnaire': questionnaire,
-                    'responses': json.dumps(responses_dict) # not currently used
+                    'responses': json.dumps(responses_dict) # not currently used see https://github.com/ConstantinoSchillebeeckx/oolong/issues/2
                 }
            )
+
 
 @login_required 
 @csrf_protect 
@@ -126,8 +168,6 @@ def edit_metric(request):
         if metric_id:
             a = model.objects.get(id=metric_id)
             metric_form = form(instance=a)
-
-        print(request.method)
 
 
         # if submitting changed form data

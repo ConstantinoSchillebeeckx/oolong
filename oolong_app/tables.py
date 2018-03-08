@@ -1,5 +1,22 @@
 import django_tables2 as tables
 
+class ResponseTable(tables.Table):
+    '''
+    skeleton for the questionnaire table
+    '''
+
+    edit = tables.TemplateColumn('<a style="color:#1abc9c;" class="far fa-edit fa-lg" href="?id={{record.id}}"></a>', verbose_name='')
+    date = tables.DateTimeColumn(format='Y-m-d H:m:s')
+    question = tables.Column()
+    response = tables.Column()
+
+    class Meta:
+        exclude=('user',)
+        attrs = {
+            'class': 'table table-striped',
+        }
+        template_name = 'django_tables2/bootstrap.html'
+
 class _Generic(tables.Table):
     '''
     skeleton for the metric table; all the model specific fields will
