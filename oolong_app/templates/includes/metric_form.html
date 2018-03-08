@@ -6,10 +6,6 @@
 {% if metric_form %}
     {% row %}
         {% column %}
-            <hr>
-            <a id="anchor">
-                <h2><code>{{selected_activity}}</code></h2>
-            </a>
             <form method="post">
                 {% csrf_token %}
                 {% bootstrap_form metric_form %}

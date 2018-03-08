@@ -14,14 +14,8 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                    <li class="{% if request.resolver_match.url_name == "home" %}active{% endif %}"><a href="/">Home</a></li>
-                <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Metric <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="{% if request.resolver_match.url_name == "submit" %}active{% endif %}"><a href="/submit_metric">Submit</a></li>
-                            <li class="{% if request.resolver_match.url_name == "edit" %}active{% endif %}"><a href="/edit_metric">Edit</a></li>
-                        </ul>
-                </li>
+                    <li class="{% if request.resolver_match.url_name == "submit_metric" %}active{% endif %}"><a href="/submit_metric">New metric</a></li>
+                    <li class="{% if request.resolver_match.url_name == "edit_metric" %}active{% endif %}"><a href="/edit_metric">Edit metric</a></li>
                     <li class="{% if request.resolver_match.url_name == "questionnaire" %}active{% endif %}"><a href="/questionnaire">Questionnaire</a></li>
                     <li><a href='/log_out/'>Log out</a></li>
                 {% endif %}
