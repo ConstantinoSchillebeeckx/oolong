@@ -554,7 +554,8 @@ class Sleep(_Metric):
         max_length=1,
         choices=[(i,i) for i in range(1,6)],
         blank=False,
-        null=True,
+        null=False,
+        default=3,
         db_index=True,
         help_text=(
             "Generalized mood score while waking up; <b>high</b> score is a <code>good</code> mood, <b>low</b> score is a <code>bad/low</code> mood."
