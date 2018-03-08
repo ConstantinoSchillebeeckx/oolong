@@ -13,6 +13,6 @@ class _Generic(tables.Table):
         order_by = '-time_stamp'
         exclude=('user',)
         attrs = {
-            'class': 'table',
+            'class': 'table table-striped',
         }
         template_name = 'django_tables2/bootstrap.html'

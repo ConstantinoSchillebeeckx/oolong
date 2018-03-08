@@ -107,8 +107,24 @@ class Note(_Metric):
 
     The required fields for this model are:
         - those of the base `Metric` model
-        - nots
+        - notes
     '''
+    mood = models.CharField(
+        max_length=10,
+        choices=[
+            ('happy','Happy'),
+            ('anxious','Anxious'),
+            ('depressed','Depressed'),
+            ('sad','Sad'),
+            ('lonely','Lonely'),
+        ],
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "General mood of this note."
+        )
+    )
     notes = models.TextField(
         blank=False,
         null=False,
@@ -514,6 +530,7 @@ class Sleep(_Metric):
         - those of the base `Metric` model
         - alone
         - end
+        - score
 
     '''
     end = models.DateTimeField(
@@ -531,6 +548,16 @@ class Sleep(_Metric):
         db_index=True,
         help_text=(
             "Whether metric event occurred while being alone."
+        )
+    )
+    score = models.CharField(
+        max_length=1,
+        choices=[(i,i) for i in range(1,6)],
+        blank=False,
+        null=True,
+        db_index=True,
+        help_text=(
+            "Generalized mood score while waking up; <b>high</b> score is a <code>good</code> mood, <b>low</b> score is a <code>bad/low</code> mood."
         )
     )
     notes = models.TextField(

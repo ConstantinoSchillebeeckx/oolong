@@ -5,7 +5,9 @@
 {% if metric_table %}
     {% row %}
         {% column %}
-            {% render_table metric_table %}
+            <div class="table-responsive">
+                {% render_table metric_table %}
+            </div>
         {% endcolumn %}
     {% endrow %}
 {% endif %}
