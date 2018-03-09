@@ -1,6 +1,5 @@
 {% load bootstrap_ui_tags %}
 
-<!-- expects the var `activities` to be a list of Activity model objects -->
 {% row %}
     <div class='col-xs-12 button-wrapper'>
         {% for activity in activities %}
@@ -14,16 +13,18 @@
 {% if selected_activity %}
     <hr>
     {% row %}
-        {% column xs="10" %}
+        {% column xs="6" %}
             <a id="anchor">
                 <h2><code>{{selected_activity}}</code></h2>
             </a>
         {% endcolumn %}
-        {% column xs="2" %}
-            <div class="btn-group pull-right" role="group" aria-label="...">
-                <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
-                <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
-            </div>
-        {% endcolumn %}
+        {% if action == 'edit' %}
+            {% column xs="6" %}
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
+                    <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
+                </div>
+            {% endcolumn %}
+        {% endif %}
     {% endrow %}
 {% endif %}
