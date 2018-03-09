@@ -16,6 +16,7 @@ from pprint import pprint
 import json
 
 from .forms import UserLoginForm, MetricForm, QuestionnaireForm, ResponseForm
+from .forms import UserSignupForm
 from .models import Activity, Question, AvailableResponse, Questionnaire
 from .models import Response
 from .tables import _Generic, ResponseTable
