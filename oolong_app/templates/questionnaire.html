@@ -26,9 +26,24 @@
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
+            <!-- success message -->
+            {% include "includes/success.html" %}
+
+            <!-- serror message -->
+            {% include "includes/error.html" %}
+
+            <! -- form & table -->
             {% if form %}
                 {% include "includes/response_form.html" %}
             {% elif table %}
+                {% row %}
+                    {% column xs="12" %}
+                        <div class="btn-group pull-right" role="group" aria-label="...">
+                            <a class="btn btn-primary btn-sm" href="?yesterday" role="button">Yesterday</a>
+                            <a class="btn btn-primary btn-sm" href="?today" role="button">Today</a>
+                        </div>
+                    {% endcolumn %}
+                {% endrow %}
                 {% render_table table %}
             {% endif %}
         {% endcontainer %}

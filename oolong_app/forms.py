@@ -20,11 +20,10 @@ class ResponseForm(ModelForm):
     def clean(self):
         form_data = super(ModelForm, self).clean()
 
-        # not sure why i have to do this TODO
-        # works, just leaving it commented it out so i know what to come back
-        # to
-        #response = AvailableResponse.objects.get(id=form_data['response'])
-        #form_data['response'] = response
+        # need to replace data in POST with an AvailableResponse
+        # instance; don't know why I have to do this
+        response = AvailableResponse.objects.get(id=form_data['response'])
+        form_data['response'] = response
 
         return form_data
 
@@ -37,6 +36,10 @@ class QuestionnaireForm(forms.Form):
     '''
     Generic questionnaire form; note that it's defined entirely
     by the kwargs we initiate the form with.
+
+    We don't have a Django model for the questionnaire, nor does each
+    questionnaire have the same questions; so we need a dynamic way
+    of generatic a Form.
 
     https://jacobian.org/writing/dynamic-form-generation/
     '''
@@ -110,7 +113,10 @@ class QuestionnaireForm(forms.Form):
 
 class MetricForm(ModelForm):
     '''
-    Generic form used for metrics.
+    Generic ModelForm used for displaying a metric.
+
+    We use the modelform_factory() to specify which model
+    should be used at render time.
     '''
     required_css_class = 'required'
 

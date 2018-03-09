@@ -5,7 +5,7 @@
     {% row %}
         {% column xs="12" sm="5" lg="3" %}
             <div class="alert alert-success" role="alert" style="margin-top:20px;">
-                Metric successfully submitted.
+                {{ success|safe }}
             </div>
         {% endcolumn %}
     {% endrow %}

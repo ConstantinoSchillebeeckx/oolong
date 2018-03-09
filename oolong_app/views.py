@@ -45,11 +45,14 @@ def edit_questionnaire(request):
 
     response_id = request.GET.get('id', None)
     form, questionnaire, table = None, None, None
+    error, success = False, False
+    today = True if 'today' in request.GET else False
+    yesterday = True if 'yesterday' in request.GET else False
 
-    if not response_id:
+    if not response_id or 'sort' in request.GET:
         # if first arriving, show all submitted responses in a table
-        responses = Response.objects.filter(user_id=request.user.id)
-        table = ResponseTable(responses, order_by="-date")
+        table = get_responses_table(request, today, yesterday)
+
         per_page = 33 # there are 33 questions total
         RequestConfig(request, paginate={'per_page': per_page}).configure(table)
     else:
@@ -64,9 +67,18 @@ def edit_questionnaire(request):
 
         form = ResponseForm(request.POST or None, instance=a, choices=responses)
 
-        print(form.is_valid())
-
-
+        if form.is_valid():
+            try:
+                a = form.save(commit=False)
+                a.id = response_id # set PK so we can do a save()
+                a.save()
+            except Exception as e:
+                print(e)
+                error = True
+            else:
+                success = "Questionnaire properly updated."
+                form = None
+                table = get_responses_table(request)
 
     return render(
                 request, 
@@ -75,18 +87,34 @@ def edit_questionnaire(request):
                     'form':form,
                     'questionnaire': questionnaire,
                     'table': table,
+                    'success': success,
+                    'error': error,
                 }
            )
+
+
+def get_responses_table(request, today, yesterday):
+
+    responses = Response.objects.filter(user_id=request.user.id)
+
+    if today or yesterday:
+        date_filter = date.today() - timedelta(yesterday)
+        responses = responses.filter(date__contains=date_filter)
+
+    table = ResponseTable(responses, order_by=("-date","question"))
+
+    return table
 
 
 @login_required 
 @csrf_protect 
 def submit_questionnaire(request):
 
+    ''' find next questionnaire '''
+
     qid = request.GET.get('qid', None)
     if not qid:
         qid = 'Happiness'
-
 
     # defines how user traverses questionnaires
     # key: starting form
@@ -103,6 +131,8 @@ def submit_questionnaire(request):
         questionnaire = Questionnaire.objects.get(name=qid)
     except:
         questionnaire = None
+
+    ''' build form '''
 
     # get our list of questions for this questionnaire
     # [(question_id, question_str),()]
@@ -122,12 +152,14 @@ def submit_questionnaire(request):
                 user=request.user.id,
            )
 
+    ''' validate form '''
+
     if form.is_valid():
         form.save()
     
         if next_qid:
             # redirect to next questionnaire
-            return redirect('/questionnaire?qid=%s' %next_qid)
+            return redirect('/submit_questionnaire?qid=%s' %next_qid)
         else:
             # questionnaires finished
             return redirect('/submit_success/')
@@ -156,7 +188,9 @@ def edit_metric(request):
 
     if activity_id:
 
-        # lookup our model name based on the select
+        ''' generate form '''
+
+        # lookup our model name based on the activity
         activity = Activity.objects.get(id=activity_id)
         activity_name = activity.name
 
@@ -171,6 +205,7 @@ def edit_metric(request):
             a = model.objects.get(id=metric_id)
             metric_form = form(instance=a)
 
+        ''' validate and save form data '''
 
         # if submitting changed form data
         if request.method == 'POST':
@@ -187,8 +222,10 @@ def edit_metric(request):
                     print(e)
                     error = True
                 else:
-                    success = True
+                    success = 'Metric successfully submitted.'
                     metric_form = None
+
+        ''' get table of metrics '''
 
         # if no previous metric specified, or we've just saved an edit
         # show the table of all available saved metrics
@@ -294,10 +331,8 @@ def submit_metric(request):
                         print(e)
                         error = True
                     else:
-                        success = True
+                        success = 'Metric successfully submitted.'
                         metric_form = None
-
-                        
 
     return render(
                 request, 
