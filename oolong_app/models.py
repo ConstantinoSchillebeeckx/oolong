@@ -572,8 +572,8 @@ class Sleep(_Metric):
                  (4,'Happy'),
                  (5,'Very happy'),
         ],
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         default=3,
         db_index=True,
         help_text=(
