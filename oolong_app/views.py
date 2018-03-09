@@ -8,6 +8,7 @@ from django.forms import modelformset_factory
 from django.forms import modelform_factory
 from django.apps import apps
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
 import django_tables2 as tables
 from django_tables2 import RequestConfig
@@ -16,7 +17,7 @@ from pprint import pprint
 import json
 
 from .forms import UserLoginForm, MetricForm, QuestionnaireForm, ResponseForm
-from .forms import UserSignupForm
+from .forms import UserSignupForm, user_in_database, input_is_valid
 from .models import Activity, Question, AvailableResponse, Questionnaire
 from .models import Response
 from .tables import _Generic, ResponseTable
