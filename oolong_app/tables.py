@@ -24,7 +24,7 @@ class _Generic(tables.Table):
     '''
 
     edit = tables.TemplateColumn('<a style="color:#1abc9c;" class="far fa-edit fa-lg" href="?activity={{record.activity}}&id={{record.id}}"></a>', verbose_name='')
-    time_stamp = tables.DateTimeColumn(format='Y-m-d H:m:s')
+    time_stamp = tables.DateTimeColumn(format='Y-m-d H:i:s')
 
     class Meta:
         order_by = '-time_stamp'

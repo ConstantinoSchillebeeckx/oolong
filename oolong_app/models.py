@@ -348,6 +348,21 @@ class Relax(_Metric):
             "Whether metric event occurred while being alone."
         )
     )
+    score = models.IntegerField(
+        choices=[(1,'Very unhappy'),
+                 (2,'Unhappy'),
+                 (3,'Neutral'),
+                 (4,'Happy'),
+                 (5,'Very happy'),
+        ],
+        blank=False,
+        null=False,
+        default=3,
+        db_index=True,
+        help_text=(
+            "Generalized mood for this metric."
+        )
+    )
     notes = models.TextField(
         blank=True,
         null=True,
@@ -550,15 +565,19 @@ class Sleep(_Metric):
             "Whether metric event occurred while being alone."
         )
     )
-    score = models.CharField(
-        max_length=1,
-        choices=[(i,i) for i in range(1,6)],
+    score = models.IntegerField(
+        choices=[(1,'Very unhappy'),
+                 (2,'Unhappy'),
+                 (3,'Neutral'),
+                 (4,'Happy'),
+                 (5,'Very happy'),
+        ],
         blank=False,
         null=False,
         default=3,
         db_index=True,
         help_text=(
-            "Generalized mood score while waking up; <b>high</b> score is a <code>good</code> mood, <b>low</b> score is a <code>bad/low</code> mood."
+            "Generalized mood while waking up."
         )
     )
     notes = models.TextField(
