@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 
 import django_tables2 as tables
 from django_tables2 import RequestConfig
-from pprint import pprint
+from datetime import datetime, timedelta, date
 
 import json
 
@@ -151,8 +151,8 @@ def edit_metric(request):
     success, error = False, False
     activity_id=request.GET.get('activity', None)
     metric_id=request.GET.get('id', None)
-
-
+    today = True if 'today' in request.GET else False
+    yesterday = True if 'yesterday' in request.GET else False
 
     if activity_id:
 
@@ -208,7 +208,17 @@ def edit_metric(request):
                         col = (l,tables.DateTimeColumn(format='Y-m-d H:m:s'))
                     extra_columns.append(col)
 
-            user_activities = list(model.objects.filter(user_id=request.user.id).values())
+            if today or yesterday:
+                date_filter = date.today() - timedelta(yesterday)
+                user_activities = (model.objects
+                                        .filter(user_id=request.user.id)
+                                        .filter(time_stamp__contains=date_filter)
+                                        .values())
+            else:
+                user_activities = (model.objects
+                                        .filter(user_id=request.user.id)
+                                        .values())
+            user_activities = list(user_activities)
 
             # manually add in activity_id so that
             # the TemplateColumn has access to it

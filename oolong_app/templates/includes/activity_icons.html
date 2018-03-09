@@ -14,10 +14,16 @@
 {% if selected_activity %}
     <hr>
     {% row %}
-        {% column %}
+        {% column xs="10" %}
             <a id="anchor">
                 <h2><code>{{selected_activity}}</code></h2>
             </a>
+        {% endcolumn %}
+        {% column xs="2" %}
+            <div class="btn-group pull-right" role="group" aria-label="...">
+                <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
+                <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
+            </div>
         {% endcolumn %}
     {% endrow %}
 {% endif %}
