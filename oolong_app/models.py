@@ -287,6 +287,20 @@ class Exercise(_Metric):
             "Whether metric event occurred while being alone."
         )
     )
+    mood_score = models.IntegerField(
+        choices=[(1,'Very unhappy'),
+                 (2,'Unhappy'),
+                 (3,'Neutral'),
+                 (4,'Happy'),
+                 (5,'Very happy'),
+        ],
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text=(
+            "Generalized mood for this metric."
+        )
+    )
     notes = models.TextField(
         blank=True,
         null=True,
