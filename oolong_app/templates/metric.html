@@ -63,7 +63,15 @@
             if (this.id !== 'id_time_stamp') $(this).scrollView();
         })
 
+        // on page load
         jQuery(function () {
+            // scroll down a bit to fully load form
+            // saves on screen real estate for mobile
+            if(window.location.href.indexOf("activity") > -1) {
+                jQuery('#anchor').scrollView();
+            }
+
+
             // we show/hide start to autopopulate with
             // user's current time - a little dirty ...
             if (start_input.length) {

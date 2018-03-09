@@ -208,8 +208,6 @@ def edit_metric(request):
 
             user_activities = list(model.objects.filter(user_id=request.user.id).values())
 
-            print(user_activities)
-
             # manually add in activity_id so that
             # the TemplateColumn has access to it
             # used to render the edit button

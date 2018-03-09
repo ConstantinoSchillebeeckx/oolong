@@ -4,7 +4,7 @@
 {% row %}
     <div class='col-xs-12 button-wrapper'>
         {% for activity in activities %}
-            <a href='?activity={{activity.id}}#anchor' type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
+            <a href='?activity={{activity.id}}' type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
                 <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.name}}</span>
             </a>
         {% endfor %}
