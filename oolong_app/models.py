@@ -574,7 +574,6 @@ class Sleep(_Metric):
         ],
         blank=True,
         null=True,
-        default=3,
         db_index=True,
         help_text=(
             "Generalized mood while waking up."
