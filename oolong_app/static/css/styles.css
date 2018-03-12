@@ -200,6 +200,14 @@ a#anchor h2 {
     margin-top: -60px;
 }
 
+a#anchor {
+    color: #333;
+}
+
+.icons {
+    margin-top: 10px;
+}
+
 /* https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668 */
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control { 
     background-color: #fff !important; 

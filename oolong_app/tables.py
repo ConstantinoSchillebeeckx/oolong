@@ -24,6 +24,7 @@ class _Generic(tables.Table):
     '''
 
     edit = tables.TemplateColumn('<a style="color:#1abc9c;" class="far fa-edit fa-lg" href="?activity={{record.activity}}&id={{record.id}}"></a>', verbose_name='')
+    delete = tables.TemplateColumn('<a style="color:#c7254e;" class="far fa-trash-alt fa-lg" href="?activity={{record.activity}}&id={{record.id}}&delete"></a>', verbose_name='')
     time_stamp = tables.DateTimeColumn(format='Y-m-d H:i:s')
 
     class Meta:

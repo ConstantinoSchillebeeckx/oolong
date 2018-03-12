@@ -7,32 +7,17 @@
 
 {% block content %}
 
-    <style>
-        .noUi-tooltip {
-            display: none;
-        }
-        .noUi-active .noUi-tooltip {
-            display: block;
-        }
-        .form-group {
-            margin-top: 25px;
-            margin-bottom: 25px;
-        }
-        input {
-            visibility: hidden; /* hide inputs so we don't see them onload */
-        }
-    </style>
-
     <!-- bodywrap -->
     <div id="bodywrap">
         {% container %}
+
             <!-- success message -->
             {% include "includes/success.html" %}
 
             <!-- serror message -->
             {% include "includes/error.html" %}
 
-            <! -- form & table -->
+            <!-- form & table -->
             {% if form %}
                 {% include "includes/response_form.html" %}
             {% elif table %}

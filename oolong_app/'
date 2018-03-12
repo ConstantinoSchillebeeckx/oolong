@@ -214,10 +214,7 @@ def edit_metric(request):
 
         # if deleting this metric instance
         if metric_id and activity_id and delete:
-            a.delete()
-            success = 'Metric successfully deleted.'
-            metric_id = None
-            metric_form = None
+            print(a)
 
         ''' validate and save form data '''
 

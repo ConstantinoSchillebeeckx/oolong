@@ -11,7 +11,7 @@
     <div id="bodywrap">
         {% container %}
 
-            {% if action %}<p class="lead">{{action|title}} metric</p>{% endif %}
+            {% if action %}<code class="lead">{{action|title}} metric</code>{% endif %}
 
             <!-- activity icons -->
             {% include "includes/activity_icons.html" %}
@@ -32,78 +32,6 @@
     </div>
     <!-- end bodywrap -->
 
-    <script>
-
-        // https://stackoverflow.com/a/1586379/1153897
-        $.fn.scrollView = function () {
-            return this.each(function () {
-                $('html, body').animate({
-                    scrollTop: $(this).offset().top - 80
-                }, 500);
-            });
-        }
-
-        var start_input = jQuery('#id_time_stamp');
-        var end_input = jQuery('#id_end');
-
-
-        var picker_format = {
-            format: "YYYY-MM-DD H:mm:ss",
-            ignoreReadonly: true, // https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668
-            allowInputToggle: true,
-            showTodayButton: true,
-            showClose: true,
-            toolbarPlacement: 'top',
-            widgetPositioning: {'vertical':'bottom'}
-        }
-
-        jQuery('select, input, textarea').focus(function() {
-            // since we show().hide() the timestamp div
-            // prevent it from auto scrolling on first page load :(
-            if (this.id !== 'id_time_stamp') $(this).scrollView();
-        })
-
-        // on page load
-        jQuery(function () {
-            // scroll down a bit to fully load form
-            // saves on screen real estate for mobile
-            if(window.location.href.indexOf("activity") > -1) {
-                jQuery('#anchor').scrollView();
-            }
-
-
-            // we show/hide start to autopopulate with
-            // user's current time - a little dirty ...
-            if (start_input.length) {
-                var start_picker = start_input.datetimepicker(picker_format)
-                start_picker.data("DateTimePicker").show().hide();
-
-                start_picker.on("dp.show", function(e) {
-                    // show time by default
-                    $('[data-action=togglePicker]').click();
-                    $(this).scrollView();
-                })
-
-            }
-
-            end_input.datetimepicker(picker_format);
-
-            // set the end timestamp to the start timestamp if the default
-            // end timestamp is before the end timestamp
-            end_input.on("dp.show", function (e) {
-                var start = start_input.data('DateTimePicker').date()
-                var end = end_input.data('DateTimePicker').date()
-
-                // show time by default
-                $('[data-action=togglePicker]').click();
-
-                if (end < start) {
-                    $(this).data('DateTimePicker').date(start);
-                }
-            });
-        });
-
-    </script>
 
 
 {% endblock %}

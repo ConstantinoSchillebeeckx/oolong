@@ -1,7 +1,7 @@
 {% load bootstrap_ui_tags %}
 
 {% row %}
-    <div class='col-xs-12 button-wrapper'>
+    <div class='col-xs-12 button-wrapper icons'>
         {% for activity in activities %}
             <a href='?activity={{activity.id}}' type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
                 <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.name}}</span>
@@ -15,16 +15,20 @@
     {% row %}
         {% column xs="6" %}
             <a id="anchor">
-                <h2><code>{{selected_activity}}</code></h2>
+                <p class="lead">{{selected_activity}}</code></p>
             </a>
         {% endcolumn %}
-        {% if action == 'edit' %}
-            {% column xs="6" %}
+        {% column xs="6" %}
+            {% if action == 'edit' %}
                 <div class="btn-group pull-right" role="group" aria-label="...">
                     <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
                     <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
                 </div>
-            {% endcolumn %}
-        {% endif %}
+            {% else %}
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <a class="btn btn-warning btn-sm" href="/edit_metric/?activity={{request.GET.activity}}" role="button">Edit</a>
+                </div>
+            {% endif %}
+        {% endcolumn %}
     {% endrow %}
 {% endif %}
