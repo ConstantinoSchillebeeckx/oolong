@@ -14,15 +14,12 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
-                    <li class="{% if request.resolver_match.url_name == "submit_metric" %}active{% endif %}"><a href="/submit_metric">Metric</a></li>
-                    <li class="dropdown {% if "questionnaire" in request.resolver_match.url_name %}active{% endif %}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Questionnaire <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/submit_questionnaire">New</a></li>
-                            <li><a href="/edit_questionnaire">Edit</a></li>
-                        </ul>
+                    <li class="{% if request.resolver_match.url_name == "submit_metric" %}active{% endif %}">
+                        <a href="/submit_metric"><i class="fas fa-plus-circle fa-lg"></i></a>
                     </li>
-                    <li><a href='/log_out/'>Log out</a></li>
+                    <li>
+                        <a href='/log_out/'><i class="fas fa-sign-out-alt fa-lg"></i></a>
+                    </li>
                 {% endif %}
             </ul>
         </div><!--/.nav-collapse -->

@@ -7,6 +7,9 @@
                 <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.name}}</span>
             </a>
         {% endfor %}
+        <a href="/{{action}}_questionnaire" type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
+            <i class="fas fa-list-ol fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> Questionnaire</span>
+        </a>
     </div>
 {% endrow %}
 

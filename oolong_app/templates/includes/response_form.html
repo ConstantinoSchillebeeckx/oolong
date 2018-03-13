@@ -42,7 +42,10 @@
                     {{ field }}
                 {% endfor %}
 
-                <button type="submit" class="btn btn-info pull-right">Submit</button>
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <a class="btn btn-warning" href="/edit_questionnaire/" role="button">Edit</a>
+                    <button type="submit" class="btn btn-info">Submit</button>
+                </div>
             {% endif %}
         </form>
     {% endcolumn %}
