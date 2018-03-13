@@ -35,6 +35,16 @@ def index(request):
     return response
 
 @login_required 
+def plot(request):
+
+    context = {
+    }
+
+    response = render(request, 'plot.html', context)
+
+    return response
+
+@login_required 
 @csrf_protect 
 def submit_success(request):
 
