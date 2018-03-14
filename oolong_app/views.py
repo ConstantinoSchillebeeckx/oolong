@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 import django_tables2 as tables
 from django_tables2 import RequestConfig
 from datetime import timedelta
-from django.utils.timezone import localdate
+from django.utils.timezone import localdate, now
 
 import json
 
@@ -119,7 +119,7 @@ def get_responses_table(request, today, yesterday):
 def filter_date(yesterday):
     # return either today's date or yesterday's date
     # `yesterday` is a bool
-    return localdate() - timedelta(yesterday)
+    return localdate(now()) - timedelta(yesterday)
 
 
 @login_required 
