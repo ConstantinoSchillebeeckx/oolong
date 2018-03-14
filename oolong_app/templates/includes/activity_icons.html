@@ -22,6 +22,7 @@
             </a>
         {% endcolumn %}
         {% column xs="6" %}
+            {{date_filter}}
             {% if action == 'edit' %}
                 <div class="btn-group pull-right" role="group" aria-label="...">
                     <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>

@@ -196,6 +196,7 @@ def submit_questionnaire(request):
 def edit_metric(request):
 
     metric_form, activity, table = None, None, None
+    date_filter=None,
     success, error = False, False
     activity_id=request.GET.get('activity', None)
     metric_id=request.GET.get('id', None)
@@ -296,6 +297,7 @@ def edit_metric(request):
                'selected_activity': activity,
                'metric_table': table,
                'action':'edit',
+               'date_filter':date_filter,
               }
 
 
