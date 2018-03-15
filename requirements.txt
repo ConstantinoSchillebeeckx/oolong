@@ -12,9 +12,10 @@ ipaddress==1.0.16
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
-psycopg2==2.7.4 --no-binary psycopg2
+psycopg2==2.7.4
 pygeoip==0.3.2
 pytz==2016.6
+simplejson==3.13.2
 six==1.11.0
 Werkzeug==0.14.1
 whitenoise==3.3.1

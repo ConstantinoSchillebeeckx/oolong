@@ -756,3 +756,30 @@ class Response(models.Model):
 
 
 
+'''
+                                -----------
+                                VIEW MODELS
+                                -----------
+'''
+
+
+class PlotResponse(models.Model):
+
+    date = models.TextField(primary_key=True) # not actually a PK, see workaround below
+    epoch = models.IntegerField()
+    questionnaire = models.ForeignKey(Questionnaire, 
+                                      on_delete=models.DO_NOTHING
+                                     )
+    avg = models.FloatField()
+    std = models.FloatField()
+
+    class Meta:
+            managed = False
+            db_table = 'plot_response'
+
+    # Django models require a column with a primary key,
+    # however this view does not have one; this is
+    # the work around.
+    # https://stackoverflow.com/a/11594959/1153897
+    def save(self, **kwargs):
+        raise NotImplementedError()

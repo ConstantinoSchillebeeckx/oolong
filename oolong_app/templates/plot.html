@@ -11,21 +11,28 @@
         svg {
             display: block;
         }
-        html, body, #chart1, svg {
+        #chart1, svg, .container-fluid {
             margin: 0px;
             padding: 0px;
             height: 100%;
             width: 100%;
+        }
+        .col-xs-12 {
+            height: 400px;
         }
 
     </style>
 
     <!-- bodywrap -->
     <div id="bodywrap">
-        {% container %}
+        {% container type="fluid" %}
+            {% row %}
+                {% column %}
 
-            <div id="chart1"></div>
+                    <div id="chart1"></div>
 
+                {% endcolumn %}
+            {% endrow %}
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
@@ -34,6 +41,9 @@
         jQuery(function () {
             var chart;
 
+            var plotDat = {{plotdat|safe}}
+
+            // Django expects a view with the name `plot_response` to exist:
             // select "date", extract('epoch' from "date")::numeric::integer epoch, questionniare, avg(score), stddev_samp(score) as std from (
             // select t1.id, "date"::date, score, questionnaire_id as questionniare
             // FROM public.response t1
@@ -42,7 +52,6 @@
             // ) t3
             // group by questionniare, "date"
             // order by "date", questionniare
-
 
             var lookup = {
                 1:'Strongly disagree',
@@ -53,9 +62,10 @@
             }
 
             var data = d3.nest()
-                        .key(function(d) { return d.questionniare })
+                        .key(function(d) { return d.questionnaire_id })
                         .rollup(function(d) { return d.map(function(i) { return {x:i.epoch*1000, y:i.avg} }) })
-                        .entries(dat)
+                        .entries(plotDat)
+
 
             nv.addGraph(function() {
 
@@ -63,7 +73,7 @@
                     .options({
                         duration: 300,
                         useInteractiveGuideline: true,
-                        margin: {left: 100},
+                        margin: {left: 110, right: 50},
                     })
                 ;
 
@@ -79,6 +89,8 @@
                     .tickFormat(function(d) {
                         return lookup[d];
                     })
+
+                chart.yDomain([0.5,5.5])
 
 
                 d3.select('#chart1').append('svg')

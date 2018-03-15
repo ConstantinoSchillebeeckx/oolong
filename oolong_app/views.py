@@ -16,12 +16,12 @@ from datetime import timedelta
 from django.utils.timezone import localdate, now, make_aware
 from django.utils.dateparse import parse_datetime
 
-import json
+import simplejson as json
 
 from .forms import UserLoginForm, MetricForm, QuestionnaireForm, ResponseForm
 from .forms import UserSignupForm, user_in_database, input_is_valid
 from .models import Activity, Question, AvailableResponse, Questionnaire
-from .models import Response
+from .models import Response, PlotResponse
 from .tables import _Generic, ResponseTable
 
 @login_required 
@@ -38,7 +38,9 @@ def index(request):
 @login_required 
 def plot(request):
 
+    dat = PlotResponse.objects.all()
     context = {
+        'plotdat': json.dumps(list(dat.values()))
     }
 
     response = render(request, 'plot.html', context)
