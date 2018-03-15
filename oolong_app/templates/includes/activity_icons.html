@@ -3,7 +3,7 @@
 {% row %}
     <div class='col-xs-12 button-wrapper icons'>
         {% for activity in activities %}
-            <a href='?activity={{activity.id}}' type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
+            <a href='?activity={{activity.id}}' type="button" class="btn {{btn_class}}">
                 <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.name}}</span>
             </a>
         {% endfor %}
@@ -22,11 +22,9 @@
             </a>
         {% endcolumn %}
         {% column xs="6" %}
-            {{date_filter}}
             {% if action == 'edit' %}
                 <div class="btn-group pull-right" role="group" aria-label="...">
-                    <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
-                    <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
+                    <a class="btn btn-info btn-sm" href="/submit_metric/?activity={{request.GET.activity}}" role="button">Add</a>
                 </div>
             {% else %}
                 <div class="btn-group pull-right" role="group" aria-label="...">
@@ -35,4 +33,14 @@
             {% endif %}
         {% endcolumn %}
     {% endrow %}
+    {% if action == 'edit' %}
+        {% row %}
+            {% column %}
+                <div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
+                    <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
+                </div>
+            {% endcolumn %}
+        {% endrow %}
+    {% endif %}
 {% endif %}

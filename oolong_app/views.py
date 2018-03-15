@@ -13,7 +13,8 @@ from django.contrib.auth.models import User
 import django_tables2 as tables
 from django_tables2 import RequestConfig
 from datetime import timedelta
-from django.utils.timezone import localdate, now
+from django.utils.timezone import localdate, now, make_aware
+from django.utils.dateparse import parse_datetime
 
 import json
 
@@ -109,8 +110,8 @@ def get_responses_table(request, today, yesterday):
     responses = Response.objects.filter(user_id=request.user.id)
 
     if today or yesterday:
-        date_filter = filter_date(yesterday)
-        responses = responses.filter(date__contains=date_filter)
+        start, end = filter_date(yesterday)
+        responses = responses.filter(date__gt=start).filter(date__lt=end)
 
     table = ResponseTable(responses, order_by=("-date","question"))
 
@@ -119,7 +120,11 @@ def get_responses_table(request, today, yesterday):
 def filter_date(yesterday):
     # return either today's date or yesterday's date
     # `yesterday` is a bool
-    return localdate(now()) - timedelta(yesterday)
+    date = str(localdate(now()) - timedelta(yesterday))
+    start = make_aware(parse_datetime(date + " 0:00:00"))
+    end = make_aware(parse_datetime(date + " 23:59:59"))
+
+    return start, end
 
 
 @login_required 
@@ -270,10 +275,11 @@ def edit_metric(request):
                     extra_columns.append(col)
 
             if today or yesterday:
-                date_filter = filter_date(yesterday)
+                start, end = filter_date(yesterday)
                 user_activities = (model.objects
                                         .filter(user_id=request.user.id)
-                                        .filter(time_stamp__contains=date_filter)
+                                        .filter(time_stamp__gt=start)
+                                        .filter(time_stamp__lt=end)
                                         .values())
             else:
                 user_activities = (model.objects
@@ -297,7 +303,7 @@ def edit_metric(request):
                'selected_activity': activity,
                'metric_table': table,
                'action':'edit',
-               'date_filter':date_filter,
+               'btn_class':'btn-warning',
               }
 
 
@@ -368,6 +374,7 @@ def submit_metric(request):
                  'activities': Activity.objects.all(),
                  'selected_activity': activity,
                  'action':'submit',
+                 'btn_class':'btn-info',
                 }
            )
 
