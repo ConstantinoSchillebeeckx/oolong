@@ -16,6 +16,13 @@ class Activity(models.Model):
     name = models.TextField(
         blank=False,
         db_index=True,
+        help_text = "Corresponding model name; must exist as a Django model."
+    )
+    label = models.TextField(
+        blank=False,
+        db_index=True,
+        null=True,
+        help_text = "Label displayed on button used for navigation."
     )
     icon = models.TextField(
         blank=False,

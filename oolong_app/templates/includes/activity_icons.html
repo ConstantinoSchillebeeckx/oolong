@@ -4,7 +4,7 @@
     <div class='col-xs-12 button-wrapper icons'>
         {% for activity in activities %}
             <a href='?activity={{activity.id}}' type="button" class="btn {{btn_class}}">
-                <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.name}}</span>
+                <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.label}}</span>
             </a>
         {% endfor %}
         <a href="/{{action}}_questionnaire" type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
