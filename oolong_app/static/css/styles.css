@@ -216,3 +216,16 @@ a#anchor {
 @media (max-width:767px){
     .activity-label {display:none;} /* hide button labels on mobile */
 }
+
+svg {
+    display: block;
+}
+svg, .plot > .container-fluid {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+}
+#chart {
+    height: 400px;
+}
