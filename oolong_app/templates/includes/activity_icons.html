@@ -8,7 +8,7 @@
             </a>
         {% endfor %}
         <a href="/{{action}}_questionnaire" type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
-            <i class="fas fa-list-ol fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> Questionnaire</span>
+            <i class="fas fa-list-ol fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> Mood</span>
         </a>
     </div>
 {% endrow %}
@@ -36,7 +36,7 @@
     {% if action == 'edit' %}
         {% row %}
             {% column %}
-                <div class="btn-group" role="group" aria-label="...">
+                <div class="btn-group lead" role="group" aria-label="...">
                     <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&yesterday" role="button">Yesterday</a>
                     <a class="btn btn-primary btn-sm" href="?activity={{request.GET.activity}}&today" role="button">Today</a>
                 </div>
