@@ -273,7 +273,7 @@ def edit_metric(request):
                     # TODO find a better way to automatically
                     # check whether a field is DateTime type
                     if l == 'end':
-                        col = (l,tables.DateTimeColumn(format='Y-m-d H:m:s'))
+                        col = (l,tables.DateTimeColumn(format='Y-m-d H:i:s'))
                     extra_columns.append(col)
 
             if today or yesterday:
