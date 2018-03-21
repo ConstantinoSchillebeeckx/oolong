@@ -72,8 +72,8 @@ class Daily(_Metric):
     type = models.CharField(
         max_length=15,
         choices=[
-            ('screen_time','Screen time'),
-            ('steps','Steps'),
+            ('screen_time','Time on phone'),
+            ('steps','Distance walked'),
         ],
         blank=False,
         null=False,
