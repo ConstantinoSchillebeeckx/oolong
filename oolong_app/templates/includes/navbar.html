@@ -1,30 +1,24 @@
 {% load bootstrap_ui_tags %}
 
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
     {% container type="fluid" %}
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">OOLONG</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                    <li class="{% if request.resolver_match.url_name == "submit_metric" %}active{% endif %}">
-                        <a href="/submit_metric"><i class="fas fa-plus-circle fa-lg"></i></a>
-                    </li>
-                    <li>
-                        <a href='/plot'><i class="fas fa-chart-line fa-lg"></i></a>
-                    </li>
-                    <li>
-                        <a href='/log_out/'><i class="fas fa-sign-out-alt fa-lg"></i></a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div><!--/.nav-collapse -->
+        <ul class="nav navbar-nav navbar-left">
+            <li>
+                <a class="navbar-brand" href="/">OOLONG</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li class="{% if request.resolver_match.url_name == "submit_metric" %}active{% endif %}">
+                    <a href="/submit_metric"><i class="fas fa-plus-circle fa-lg"></i></a>
+                </li>
+                <li>
+                    <a href='/plot'><i class="fas fa-chart-line fa-lg"></i></a>
+                </li>
+                <li>
+                    <a href='/log_out/'><i class="fas fa-sign-out-alt fa-lg"></i></a>
+                </li>
+            {% endif %}
+        </ul>
     {% endcontainer %}
-</nav>
+</div>

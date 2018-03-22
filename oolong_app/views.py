@@ -350,7 +350,14 @@ def submit_metric(request):
         if form:
 
             if request.method == 'GET':
-                metric_form = form()
+                if activity_name == 'Medication':
+                    # load previous meds for convenience
+                    last_med = model.objects.latest('id')
+                    last_med.time_stamp = None
+                    metric_form = form(instance=last_med)
+                else:
+                    metric_form = form()
+                    
             else:
                 metric_form = form(request.POST)
 
