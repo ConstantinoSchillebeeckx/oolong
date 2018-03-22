@@ -6,7 +6,7 @@
 // https://stackoverflow.com/a/1586379/1153897
 $.fn.scrollView = function () {
     return this.each(function () {
-        $('html, body').stop().delay(200).animate({
+        $('html, body').animate({
             scrollTop: $(this).offset().top - 80
         }, 500);
     });
@@ -16,7 +16,7 @@ $.fn.scrollView = function () {
 jQuery('select, input, textarea').focus(function() {
     // since we show().hide() the timestamp div
     // prevent it from auto scrolling on first page load :(
-    if (this.id !== 'id_time_stamp') $(this).scrollView();
+    //if (this.id !== 'id_time_stamp') $(this).scrollView();
 })
 
 // on metric page load
