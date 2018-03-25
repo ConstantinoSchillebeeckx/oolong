@@ -779,6 +779,7 @@ class PlotResponse(models.Model):
                                      )
     avg = models.FloatField()
     std = models.FloatField()
+    median = models.FloatField()
 
     class Meta:
             managed = False
