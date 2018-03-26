@@ -122,16 +122,17 @@ class MetricForm(ModelForm):
 
     def clean(self):
         '''
-        If `Value` is provided, so must `Units`
-
-        If `End` is provided, it must be after 'Time stamp`
+        Custom error/validation checking
         '''
         cleaned_data = super().clean()
         value = cleaned_data.get('value', None)
         units = cleaned_data.get('units', None)
         time_stamp = cleaned_data.get('time_stamp', None)
         end = cleaned_data.get('end', None)
+        type = cleaned_data.get('type', None)
+        has_caffeine = cleaned_data.get('has_caffeine', None)
 
+        # If `Value` is provided, so must `Units`
         if value and not units:
             msg=mark_safe(
                 "If providing a <code>Value</code>, "
@@ -139,12 +140,32 @@ class MetricForm(ModelForm):
             )
             self.add_error('units', forms.ValidationError(msg))
 
+        # If `End` is provided, it must be after 'Time stamp`
         if end and time_stamp and end < time_stamp:
             msg=mark_safe(
                 "If providing an <code>End</code> timestamp, "
                 "it must occurr after starting <code>Time stamp</code>."
             )
             self.add_error('end', forms.ValidationError(msg))
+
+        # water cannot have caffeine
+        if type == 'water' and has_caffeine:
+            msg=mark_safe(
+                "Water cannot have caffeine!"
+            )
+            self.add_error('has_caffeine', forms.ValidationError(msg))
+
+        # validate proper unit types for time_on_phone and distance_walked
+        if (
+            (type == 'screen_time' and units == 'steps') or
+            (type == 'steps' and units in ('minutes','hours'))
+        ):
+            msg=mark_safe(
+                "This combination of <code>Type</code> & "
+                "<code>Units</code> does not make sense; "
+                "please change one of them."
+            )
+            self.add_error(None, forms.ValidationError(msg))
 
 
     '''
