@@ -6,22 +6,18 @@ var isMobile = false; //initiate as false
 // selected element
 // https://stackoverflow.com/a/1586379/1153897
 $.fn.scrollView = function () {
-
-    // only scroll on desktop, mobile already auto scrolls
-    if (!isMobile) {
-        return this.each(function () {
-            $('html, body').animate({
-                scrollTop: $(this).offset().top - 80
-            }, 500);
-        });
-    }
+    return this.each(function () {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top - 80
+        }, 500);
+    });
 }
 
 
 jQuery('select, input, textarea').focus(function() {
     // since we show().hide() the timestamp div
     // prevent it from auto scrolling on first page load :(
-    if (this.id !== 'id_time_stamp') $(this).scrollView();
+    if (this.id !== 'id_time_stamp' && !isMobile) $(this).scrollView();
 })
 
 // on metric page load
@@ -46,7 +42,7 @@ jQuery(function () {
     }
 
     // on activity metric page load
-    // scroll down a bit to fully load form
+    // scroll down a bit to fully load form.
     // saves on screen real estate for mobile
     if(window.location.href.indexOf("activity") > -1) {
         jQuery('#anchor').scrollView();
@@ -61,9 +57,10 @@ jQuery(function () {
         start_picker.data("DateTimePicker").show().hide();
 
         start_picker.on("dp.show", function(e) {
-            // show time by default
+            // show time view instead of date
             $('[data-action=togglePicker]').click();
-            $(this).scrollView();
+            e.preventDefault();
+            e.stopPropagation();
         })
 
     }
@@ -77,7 +74,7 @@ jQuery(function () {
         var start = start_input.data('DateTimePicker').date()
         var end = end_input.data('DateTimePicker').date()
 
-        // show time by default
+        // show time view instead of date
         $('[data-action=togglePicker]').click();
 
         if (end < start) {
