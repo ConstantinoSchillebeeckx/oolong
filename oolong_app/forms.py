@@ -131,6 +131,7 @@ class MetricForm(ModelForm):
         end = cleaned_data.get('end', None)
         type = cleaned_data.get('type', None)
         has_caffeine = cleaned_data.get('has_caffeine', None)
+        alone = cleaned_data.get('alone', False)
 
         # If `Value` is provided, so must `Units`
         if value and not units:
@@ -164,6 +165,15 @@ class MetricForm(ModelForm):
                 "This combination of <code>Type</code> & "
                 "<code>Units</code> does not make sense; "
                 "please change one of them."
+            )
+            self.add_error(None, forms.ValidationError(msg))
+
+        # various relax types cannot be alone
+        if alone and type in ('phone','therapist','friends'):
+            msg=mark_safe(
+                "The activity type <b>%s</b> cannot be marked as "
+                "<code>alone</code>; please uncheck <code>alone</code> "
+                "or choose a different <code>type</code>." %type
             )
             self.add_error(None, forms.ValidationError(msg))
 

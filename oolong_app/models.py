@@ -72,8 +72,8 @@ class Daily(_Metric):
     type = models.CharField(
         max_length=15,
         choices=[
-            ('screen_time','Time on phone'),
-            ('steps','Distance walked'),
+            ('screen_time','Minutes on phone'),
+            ('steps','Steps walked'),
         ],
         blank=False,
         null=False,
@@ -88,20 +88,6 @@ class Daily(_Metric):
         db_index=True,
         help_text=(
             "The recorded value for the type of metric"
-        )
-    )
-    units = models.CharField(
-        max_length=10,
-        choices=[
-            ('minutes','Minutes'),
-            ('steps','Steps'),
-            ('hours','Hours'),
-        ],
-        blank=True,
-        null=True,
-        db_index=True,
-        help_text=(
-            "Units associated with the <code>Value</code> field."
         )
     )
 
@@ -438,18 +424,6 @@ class Eat(_Metric):
         db_index=True,
         help_text=(
             "The recorded calories for the metric event."
-        )
-    )
-    units = models.CharField(
-        max_length=10,
-        choices=[('cal','Cal'),
-                 ('number','Number'),
-                ],
-        blank=True,
-        null=True,
-        db_index=True,
-        help_text=(
-            "Units associated with the <code>Value</code> field."
         )
     )
     alone = models.BooleanField(
