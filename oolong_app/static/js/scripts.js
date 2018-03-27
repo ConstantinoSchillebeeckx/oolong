@@ -63,12 +63,6 @@ jQuery(function () {
 
     }
 
-    jQuery(start_input).on('touchstart', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        start_input.data('DateTimePicker').show();
-    }) 
-
     // build end datetime picker
     end_input.datetimepicker(picker_format);
 
