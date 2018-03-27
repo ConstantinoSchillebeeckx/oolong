@@ -59,11 +59,14 @@ jQuery(function () {
         start_picker.on("dp.show", function(e) {
             // show time view instead of date
             $('[data-action=togglePicker]').click();
-            e.preventDefault();
-            e.stopPropagation();
         })
 
     }
+
+    jQuery(start_input).on('touchstart', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }) 
 
     // build end datetime picker
     end_input.datetimepicker(picker_format);
