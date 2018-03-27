@@ -59,6 +59,7 @@ jQuery(function () {
         start_picker.on("dp.show", function(e) {
             // show time view instead of date
             $('[data-action=togglePicker]').click();
+            $(this).scrollView();
         })
 
     }
