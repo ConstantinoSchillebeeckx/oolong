@@ -173,6 +173,7 @@ def submit_questionnaire(request):
                 q=questions, 
                 choices=responses,
                 user=request.user.id,
+                default=questionnaire.default_response,
            )
 
     ''' validate form '''
@@ -253,7 +254,7 @@ def edit_metric(request):
                     print(e)
                     error = True
                 else:
-                    success = 'Metric successfully submitted.'
+                    success = 'Metric successfully updated.'
                     metric_form = None
 
         ''' get table of metrics '''

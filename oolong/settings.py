@@ -92,6 +92,9 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+BOOTSTRAP3 = {
+     'success_css_class': None,
+}
 
 
 # Internationalization

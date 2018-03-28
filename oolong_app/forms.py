@@ -48,6 +48,7 @@ class QuestionnaireForm(forms.Form):
         q = kwargs.pop('q') # questions
         choices = kwargs.pop('choices')
         user = kwargs.pop('user')
+        default = kwargs.pop('default')
 
         super(QuestionnaireForm, self).__init__(*args, **kwargs)
         widget = forms.Select(attrs={'class':'form-control'})
@@ -56,11 +57,12 @@ class QuestionnaireForm(forms.Form):
         self.fields['user'] = forms.CharField(widget=hidden, label='user')
 
         for q_id, q_str in q:
-            self.fields['qid_%s' % q_id] = forms.ChoiceField(
+            self.fields['qid_%s' %q_id] = forms.ChoiceField(
                                                 choices=choices,
                                                 label=q_str,
                                                 widget=widget
                                            )
+            self.initial['qid_%s' %q_id] = default
 
     def clean(self):
         # ensure user hasn't already filled out this form today
@@ -134,7 +136,7 @@ class MetricForm(ModelForm):
         alone = cleaned_data.get('alone', False)
 
         # If `Value` is provided, so must `Units`
-        if value and not units:
+        if type in ('exercise','drink') and value and not units:
             msg=mark_safe(
                 "If providing a <code>Value</code>, "
                 "you must also provide <code>Units</code>."
@@ -156,17 +158,6 @@ class MetricForm(ModelForm):
             )
             self.add_error('has_caffeine', forms.ValidationError(msg))
 
-        # validate proper unit types for time_on_phone and distance_walked
-        if (
-            (type == 'screen_time' and units == 'steps') or
-            (type == 'steps' and units in ('minutes','hours'))
-        ):
-            msg=mark_safe(
-                "This combination of <code>Type</code> & "
-                "<code>Units</code> does not make sense; "
-                "please change one of them."
-            )
-            self.add_error(None, forms.ValidationError(msg))
 
         # various relax types cannot be alone
         if alone and type in ('phone','therapist','friends'):

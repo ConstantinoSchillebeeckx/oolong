@@ -418,7 +418,7 @@ class Eat(_Metric):
             "Description of any item eaten."
         )
     )
-    value = models.FloatField(
+    calories = models.FloatField(
         blank=True,
         null=True,
         db_index=True,
@@ -480,7 +480,7 @@ class Drink(_Metric):
             "The type of item drunk."
         )
     )
-    value = models.FloatField(
+    volume = models.FloatField(
         blank=True,
         null=True,
         db_index=True,
@@ -594,7 +594,6 @@ class Sleep(_Metric):
 
 
 
-
 class Questionnaire(models.Model):
     '''
     Model that serves as a reference to define what questionnaires
@@ -619,39 +618,18 @@ class Questionnaire(models.Model):
             "how often have you been bothered by the following problems?'"
         )
     )
+    default_response = models.IntegerField(
+        help_text=(
+            "Default response with which to prepopulate question; references "
+            "the ID of `available_response`."
+        ),
+        null=True,
+        db_index=True,
+    )
 
     class Meta:
         db_table = 'questionnaire'
 
-
-
-class Question(models.Model):
-    '''
-    Models that servers as a reference for all the questions available
-    across the various questionnaires.
-    '''
-    question = models.TextField(
-        blank=False,
-        db_index=True,
-        null=False,
-        help_text=(
-            "The text for the question."
-        )
-    )
-    questionnaire = models.ForeignKey(
-        Questionnaire,
-        on_delete=models.PROTECT,
-        help_text=(
-            "Which questionnaire the particular question is associated with."
-        )
-    )
-
-    def __str__(self):
-        return self.question
-
-    class Meta:
-        db_table = 'question'
-        unique_together = ('question','questionnaire')
 
 
 class AvailableResponse(models.Model):
@@ -691,6 +669,36 @@ class AvailableResponse(models.Model):
         db_table = 'available_response'
         unique_together = [('label','questionnaire'),('score','questionnaire')]
     
+
+
+class Question(models.Model):
+    '''
+    Models that servers as a reference for all the questions available
+    across the various questionnaires.
+    '''
+    question = models.TextField(
+        blank=False,
+        db_index=True,
+        null=False,
+        help_text=(
+            "The text for the question."
+        )
+    )
+    questionnaire = models.ForeignKey(
+        Questionnaire,
+        on_delete=models.PROTECT,
+        help_text=(
+            "Which questionnaire the particular question is associated with."
+        )
+    )
+
+    def __str__(self):
+        return self.question
+
+    class Meta:
+        db_table = 'question'
+        unique_together = ('question','questionnaire')
+
 
 
 class Response(models.Model):
