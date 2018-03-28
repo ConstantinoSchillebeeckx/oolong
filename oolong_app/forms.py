@@ -182,8 +182,8 @@ class MetricForm(ModelForm):
             'item': Textarea(attrs={'rows': 2}),
             'medication': Textarea(attrs={'rows': 2}),
             'calories': NumberInput(attrs={"pattern":"[0-9]*"}), # needed to force numeric pad on iOS
-            'volume': NumberInput(attrs={"pattern":"[0-9]*"}), # needed to force numeric pad on iOS
-            'dose': NumberInput(attrs={"pattern":"[0-9]*"}), # needed to force numeric pad on iOS
+            'volume': NumberInput(attrs={"pattern":"[0-9\.]*"}), # needed to force numeric pad on iOS
+            'dose': NumberInput(attrs={"pattern":"[0-9\.]*"}), # needed to force numeric pad on iOS
             'value': NumberInput(attrs={"pattern":"[0-9]*"}), # needed to force numeric pad on iOS
             'time_stamp': TextInput(attrs={"readonly":True}), # https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668
             'end': TextInput(attrs={"readonly":True}), # https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1668
