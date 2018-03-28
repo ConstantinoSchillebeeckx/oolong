@@ -85,7 +85,7 @@ class QuestionnaireForm(forms.Form):
             min_diff = 12 # minumum 12 hrs between submits
 
             if hr_diff < min_diff:
-                    raise forms.ValidationError('You cannot submit this questionnaire more than once per day.')
+                    raise forms.ValidationError('You cannot submit this questionnaire more than once per day; you last submitted it %.3f hours ago.' %hr_diff)
 
         return form_data
 
