@@ -762,6 +762,9 @@ class PlotResponse(models.Model):
     avg = models.FloatField()
     std = models.FloatField()
     median = models.FloatField()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+    )
 
     class Meta:
             managed = False

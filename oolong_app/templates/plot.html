@@ -11,7 +11,13 @@
     <div id="bodywrap" class="plot">
         {% container type="fluid" %}
             {% row %}
-                <div class="col-xs-12" id="chart"></div>
+                {% column %}
+                    {% if plotdat %}
+                        <div id="chart"></div>
+                    {% else %}
+                        <p class="lead">No data found for {{ user.get_username }}; please fill out the <a href='/submit_questionnaire/'>questionnaire</a> first.</p>
+                    {% endif %}
+                {% endcolumn %}
             {% endrow %}
         {% endcontainer %}
     </div>
