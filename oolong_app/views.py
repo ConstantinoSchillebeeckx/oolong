@@ -38,7 +38,7 @@ def index(request):
 @login_required 
 def plot(request):
 
-    dat = PlotResponse.objects.filter(user=request.user)
+    dat = PlotResponse.objects.filter(user=1)
     plotdat = None if not dat.count() else json.dumps(list(dat.values()))
     context = {
         'plotdat': plotdat
@@ -164,9 +164,10 @@ def submit_questionnaire(request):
 
     # get the available responses for the questions
     # [(response_id, response_label),()]
-    responses = [(None,'----')]
-    tmp = AvailableResponse.objects.filter(questionnaire_id=qid).values_list('id','label')
-    responses.extend(list(tmp))
+    responses = list(AvailableResponse.objects
+                                      .filter(questionnaire_id=qid)
+                                      .order_by('score')
+                                      .values_list('score','label'))
     responses_dict = {k:v for k,v in responses if k}
 
     form = QuestionnaireForm(

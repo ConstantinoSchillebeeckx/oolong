@@ -727,11 +727,17 @@ class Response(models.Model):
             "Question being answered/scored."
         )
     )   
-    response = models.ForeignKey(
-        AvailableResponse,
+    score = models.IntegerField(
         blank=False,
-        null=False,
         db_index=True,
+        null=False,
+        help_text=(
+            "Score for given response; e.g. 4."
+        )
+    )
+    response = models.IntegerField(
+        db_index=False,
+        null=True,
         help_text=(
             "Response to given question."
         )

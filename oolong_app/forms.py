@@ -41,6 +41,10 @@ class QuestionnaireForm(forms.Form):
     questionnaire have the same questions; so we need a dynamic way
     of generatic a Form.
 
+    Each question in the questionnaire will get a select generate
+    for it, the id of that select will be in the form qid_XX, where
+    XX is the ID (in the DB) of the question.
+
     https://jacobian.org/writing/dynamic-form-generation/
     '''
 
@@ -84,14 +88,20 @@ class QuestionnaireForm(forms.Form):
             hr_diff = diff.total_seconds() / 3600.0
             min_diff = 12 # minumum 12 hrs between submits
 
-            if hr_diff < min_diff:
+            if False and hr_diff < min_diff:
                     raise forms.ValidationError('You cannot submit this questionnaire more than once per day; you last submitted it %.3f hours ago.' %hr_diff)
 
         return form_data
 
 
     def get_answers(self):
-        # returns the tuple (question_id, response_id)
+        '''
+        Iterates over self.cleaned_data and parses the question
+        answers into a tuple (qid, score) where score is
+        the score given to a particular response, and qid is the
+        ID (in the DB) of the question.
+        '''
+        # returns the tuple (question_id, score)
         for name, value in self.cleaned_data.items():
             if name.startswith('qid_'):
                 qid = int(name.replace('qid_',''))
@@ -102,10 +112,10 @@ class QuestionnaireForm(forms.Form):
         super(QuestionnaireForm, self).__init__(*args, **kwargs)
         user = self.cleaned_data.get('user',None)
 
-        for (question_id, response_id) in self.get_answers():
+        for (question_id, score) in self.get_answers():
             r = Response(
                     question_id = question_id,
-                    response_id = response_id,
+                    score = score,
                     user_id = user
                 )
             r.save()
