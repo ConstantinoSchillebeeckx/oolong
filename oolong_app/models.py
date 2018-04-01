@@ -110,8 +110,9 @@ class Note(_Metric):
             ('depressed','Depressed'),
             ('sad','Sad'),
             ('lonely','Lonely'),
+            ('generic','Generic'),
         ],
-        blank=True,
+        blank=False,
         null=True,
         db_index=True,
         help_text=(
