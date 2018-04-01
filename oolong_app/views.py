@@ -38,7 +38,7 @@ def index(request):
 @login_required 
 def plot(request):
 
-    dat = PlotResponse.objects.filter(user=1)
+    dat = PlotResponse.objects.filter(user=request.user)
     plotdat = None if not dat.count() else json.dumps(list(dat.values()))
     context = {
         'plotdat': plotdat

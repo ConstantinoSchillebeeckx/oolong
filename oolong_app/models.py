@@ -756,9 +756,7 @@ class PlotResponse(models.Model):
 
     date = models.TextField(primary_key=True) # not actually a PK, see workaround below
     epoch = models.IntegerField()
-    questionnaire = models.ForeignKey(Questionnaire, 
-                                      on_delete=models.DO_NOTHING
-                                     )
+    questionnaire = models.TextField()
     avg = models.FloatField()
     std = models.FloatField()
     median = models.FloatField()
