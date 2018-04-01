@@ -735,13 +735,6 @@ class Response(models.Model):
             "Score for given response; e.g. 4."
         )
     )
-    response = models.IntegerField(
-        db_index=False,
-        null=True,
-        help_text=(
-            "Response to given question."
-        )
-    )
 
     class Meta:
         db_table = 'response'

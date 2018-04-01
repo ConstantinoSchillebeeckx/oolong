@@ -59,7 +59,7 @@ def submit_success(request):
 def edit_questionnaire(request):
 
     response_id = request.GET.get('id', None)
-    form, questionnaire, table = None, None, None
+    q, form, questionnaire, table = None, None, None, None
     error, success = False, False
     today = True if 'today' in request.GET else False
     yesterday = True if 'yesterday' in request.GET else False
@@ -67,20 +67,19 @@ def edit_questionnaire(request):
     if not response_id or 'sort' in request.GET:
         # if first arriving, show all submitted responses in a table
         table = get_responses_table(request, today, yesterday)
-
-        per_page = 33 # there are 33 questions total
-        RequestConfig(request, paginate={'per_page': per_page}).configure(table)
     else:
         # if editing a response
         a = Response.objects.get(id=response_id)
         q = Question.objects.get(id=a.question_id)
+        questionnaire = Questionnaire.objects.get(name=q.questionnaire_id)
 
         # available responses for this questions
-        responses = [(None,'----')]
-        tmp = AvailableResponse.objects.filter(questionnaire_id=q.questionnaire_id).values_list('id','label')
-        responses.extend(list(tmp))
+        responses = list(AvailableResponse.objects
+                                          .filter(questionnaire_id=q.questionnaire_id)
+                                          .values_list('score','label'))
 
         form = ResponseForm(request.POST or None, instance=a, choices=responses)
+        print(request)
 
         if form.is_valid():
             try:
@@ -93,7 +92,11 @@ def edit_questionnaire(request):
             else:
                 success = "Questionnaire properly updated."
                 form = None
-                table = get_responses_table(request)
+                table = get_responses_table(request, None, None)
+
+    if table:
+        per_page = 33 # there are 33 questions total
+        RequestConfig(request, paginate={'per_page': per_page}).configure(table)
 
     return render(
                 request, 
@@ -101,6 +104,7 @@ def edit_questionnaire(request):
                 {
                     'form':form,
                     'questionnaire': questionnaire,
+                    'question': q,
                     'table': table,
                     'success': success,
                     'error': error,
@@ -115,6 +119,13 @@ def get_responses_table(request, today, yesterday):
     if today or yesterday:
         start, end = filter_date(yesterday)
         responses = responses.filter(date__gt=start).filter(date__lt=end)
+
+    responses = list(responses.values())
+
+    # lookup labels for each score (since they aren't PKs)
+    for l in responses:
+        print(l)
+        l['response'] = AvailableResponse.objects.get(score=l['score'])
 
     table = ResponseTable(responses, order_by=("-date","question"))
 

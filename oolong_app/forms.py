@@ -14,22 +14,23 @@ class ResponseForm(ModelForm):
         choices = kwargs.pop('choices')
         super(ResponseForm, self).__init__(*args, **kwargs)
         widget = forms.Select(attrs={'class':'form-control'})
-        self.fields['response'] = forms.ChoiceField(choices=choices,
+        self.fields['score'] = forms.ChoiceField(choices=choices,
                                                     widget=widget
                                                    )
+
     def clean(self):
         form_data = super(ModelForm, self).clean()
 
         # need to replace data in POST with an AvailableResponse
         # instance; don't know why I have to do this
-        response = AvailableResponse.objects.get(id=form_data['response'])
-        form_data['response'] = response
+        #response = AvailableResponse.objects.get(id=form_data['score'])
+        #form_data['response'] = response
 
         return form_data
 
     class Meta:
         model = Response
-        fields = ['response']
+        fields = ['score']
 
 
 class QuestionnaireForm(forms.Form):
@@ -88,7 +89,7 @@ class QuestionnaireForm(forms.Form):
             hr_diff = diff.total_seconds() / 3600.0
             min_diff = 12 # minumum 12 hrs between submits
 
-            if False and hr_diff < min_diff:
+            if hr_diff < min_diff:
                     raise forms.ValidationError('You cannot submit this questionnaire more than once per day; you last submitted it %.3f hours ago.' %hr_diff)
 
         return form_data
