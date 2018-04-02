@@ -8,7 +8,7 @@ class ResponseTable(tables.Table):
     edit = tables.TemplateColumn('<a style="color:#1abc9c;" class="far fa-edit fa-lg" href="?id={{record.id}}"></a>', verbose_name='')
     date = tables.DateTimeColumn(format='Y-m-d H:m:s')
     question = tables.Column()
-    response = tables.Column()
+    score = tables.Column()
 
     class Meta:
         exclude=('user',)

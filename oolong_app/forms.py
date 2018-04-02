@@ -9,24 +9,19 @@ from .models import Activity, Sleep, Eat, Drink, Question, Response
 from .models import Medication, Sex, Bathroom, Relax, Exercise, AvailableResponse
 
 class ResponseForm(ModelForm):
+    '''
+    Form used to edit an already provided response.
+    '''
 
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('choices')
         super(ResponseForm, self).__init__(*args, **kwargs)
         widget = forms.Select(attrs={'class':'form-control'})
+        q_label = Question.objects.get(pk=self.instance.question_id)
         self.fields['score'] = forms.ChoiceField(choices=choices,
-                                                    widget=widget
-                                                   )
-
-    def clean(self):
-        form_data = super(ModelForm, self).clean()
-
-        # need to replace data in POST with an AvailableResponse
-        # instance; don't know why I have to do this
-        #response = AvailableResponse.objects.get(id=form_data['score'])
-        #form_data['response'] = response
-
-        return form_data
+                                                 widget=widget,
+                                                 label=q_label,
+                                                )
 
     class Meta:
         model = Response

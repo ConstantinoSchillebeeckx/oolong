@@ -79,7 +79,6 @@ def edit_questionnaire(request):
                                           .values_list('score','label'))
 
         form = ResponseForm(request.POST or None, instance=a, choices=responses)
-        print(request)
 
         if form.is_valid():
             try:
@@ -114,18 +113,14 @@ def edit_questionnaire(request):
 
 def get_responses_table(request, today, yesterday):
 
+
     responses = Response.objects.filter(user_id=request.user.id)
+
 
     if today or yesterday:
         start, end = filter_date(yesterday)
         responses = responses.filter(date__gt=start).filter(date__lt=end)
 
-    responses = list(responses.values())
-
-    # lookup labels for each score (since they aren't PKs)
-    for l in responses:
-        print(l)
-        l['response'] = AvailableResponse.objects.get(score=l['score'])
 
     table = ResponseTable(responses, order_by=("-date","question"))
 
