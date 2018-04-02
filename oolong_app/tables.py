@@ -13,7 +13,7 @@ class ResponseTable(tables.Table):
     class Meta:
         exclude=('user',)
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-striped table-hover',
         }
         template_name = 'django_tables2/bootstrap.html'
 
@@ -31,6 +31,6 @@ class _Generic(tables.Table):
         order_by = '-time_stamp'
         exclude=('user',)
         attrs = {
-            'class': 'table table-striped',
+            'class': 'table table-striped table-hover',
         }
         template_name = 'django_tables2/bootstrap.html'
