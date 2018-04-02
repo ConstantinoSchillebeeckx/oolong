@@ -1,3 +1,13 @@
+// ping server every 30 min to keep it awake
+var http = require("http");
+setInterval(function() {
+    http.get("http://oolong-app.herokuapp.com");
+}, 1800000);
+
+
+
+
+
 
 /* ONLY USED ON METRIC.HTML */
 var isMobile = false; //initiate as false
