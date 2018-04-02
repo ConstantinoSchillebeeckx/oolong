@@ -1,0 +1,12 @@
+{% load bootstrap_ui_tags %}
+
+{% row %}
+    {% column %}
+        {% if plotdat %}
+            <div id="chart"></div>
+        {% else %}
+            <p class="lead" style="padding-left:15px;">No data found for {{ user.get_username }}; please fill submit some data first.</p>
+        {% endif %}
+    {% endcolumn %}
+{% endrow %}
+

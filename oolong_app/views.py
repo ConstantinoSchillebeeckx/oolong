@@ -21,7 +21,7 @@ import simplejson as json
 from .forms import UserLoginForm, MetricForm, QuestionnaireForm, ResponseForm
 from .forms import UserSignupForm, user_in_database, input_is_valid
 from .models import Activity, Question, AvailableResponse, Questionnaire
-from .models import Response, PlotResponse
+from .models import Response, PlotResponse, PlotDrink
 from .tables import _Generic, ResponseTable
 
 @login_required 
@@ -38,10 +38,29 @@ def index(request):
 @login_required 
 def plot(request):
 
-    dat = PlotResponse.objects.filter(user=request.user)
-    plotdat = None if not dat.count() else json.dumps(list(dat.values()))
+    activity_id = request.GET.get('activity', None)
+    dat, activity = None, None
+    try:
+        activity = Activity.objects.get(pk=activity_id)
+    except Exception as ex:
+        pass
+
+    if not activity:
+        # by default, show the mood plot
+        dat = PlotResponse.objects.filter(user=request.user)
+    elif str(activity) == 'Drink':
+        dat = PlotDrink.objects.filter(user=request.user)
+
+    plotdat = None
+    if dat and dat.count():
+        plotdat = json.dumps(list(dat.values()))
+
     context = {
-        'plotdat': plotdat
+        'plotdat': plotdat,
+        'activities': Activity.objects.all().order_by('id'),
+        'activity': activity,
+        'btn_class':'btn-success',
+        'action':'plot',
     }
 
     response = render(request, 'plot.html', context)

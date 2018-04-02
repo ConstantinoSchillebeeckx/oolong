@@ -1,4 +1,95 @@
-function render_response_plot(plotDat, agg) {
+function render_drink_plot(plotDat) {
+    var chart;
+    /*
+    Expects a Django view to exist:
+    CREATE OR REPLACE VIEW public.plot_drink AS
+    select
+        user_id,
+        type,
+        time_stamp::date::text as "date",
+        sum( case when metric_drink.units::text = 'ml'::text then metric_drink.volume * 0.033814::double precision else metric_drink.volume end )
+    from
+        metric_drink
+    group by
+        user_id,
+        type,
+        time_stamp::date::text;
+
+    Param:
+    ======
+    plotDat is a query of the view plot_drink 
+    for the user currently logged in.
+
+    It's format is a list of objects with keys:
+    - type
+    - date
+    - sum
+    
+    */
+
+    // multiBarChart expects all series to have the same x's
+    // in the same order!
+    // so we have to fill in those that are missing
+    var all_dates = d3.set(plotDat.map(function(d) { 
+                        return new Date(d.date).valueOf() 
+                    })).values().sort();
+
+    var data = d3.nest()
+                .key(function(d) { return d.type })
+                .rollup(function(d) { 
+                    var tmp = {}; // {epoch: vol sum}
+                    d.forEach(function(i) {
+                        tmp[new Date(i.date).valueOf()] = i.sum;
+                    })
+
+                    // list of epoch for this type
+                    var have = d3.set(Object.keys(tmp));
+    
+                    // fill in missing dates
+                    return all_dates.map(function(i) {
+                        return {
+                            x: parseInt(i),
+                            y: have.has(i) ? tmp[i] : 0
+                        }
+                    })
+                })
+                .entries(plotDat)
+
+    // make all series stackable
+    data.forEach(function(d) {
+        d['nonStackable'] = false
+    })
+
+    nv.addGraph(function() {
+
+        chart = nv.models.multiBarChart()
+            .stacked(true)
+            .color(d3.scale.category10().range())
+
+
+        chart.xAxis
+            .tickFormat(function(d,i) {
+                return d3.time.format('%Y-%m-%d')(new Date(d))
+            })
+
+        chart.yAxis
+             .showMaxMin(true)
+             .axisLabel("Total volume (fl oz)")
+
+
+        d3.select('#chart').append('svg')
+          .datum(data)
+          .call(chart);
+
+
+        nv.utils.windowResize(chart.update);
+
+        return chart;
+    });
+}
+
+
+function render_mood_plot(plotDat, agg) {
     var chart;
 
     console.log(plotDat)
@@ -42,21 +133,29 @@ function render_response_plot(plotDat, agg) {
 
     var data = d3.nest()
                 .key(function(d) { return d.questionnaire })
-                .rollup(function(d) { return d.map(function(i) { return {x:i.epoch*1000, y:i[agg]} }) })
+                .rollup(function(d) { 
+                    return d.map(function(i) { 
+                        return {
+                            x:i.epoch*1000, 
+                            y:i[agg]
+                        } 
+                    }) 
+                })
                 .entries(plotDat)
 
 
     nv.addGraph(function() {
 
         chart = nv.models.lineChart()
+            .color(d3.scale.category10().range())
             .options({
                 duration: 300,
                 useInteractiveGuideline: true,
-                margin: {left: 110, right: 50},
+                margin: {left: 60, right: 50},
             });
 
         chart.xAxis
-            .axisLabel("Date")
+            //.axisLabel("Date")
             .tickFormat(function(d,i) {
                 return d3.time.format('%Y-%m-%d')(new Date(d))
             })
@@ -67,8 +166,9 @@ function render_response_plot(plotDat, agg) {
         // not an integer found in `lookup`
         var yMin = 0.5, yMax = 7.5;
         chart.yAxis
-            .showMaxMin(true)
-            .ticks(Object.keys(lookup).length)
+             .showMaxMin(false)
+             .axisLabel(agg + " score")
+             .ticks(Object.keys(lookup).length)
 /*
 For the time being we don't convert y-axis labels.
 I'm doing this since I've switch the labels and scoring around
@@ -86,8 +186,8 @@ from 1-7 to 1-5.
 
 
         d3.select('#chart').append('svg')
-            .datum(data)
-            .call(chart);
+          .datum(data)
+          .call(chart);
 
         nv.utils.windowResize(chart.update);
 

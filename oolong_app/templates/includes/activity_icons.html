@@ -3,11 +3,11 @@
 {% row %}
     <div class='col-xs-12 button-wrapper icons'>
         {% for activity in activities %}
-            <a href='?activity={{activity.id}}' type="button" class="btn {{btn_class}}">
+            <a href='?activity={{activity.id}}' type="button" class="btn {% if btn_class %}{{btn_class}}{% else %}btn-info{% endif %}">
                 <i class="fas {{activity.icon}} fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> {{activity.label}}</span>
             </a>
         {% endfor %}
-        <a href="/{{action}}_questionnaire" type="button" class="btn {% if action == 'edit' %}btn-warning{% else %}btn-info{% endif %}">
+        <a href="/{{action}}_questionnaire" type="button" class="btn {% if btn_class %}{{btn_class}}{% else %}btn-info{% endif %}">
             <i class="fas fa-list-ol fa-2x" style="vertical-align: middle;"></i><span class="activity-label"> Mood</span>
         </a>
     </div>

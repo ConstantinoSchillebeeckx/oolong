@@ -9,16 +9,14 @@
 
     <!-- bodywrap -->
     <div id="bodywrap" class="plot">
-        {% container type="fluid" %}
-            {% row %}
-                {% column %}
-                    {% if plotdat %}
-                        <div id="chart"></div>
-                    {% else %}
-                        <p class="lead" style="padding-left:15px;">No data found for {{ user.get_username }}; please fill out the <a href='/submit_questionnaire/'>questionnaire</a> first.</p>
-                    {% endif %}
-                {% endcolumn %}
-            {% endrow %}
+        {% container %}
+
+            <!-- activity icons -->
+            {% include "includes/activity_icons.html" %}
+
+            <!-- plot -->
+            {% include "includes/render_plot.html" %}
+
         {% endcontainer %}
     </div>
     <!-- end bodywrap -->
@@ -26,7 +24,11 @@
     <script>
         jQuery(function () {
             if (typeof {{plotdat|safe}} !== 'undefined') {
-                render_response_plot({{plotdat|safe}}, 'avg')
+                if ('{{activity}}' == 'Drink') {
+                    render_drink_plot({{plotdat|safe}});
+                } else {
+                    render_mood_plot({{plotdat|safe}}, 'avg');
+                }
             }
         })
     </script>

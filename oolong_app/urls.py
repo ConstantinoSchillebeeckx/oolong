@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^log_out/$', views.user_logout, name='log_out'),
     url(r'^submit_success/$', views.submit_success, name='success'),
     url(r'^plot/$', views.plot, name='plot'),
+    url(r'^plot_questionnaire/$', views.plot, name='plot'),
     url(
         r'^favicon.ico$',
         RedirectView.as_view(

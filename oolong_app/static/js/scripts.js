@@ -1,20 +1,3 @@
-// ping server every 30 min to keep it awake
-setInterval(function() {
-    var url = "https://oolong-app.herokuapp.com";
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            var dat = xmlHttp.responseText;
-        }
-    }
-    xmlHttp.open("GET", url, true); // true for asynchronous 
-    xmlHttp.send(null);
-}, 1800000);
-
-
-
-
-
 
 /* ONLY USED ON METRIC.HTML */
 var isMobile = false; //initiate as false

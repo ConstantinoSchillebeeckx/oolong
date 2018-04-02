@@ -774,3 +774,24 @@ class PlotResponse(models.Model):
     # https://stackoverflow.com/a/11594959/1153897
     def save(self, **kwargs):
         raise NotImplementedError()
+
+
+class PlotDrink(models.Model):
+
+    date = models.TextField(primary_key=True) # not actually a PK, see workaround below
+    type = models.TextField()
+    sum = models.FloatField()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+    )
+
+    class Meta:
+            managed = False
+            db_table = 'plot_drink'
+
+    # Django models require a column with a primary key,
+    # however this view does not have one; this is
+    # the work around.
+    # https://stackoverflow.com/a/11594959/1153897
+    def save(self, **kwargs):
+        raise NotImplementedError()
