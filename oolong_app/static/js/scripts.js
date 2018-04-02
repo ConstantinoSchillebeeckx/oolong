@@ -1,7 +1,14 @@
 // ping server every 30 min to keep it awake
-var http = require("http");
 setInterval(function() {
-    http.get("http://oolong-app.herokuapp.com");
+    var url = "https://oolong-app.herokuapp.com";
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var dat = xmlHttp.responseText;
+        }
+    }
+    xmlHttp.open("GET", url, true); // true for asynchronous 
+    xmlHttp.send(null);
 }, 1800000);
 
 
