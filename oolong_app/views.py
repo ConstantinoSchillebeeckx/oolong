@@ -76,6 +76,7 @@ def edit_questionnaire(request):
         # available responses for this questions
         responses = list(AvailableResponse.objects
                                           .filter(questionnaire_id=q.questionnaire_id)
+                                          .order_by('score')
                                           .values_list('score','label'))
 
         form = ResponseForm(request.POST or None, instance=a, choices=responses)
@@ -166,7 +167,9 @@ def submit_questionnaire(request):
 
     # get our list of questions for this questionnaire
     # [(question_id, question_str),()]
-    questions = list(Question.objects.filter(questionnaire_id=qid).values_list('id','question'))
+    questions = list(Question.objects
+                             .filter(questionnaire_id=qid)
+                             .values_list('id','question'))
 
     # get the available responses for the questions
     # [(response_id, response_label),()]
