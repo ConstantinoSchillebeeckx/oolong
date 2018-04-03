@@ -1,1 +1,1 @@
-web: newrelic-admin run-program gunicorn oolong.wsgi --log-file -
+web: gunicorn oolong.wsgi --log-file -
