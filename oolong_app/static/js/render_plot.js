@@ -27,6 +27,8 @@ function render_drink_plot(plotDat) {
     
     */
 
+    console.log(plotDat);
+
     // multiBarChart expects all series to have the same x's
     // in the same order!
     // so we have to fill in those that are missing
@@ -34,6 +36,7 @@ function render_drink_plot(plotDat) {
                         return new Date(d.date).valueOf() 
                     })).values().sort();
 
+    // convert out data 
     var data = d3.nest()
                 .key(function(d) { return d.type })
                 .rollup(function(d) { 
@@ -59,6 +62,8 @@ function render_drink_plot(plotDat) {
     data.forEach(function(d) {
         d['nonStackable'] = false
     })
+
+    console.log(data);
 
     nv.addGraph(function() {
 
