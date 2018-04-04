@@ -15,13 +15,17 @@ from django_tables2 import RequestConfig
 from datetime import timedelta
 from django.utils.timezone import localdate, now, make_aware
 from django.utils.dateparse import parse_datetime
+from django.db.models.functions import TruncDate
+from django.db.models import Case, When, FloatField, F
+
+import pytz
 
 import simplejson as json
 
 from .forms import UserLoginForm, MetricForm, QuestionnaireForm, ResponseForm
 from .forms import UserSignupForm, user_in_database, input_is_valid
 from .models import Activity, Question, AvailableResponse, Questionnaire
-from .models import Response, PlotResponse, PlotDrink
+from .models import Response, PlotResponse, Drink
 from .tables import _Generic, ResponseTable
 
 @login_required 
@@ -49,11 +53,24 @@ def plot(request):
         # by default, show the mood plot
         dat = PlotResponse.objects.filter(user=request.user)
     elif str(activity) == 'Drink':
-        dat = PlotDrink.objects.filter(user=request.user)
+        '''
+        I wanted to use a view here, which already converted the units
+        and aggregated the volumes. This doesn't work however because
+        the view doesn't properly group on date; it seems like it does
+        the group on UTC versions of the date, not the local user date.
+        '''
+        dat = Drink.objects.filter(user=request.user).order_by('time_stamp')
+        dat = dat.annotate(date=TruncDate('time_stamp'),
+                fl_oz=Case(
+                    When(units='ml', then=F('volume')*0.033814),
+                    default=F('volume'),
+                    output_field=FloatField()
+                )
+              )
 
     plotdat = None
     if dat and dat.count():
-        plotdat = json.dumps(list(dat.values()))
+        plotdat = json.dumps(list(dat.values()), default=str)
 
     context = {
         'plotdat': plotdat,

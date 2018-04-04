@@ -27,43 +27,41 @@ function render_drink_plot(plotDat) {
     
     */
 
-    console.log(plotDat);
+
+    // convert data
+    var tmp = d3.nest()
+                .key(function(d) { return d.type })
+                .key(function(d) { return d.date })
+                .rollup(function(d) { 
+                    return d3.sum(d, function(i) { return i.fl_oz });
+                })
+                .map(plotDat);
 
     // multiBarChart expects all series to have the same x's
     // in the same order!
     // so we have to fill in those that are missing
     var all_dates = d3.set(plotDat.map(function(d) { 
-                        return new Date(d.date).valueOf() 
+                        return d.date;
                     })).values().sort();
 
-    // convert out data 
-    var data = d3.nest()
-                .key(function(d) { return d.type })
-                .rollup(function(d) { 
-                    var tmp = {}; // {epoch: vol sum}
-                    d.forEach(function(i) {
-                        tmp[new Date(i.date).valueOf()] = i.sum;
-                    })
-
-                    // list of epoch for this type
-                    var have = d3.set(Object.keys(tmp));
-    
-                    // fill in missing dates
-                    return all_dates.map(function(i) {
-                        return {
-                            x: parseInt(i),
-                            y: have.has(i) ? tmp[i] : 0
-                        }
-                    })
-                })
-                .entries(plotDat)
 
     // make all series stackable
-    data.forEach(function(d) {
-        d['nonStackable'] = false
+    var data = Object.keys(tmp).map(function(type) {
+        var vals = tmp[type]; // {YYYY-MM-DD: vol}
+        return {
+            key: type,
+            nonStackable: false,
+            values: all_dates.map(function(i) {
+                var epoch = new Date(i).valueOf();
+                if (i in vals) {
+                    return {x: epoch, y: vals[i]}
+                } else {
+                    return {x: epoch, y: 0}
+                }
+            })
+        };
     })
 
-    console.log(data);
 
     nv.addGraph(function() {
 
@@ -73,13 +71,13 @@ function render_drink_plot(plotDat) {
 
 
         chart.xAxis
-            .tickFormat(function(d,i) {
-                return d3.time.format('%Y-%m-%d')(new Date(d))
+            .tickFormat(function(d) {
+                return d3.time.format.utc('%Y-%m-%d')(new Date(d))
             })
 
         chart.yAxis
              .showMaxMin(true)
-             .axisLabel("Total volume (fl oz)")
+             .axisLabel("Volume (fl. oz.)")
 
 
         d3.select('#chart').append('svg')
