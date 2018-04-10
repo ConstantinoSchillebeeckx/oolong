@@ -9,9 +9,14 @@
             <form method="post">
                 {% csrf_token %}
                 {% bootstrap_form metric_form %}
-                <button type="submit" class="btn btn-info pull-right">
-                    {% if action == 'submit' %} Submit {% else %} Save {% endif %}
-                </button>
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    {% if action == 'edit' %}
+                        <a href='?activity={{selected_activity.id}}' type="btn" class="btn btn-warning">Cancel</a>
+                    {% endif %}
+                    <button type="submit" class="btn btn-info">
+                        {% if action == 'submit' %} Submit {% else %} Save {% endif %}
+                    </button>
+                </div>
             </form>
         {% endcolumn %}
     {% endrow %}
