@@ -51,7 +51,12 @@ def plot(request):
 
     if not activity:
         # by default, show the mood plot
-        dat = PlotResponse.objects.filter(user=request.user)
+
+        # date at which I started using new scoring scheme
+        date = make_aware(parse_datetime("2018-03-31 0:00:00"))
+        dat = (PlotResponse.objects
+                           .filter(user=request.user)
+                           .filter(date__gt=date))
     elif str(activity) == 'Drink':
         '''
         I wanted to use a view here, which already converted the units

@@ -130,8 +130,6 @@ function render_mood_plot(plotDat, agg) {
         3:'Slightly disagree',
         4:'Neutral',
         5:'Slightly agree',
-        6:'Agree',
-        7:'Strongly agree',
     }
 
     var data = d3.nest()
@@ -151,14 +149,13 @@ function render_mood_plot(plotDat, agg) {
 
         chart = nv.models.lineChart()
             .color(d3.scale.category10().range())
-            .options({
-                duration: 300,
-                useInteractiveGuideline: true,
-                margin: {left: 60, right: 50},
-            });
+            .interpolate('cardinal')
+            .duration(300)
+            .useInteractiveGuideline(true)
+            .margin({left: 60, right: 50})
+
 
         chart.xAxis
-            //.axisLabel("Date")
             .tickFormat(function(d,i) {
                 return d3.time.format('%Y-%m-%d')(new Date(d))
             })
@@ -167,11 +164,14 @@ function render_mood_plot(plotDat, agg) {
         // of the averaged mood score; however the tooltip also makes
         // use of this formatting, so we pass the exact value if its
         // not an integer found in `lookup`
-        var yMin = 0.5, yMax = 7.5;
+        var yMin = 1, yMax = 5;
         chart.yAxis
              .showMaxMin(false)
-             .axisLabel(agg + " score")
+             .axisLabel(agg + " score [larger score = stronger affect]")
              .ticks(Object.keys(lookup).length)
+             .tickFormat(function(d) {
+                return d.toFixed(2);
+             })
 /*
 For the time being we don't convert y-axis labels.
 I'm doing this since I've switch the labels and scoring around
