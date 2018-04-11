@@ -83,7 +83,7 @@ class Daily(_Metric):
         )
     )
     value = models.FloatField(
-        blank=True,
+        blank=False,
         null=True,
         db_index=True,
         help_text=(
