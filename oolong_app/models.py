@@ -482,7 +482,7 @@ class Drink(_Metric):
         )
     )
     volume = models.FloatField(
-        blank=True,
+        blank=False,
         null=True,
         db_index=True,
         help_text=(
@@ -495,7 +495,7 @@ class Drink(_Metric):
             ('fl oz','Fluid Ounce'),
             ('ml','Milliliter'),
         ],
-        blank=True,
+        blank=False,
         null=True,
         db_index=True,
         help_text=(

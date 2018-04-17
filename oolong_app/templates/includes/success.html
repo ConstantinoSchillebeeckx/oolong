@@ -3,8 +3,8 @@
 <!-- expects the var `success` to not None for message to display -->
 {% if success %}
     {% row %}
-        {% column xs="12" sm="5" lg="3" %}
-            <div class="alert alert-success" role="alert" style="margin-top:20px;">
+        {% column %}
+            <div class="alert alert-success alert-auto-width" role="alert" style="margin-top:20px;">
                 {{ success|safe }}
             </div>
         {% endcolumn %}

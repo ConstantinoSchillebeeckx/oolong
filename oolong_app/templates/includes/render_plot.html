@@ -5,7 +5,13 @@
         {% if plotdat %}
             <div id="chart"></div>
         {% else %}
-            <p class="lead" style="padding-left:15px;">No data found for {{ user.get_username }}; please fill submit some data first.</p>
+            <div class="lead">
+                {% if user.is_anonymous  %}
+                    Plot type not yet implemented.
+                {% else %}
+                    No data found for {{ user.get_username }}; please fill submit some data first.
+                {% endif %}
+            </div>
         {% endif %}
     {% endcolumn %}
 {% endrow %}

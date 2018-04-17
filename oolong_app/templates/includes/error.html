@@ -3,8 +3,8 @@
 <!-- expects the var `error` to not None for message to display -->
 {% if error %}
     {% row %}
-        {% column xs="12" sm="5" lg="3" %}
-            <div class="alert alert-danger" role="alert">
+        {% column %}
+            <div class="alert alert-danger alert-auto-width" role="alert">
                 An error occurred, please try again.
             </div>
         {% endcolumn %}

@@ -250,3 +250,12 @@ svg text {
 .navbar-right {
   float: right!important;
 }
+
+#demo-data-msg {
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
+.alert-auto-width {
+    display:inline-block;
+}

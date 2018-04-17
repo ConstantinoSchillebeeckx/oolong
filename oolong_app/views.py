@@ -28,7 +28,7 @@ from .models import Activity, Question, AvailableResponse, Questionnaire
 from .models import Response, PlotResponse, Drink
 from .tables import _Generic, ResponseTable
 
-@login_required 
+#@login_required 
 def index(request):
     '''Renders the homepage.'''
 
@@ -39,15 +39,19 @@ def index(request):
 
     return response
 
-@login_required 
+#@login_required 
 def plot(request):
 
     activity_id = request.GET.get('activity', None)
     dat, activity = None, None
+
     try:
         activity = Activity.objects.get(pk=activity_id)
     except Exception as ex:
         pass
+
+    # if no user is logged in; just show my info
+    user = request.user if not request.user.is_anonymous else 2
 
     if not activity:
         # by default, show the mood plot
@@ -55,7 +59,7 @@ def plot(request):
         # date at which I started using new scoring scheme
         date = make_aware(parse_datetime("2018-03-31 0:00:00"))
         dat = (PlotResponse.objects
-                           .filter(user=request.user)
+                           .filter(user=user)
                            .filter(date__gt=date))
     elif str(activity) == 'Drink':
         '''
@@ -64,7 +68,7 @@ def plot(request):
         the view doesn't properly group on date; it seems like it does
         the group on UTC versions of the date, not the local user date.
         '''
-        dat = Drink.objects.filter(user=request.user).order_by('time_stamp')
+        dat = Drink.objects.filter(user=user).order_by('time_stamp')
         dat = dat.annotate(date=TruncDate('time_stamp'),
                 fl_oz=Case(
                     When(units='ml', then=F('volume')*0.033814),
@@ -89,13 +93,13 @@ def plot(request):
 
     return response
 
-@login_required 
+#@login_required 
 @csrf_protect 
 def submit_success(request):
 
     return render(request, 'submit_success.html', {})
 
-@login_required 
+#@login_required 
 @csrf_protect 
 def edit_questionnaire(request):
 
@@ -122,16 +126,26 @@ def edit_questionnaire(request):
 
         form = ResponseForm(request.POST or None, instance=a, choices=responses)
 
+
         if form.is_valid():
-            try:
-                a = form.save(commit=False)
-                a.id = response_id # set PK so we can do a save()
-                a.save()
-            except Exception as e:
-                print(e)
-                error = True
+
+            if not request.user.is_anonymous:
+                try:
+                    a = form.save(commit=False)
+                    a.id = response_id # set PK so we can do a save()
+                    a.save()
+                except Exception as e:
+                    print(e)
+                    error = True
+                else:
+                    success = "Question properly updated."
+                    form = None
+                    table = get_responses_table(request, None, None)
             else:
-                success = "Questionnaire properly updated."
+                success = (
+                    'Question successfully updated (had you been '
+                    '<a href="/login">logged in</a>).'
+                )
                 form = None
                 table = get_responses_table(request, None, None)
 
@@ -155,14 +169,14 @@ def edit_questionnaire(request):
 
 def get_responses_table(request, today, yesterday):
 
+    # if no user is logged in; just show my info
+    user = request.user if not request.user.is_anonymous else 2
 
-    responses = Response.objects.filter(user_id=request.user.id)
-
+    responses = Response.objects.filter(user_id=user)
 
     if today or yesterday:
         start, end = filter_date(yesterday)
         responses = responses.filter(date__gt=start).filter(date__lt=end)
-
 
     table = ResponseTable(responses, order_by=("-date","question"))
 
@@ -178,9 +192,11 @@ def filter_date(yesterday):
     return start, end
 
 
-@login_required 
+#@login_required 
 @csrf_protect 
 def submit_questionnaire(request):
+
+    user = request.user if not request.user.is_anonymous else 0
 
     ''' find next questionnaire '''
 
@@ -224,14 +240,17 @@ def submit_questionnaire(request):
                 request.POST or None, 
                 q=questions, 
                 choices=responses,
-                user=request.user.id,
+                user=user,
                 default=questionnaire.default_response,
            )
 
     ''' validate form '''
 
     if form.is_valid():
-        form.save()
+
+        # skip the save if user is not logged in
+        if not request.user.is_anonymous:
+            form.save()
     
         if next_qid:
             # redirect to next questionnaire
@@ -251,15 +270,20 @@ def submit_questionnaire(request):
            )
 
 
-@login_required 
+#@login_required 
 @csrf_protect 
 def edit_metric(request):
 
     metric_form, activity, table = None, None, None
     date_filter=None,
     success, error = False, False
+
+    # if no user is logged in; just show my info
+    user = request.user if not request.user.is_anonymous else 2
+
     activity_id=request.GET.get('activity', None)
     metric_id=request.GET.get('id', None)
+
     today = True if 'today' in request.GET else False
     yesterday = True if 'yesterday' in request.GET else False
     delete = True if 'delete' in request.GET else False
@@ -297,16 +321,24 @@ def edit_metric(request):
             metric_form = form(request.POST, instance=a)
 
             if metric_form.is_valid():
-                try:
-                    a = metric_form.save(commit=False)
-                    a.id = metric_id # set PK so we can do a save()
-                    a.user_id = request.user.id
-                    a.save()
-                except Exception as e:
-                    print(e)
-                    error = True
+
+                if not request.user.is_anonymous:
+                    try:
+                        a = metric_form.save(commit=False)
+                        a.id = metric_id # set PK so we can do a save()
+                        a.user_id = user
+                        a.save()
+                    except Exception as e:
+                        print(e)
+                        error = True
+                    else:
+                        success = 'Metric successfully updated.'
+                        metric_form = None
                 else:
-                    success = 'Metric successfully updated.'
+                    success = (
+                        'Metric successfully updated (had you been '
+                        '<a href="/login">logged in</a>).'
+                    )
                     metric_form = None
 
         ''' get table of metrics '''
@@ -329,18 +361,12 @@ def edit_metric(request):
                         col = (l,tables.DateTimeColumn(format='Y-m-d H:i:s'))
                     extra_columns.append(col)
 
+            user_activities = model.objects.filter(user_id=user)
             if today or yesterday:
                 start, end = filter_date(yesterday)
-                user_activities = (model.objects
-                                        .filter(user_id=request.user.id)
-                                        .filter(time_stamp__gt=start)
-                                        .filter(time_stamp__lt=end)
-                                        .values())
-            else:
-                user_activities = (model.objects
-                                        .filter(user_id=request.user.id)
-                                        .values())
-            user_activities = list(user_activities)
+                user_activities = (user_activities.filter(time_stamp__gt=start)
+                                                  .filter(time_stamp__lt=end))
+            user_activities = list(user_activities.values())
 
             # manually add in activity_id so that
             # the TemplateColumn has access to it
@@ -369,7 +395,7 @@ def edit_metric(request):
                 context,
            )
 
-@login_required 
+#@login_required 
 @csrf_protect 
 def submit_metric(request):
     '''
@@ -416,15 +442,22 @@ def submit_metric(request):
 
                 if metric_form.is_valid():
 
-                    try:
-                        a = metric_form.save(commit=False)
-                        a.user_id = request.user.id
-                        a.save()
-                    except Exception as e:
-                        print(e)
-                        error = True
+                    if not request.user.is_anonymous:
+                        try:
+                            a = metric_form.save(commit=False)
+                            a.user_id = request.user.id
+                            a.save()
+                        except Exception as e:
+                            print(e)
+                            error = True
+                        else:
+                            success = 'Metric successfully submitted.'
+                            metric_form = None
                     else:
-                        success = 'Metric successfully submitted.'
+                        success = (
+                            'Metric successfully submitted (had you been '
+                            '<a href="/login">logged in</a>).'
+                        )
                         metric_form = None
 
     return render(

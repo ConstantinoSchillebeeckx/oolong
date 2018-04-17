@@ -1,0 +1,13 @@
+{% load bootstrap_ui_tags %}
+
+{% if request.user.is_anonymous %}
+    {% row %}
+        {% column %}
+            <div id="demo-data-msg" class="text-muted">
+                <span class="label label-danger">NOTE</span> you are viewing demo 
+                data since you aren't <a href="/login">logged in</a>.
+            </div>
+        {% endcolumn %}
+    {% endrow %}
+{% endif %}
+

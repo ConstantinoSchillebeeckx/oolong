@@ -10,8 +10,15 @@
     <div id="bodywrap">
         {% container %}
             {% row %}
-                {% column xs="12" sm="4" lg="3" %}
-                    <div class="alert alert-success" role="alert">Everything submitted properly!</div>
+                {% column %}
+                    <div class="alert alert-success alert-auto-width" role="alert">
+                        {% if not request.user.is_anonymous %}
+                            Everything submitted properly!
+                        {% else %}
+                            Everything submitted properly (had you been 
+                            <a href="/login">logged in</a>)!
+                        {% endif %}
+                    </div>
                 {% endcolumn %}
             {% endrow %}
         {% endcontainer %}
