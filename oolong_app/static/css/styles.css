@@ -96,28 +96,15 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: -70px;
     padding-top: 150px;
     text-align:center;
-    background-attachment: relative;
-    background-position: center center;
     min-height: 250px;
     width: 100%;
-
-    -webkit-background-size: 100%;
-    -moz-background-size: 100%;
-    -o-background-size: 100%;
-    background-size: 100%;
-
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
 }
 
-#headerwrap h1 {
+#headerwrap h2 {
     color:#4a4a4a;
     padding-top: 10px;
     padding-bottom: 20px;
-    letter-spacing: 4px;
-    font-size: 80px;
+    letter-spacing: 3px;
     font-weight: bold;
 }
 
