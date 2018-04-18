@@ -196,7 +196,7 @@ def filter_date(yesterday):
 @csrf_protect 
 def submit_questionnaire(request):
 
-    user = request.user if not request.user.is_anonymous else 0
+    user = request.user.id if not request.user.is_anonymous else 0
 
     ''' find next questionnaire '''
 
