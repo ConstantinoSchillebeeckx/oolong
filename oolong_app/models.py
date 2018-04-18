@@ -51,7 +51,7 @@ class _Metric(models.Model):
     time_stamp = models.DateTimeField(
         blank=False,
         db_index=True,
-        unique=True, # helps prevent double form submit
+        unique=False,
         help_text="When the metric event occurred or began.",
     )
     user = models.ForeignKey(
@@ -63,6 +63,7 @@ class _Metric(models.Model):
 
     class Meta:
         abstract = True
+        unique_together = ('time_stamp','user') # helps prevent double submit
 
 class Daily(_Metric):
     '''
