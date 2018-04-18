@@ -169,8 +169,8 @@ def edit_questionnaire(request):
 
 def get_responses_table(request, today, yesterday):
 
-    # if no user is logged in; just show demo data
-    user = request.user if not request.user.is_anonymous else 1
+    # if no user is logged in; just show my data
+    user = request.user if not request.user.is_anonymous else 2
 
     responses = Response.objects.filter(user_id=user)
 
