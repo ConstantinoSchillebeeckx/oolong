@@ -50,7 +50,7 @@ def plot(request):
     except Exception as ex:
         pass
 
-    # if no user is logged in; just show my info
+    # if no user is logged in; just show my data
     user = request.user if not request.user.is_anonymous else 2
 
     if not activity:
@@ -169,8 +169,8 @@ def edit_questionnaire(request):
 
 def get_responses_table(request, today, yesterday):
 
-    # if no user is logged in; just show my info
-    user = request.user if not request.user.is_anonymous else 2
+    # if no user is logged in; just show demo data
+    user = request.user if not request.user.is_anonymous else 1
 
     responses = Response.objects.filter(user_id=user)
 
@@ -278,8 +278,8 @@ def edit_metric(request):
     date_filter=None,
     success, error = False, False
 
-    # if no user is logged in; just show my info
-    user = request.user if not request.user.is_anonymous else 2
+    # if no user is logged in; just show demo data
+    user = request.user if not request.user.is_anonymous else 1
 
     activity_id=request.GET.get('activity', None)
     metric_id=request.GET.get('id', None)
